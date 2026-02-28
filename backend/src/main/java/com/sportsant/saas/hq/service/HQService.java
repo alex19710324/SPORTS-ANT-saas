@@ -6,7 +6,6 @@ import com.sportsant.saas.franchise.repository.FranchiseApplicationRepository;
 import com.sportsant.saas.store.entity.Store;
 import com.sportsant.saas.store.repository.StoreRepository;
 import com.sportsant.saas.communication.service.NotificationService;
-import com.sportsant.saas.communication.entity.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

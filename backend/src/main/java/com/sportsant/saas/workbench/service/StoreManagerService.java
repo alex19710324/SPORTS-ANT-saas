@@ -2,7 +2,6 @@ package com.sportsant.saas.workbench.service;
 
 import com.sportsant.saas.device.repository.DeviceRepository;
 import com.sportsant.saas.finance.service.FinanceService;
-import com.sportsant.saas.store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,6 @@ import java.util.Map;
 
 @Service
 public class StoreManagerService {
-
-    @Autowired
-    private StoreRepository storeRepository;
 
     @Autowired
     private FinanceService financeService;

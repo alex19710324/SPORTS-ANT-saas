@@ -39,8 +39,8 @@ public class DataAnalysisService {
         // Active Stores
         kpis.put("activeStores", storeRepository.count());
         
-        // Total Revenue (Mock aggregated, as financeService is per store context usually)
-        kpis.put("totalRevenue", BigDecimal.valueOf(158420.50)); 
+        // Total Revenue (Aggregated from Finance Service)
+        kpis.put("totalRevenue", financeService.getTodayRevenue()); 
         
         return kpis;
     }

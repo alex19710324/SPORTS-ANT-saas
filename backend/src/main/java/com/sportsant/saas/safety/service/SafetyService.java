@@ -1,12 +1,13 @@
 package com.sportsant.saas.safety.service;
 
+import com.sportsant.saas.ai.event.SystemEvent;
 import com.sportsant.saas.ai.service.AiAware;
 import com.sportsant.saas.safety.entity.IncidentReport;
 import com.sportsant.saas.safety.repository.IncidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,7 @@ public class SafetyService implements AiAware {
     @Autowired
     private IncidentRepository incidentRepository;
 
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
+    // Removed unused eventPublisher
 
     public IncidentReport reportIncident(String type, String location, String description, String reporter) {
         IncidentReport report = new IncidentReport();

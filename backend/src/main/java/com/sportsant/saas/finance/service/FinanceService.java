@@ -82,17 +82,18 @@ public class FinanceService implements AiAware {
     }
     
     public BigDecimal getTodayRevenue() {
-        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         BigDecimal revenue = transactionRepository.sumRevenueSince(startOfDay);
         return revenue != null ? revenue : BigDecimal.ZERO;
     }
 
     public Long getTodayVisitors() {
-        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         Long visitors = transactionRepository.countVisitorsSince(startOfDay);
         return visitors != null ? visitors : 0L;
     }
 
+    @Transactional
     public Voucher createVoucherFromEvent(String sourceType, Long sourceId, BigDecimal amount) {
         Voucher voucher = accountingEngine.generateVoucher(sourceType, sourceId, amount);
         return voucherRepository.save(voucher);

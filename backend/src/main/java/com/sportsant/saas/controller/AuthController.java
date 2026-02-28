@@ -32,7 +32,6 @@ import com.sportsant.saas.repository.UserRepository;
 import com.sportsant.saas.security.JwtUtils;
 import com.sportsant.saas.security.UserDetailsImpl;
 import com.sportsant.saas.communication.service.NotificationService;
-import com.sportsant.saas.communication.entity.Notification;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
