@@ -1,109 +1,101 @@
 <template>
-  <div class="marketing-dashboard" v-loading="loading">
-    <h2>Marketing Campaigns</h2>
-    
-    <div class="actions">
-      <el-button type="primary" @click="showCreateDialog = true">Create Campaign</el-button>
+  <div class="marketing-dashboard">
+    <div class="header">
+        <h2>Marketing & Growth</h2>
+        <el-button type="primary" @click="showWizard = true">Create Campaign</el-button>
     </div>
 
-    <!-- Activity List -->
-    <el-table :data="activities" style="width: 100%; margin-top: 20px;">
-      <el-table-column prop="name" label="Name" />
-      <el-table-column prop="type" label="Type">
-        <template #default="scope">
-          <el-tag>{{ scope.row.type }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="status" label="Status" />
-      <el-table-column prop="startTime" label="Start Time" />
-      <el-table-column label="Actions">
-        <template #default="scope">
-          <el-button size="small" @click="handleGenerateContent(scope.row)">AI Content</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="stats-grid">
+        <el-card shadow="hover">
+            <template #header>Active Campaigns</template>
+            <h3>{{ campaigns.filter(c => c.status === 'ACTIVE').length }}</h3>
+        </el-card>
+        <el-card shadow="hover">
+            <template #header>Total Reach</template>
+            <h3>15,204</h3>
+        </el-card>
+        <el-card shadow="hover">
+            <template #header>Conversion Rate</template>
+            <h3 class="text-success">3.2%</h3>
+        </el-card>
+    </div>
 
-    <!-- Create Dialog -->
-    <el-dialog v-model="showCreateDialog" title="New Campaign">
-      <el-form :model="newActivity" label-width="120px">
-        <el-form-item label="Name">
-          <el-input v-model="newActivity.name" />
-        </el-form-item>
-        <el-form-item label="Type">
-          <el-select v-model="newActivity.type">
-            <el-option label="Group Buy" value="GROUP_BUY" />
-            <el-option label="Flash Sale" value="FLASH_SALE" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Group Size" v-if="newActivity.type === 'GROUP_BUY'">
-          <el-input-number v-model="newActivity.groupSize" :min="2" />
-        </el-form-item>
-        <el-form-item label="Discount" v-if="newActivity.type === 'GROUP_BUY'">
-          <el-input-number v-model="newActivity.discount" :step="0.1" :max="1" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="showCreateDialog = false">Cancel</el-button>
-        <el-button type="primary" @click="handleCreate">Create</el-button>
-      </template>
-    </el-dialog>
+    <el-card class="campaign-list">
+        <template #header>Campaigns</template>
+        <el-table :data="campaigns" style="width: 100%">
+            <el-table-column prop="name" label="Name" />
+            <el-table-column prop="type" label="Type">
+                <template #default="scope">
+                    <el-tag>{{ scope.row.type }}</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="status" label="Status">
+                <template #default="scope">
+                    <el-tag :type="getStatusType(scope.row.status)">{{ scope.row.status }}</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column label="Actions" width="150">
+                <template #default="scope">
+                    <el-button size="small" @click="viewDetails(scope.row)">View</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </el-card>
 
-    <!-- AI Content Dialog -->
-    <el-dialog v-model="showContentDialog" title="AI Generated Content">
-      <div v-if="generatedContent">
-        <h4>{{ generatedContent.wechat_title }}</h4>
-        <p>{{ generatedContent.wechat_body }}</p>
-        <img :src="generatedContent.poster_url" style="width: 100%; max-width: 300px;" />
-      </div>
-    </el-dialog>
+    <CampaignWizard v-model="showWizard" @created="fetchCampaigns" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, reactive } from 'vue';
-import { useMarketingStore } from '../../stores/marketing.store';
+import { ref, onMounted } from 'vue';
+import CampaignWizard from './CampaignWizard.vue';
+import apiClient from '../../services/api';
+import { ElMessage } from 'element-plus';
 
-const store = useMarketingStore();
-const activities = computed(() => store.activities);
-const generatedContent = computed(() => store.generatedContent);
-const loading = computed(() => store.loading);
+const campaigns = ref<any[]>([]);
+const showWizard = ref(false);
 
-const showCreateDialog = ref(false);
-const showContentDialog = ref(false);
-
-const newActivity = reactive({
-  name: '',
-  type: 'GROUP_BUY',
-  groupSize: 3,
-  discount: 0.8
-});
-
-const handleCreate = async () => {
-  const payload = {
-    name: newActivity.name,
-    type: newActivity.type,
-    rulesJson: JSON.stringify({
-      groupSize: newActivity.groupSize,
-      discount: newActivity.discount
-    })
-  };
-  await store.createActivity(payload);
-  showCreateDialog.value = false;
+const fetchCampaigns = async () => {
+    try {
+        const res = await apiClient.get('/marketing/campaigns');
+        campaigns.value = res.data;
+    } catch (error) {
+        ElMessage.error('Failed to load campaigns');
+    }
 };
 
-const handleGenerateContent = async (activity: any) => {
-  await store.generateContent(activity.id);
-  showContentDialog.value = true;
+const getStatusType = (status: string) => {
+    if (status === 'ACTIVE') return 'success';
+    if (status === 'COMPLETED') return 'info';
+    return 'warning';
+};
+
+const viewDetails = (campaign: any) => {
+    ElMessage.info('Campaign details view coming soon');
 };
 
 onMounted(() => {
-  store.fetchActivities();
+    fetchCampaigns();
 });
 </script>
 
 <style scoped>
-.actions {
-  display: flex;
-  justify-content: flex-end;
+.marketing-dashboard {
+    padding: 20px;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.text-success {
+    color: #67c23a;
 }
 </style>

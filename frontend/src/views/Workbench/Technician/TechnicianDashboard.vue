@@ -38,10 +38,10 @@
                         <el-tag :type="scope.row.priority === 'HIGH' ? 'danger' : 'warning'" size="small">{{ scope.row.priority }}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="Action" width="120">
+                <el-table-column label="Action" width="180">
                     <template #default="scope">
                         <el-button v-if="scope.row.status === 'OPEN'" link type="primary" size="small" @click="updateStatus(scope.row.id, 'IN_PROGRESS')">Start</el-button>
-                        <el-button v-if="scope.row.status === 'IN_PROGRESS'" link type="success" size="small" @click="updateStatus(scope.row.id, 'CLOSED')">Complete</el-button>
+                        <el-button v-if="scope.row.status === 'IN_PROGRESS'" link type="success" size="small" @click="openCompleteDialog(scope.row)">Complete</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -62,23 +62,64 @@
         </el-card>
     </div>
 
+    <!-- Complete Order Dialog -->
+    <el-dialog v-model="showCompleteDialog" title="Complete Work Order">
+        <el-form>
+            <el-form-item label="Resolution Notes">
+                <el-input type="textarea" v-model="completionNotes" />
+            </el-form-item>
+            
+            <el-divider>Spare Parts Used</el-divider>
+            
+            <div v-for="(part, index) in selectedParts" :key="index" class="part-row">
+                <el-select v-model="part.sku" placeholder="Select Part" filterable>
+                    <el-option v-for="item in spareParts" :key="item.sku" :label="item.name + ' (' + item.quantity + ')'" :value="item.sku" :disabled="item.quantity <= 0" />
+                </el-select>
+                <el-input-number v-model="part.quantity" :min="1" size="small" />
+                <el-button type="danger" icon="Delete" circle size="small" @click="removePartRow(index)" />
+            </div>
+            <el-button type="primary" link @click="addPartRow">+ Add Part</el-button>
+        </el-form>
+        <template #footer>
+            <el-button @click="showCompleteDialog = false">Cancel</el-button>
+            <el-button type="primary" @click="submitCompletion">Complete Order</el-button>
+        </template>
+    </el-dialog>
+
     <DeviceMonitor />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useWorkbenchStore } from '../../../stores/workbench.store';
 import DeviceMonitor from './DeviceMonitor.vue';
 import { ElMessage } from 'element-plus';
+import apiClient from '../../../services/api';
 
 const store = useWorkbenchStore();
 const tasks = computed(() => store.technicianTasks);
 const loading = computed(() => store.loading);
 
+const showCompleteDialog = ref(false);
+const currentOrderId = ref<number | null>(null);
+const completionNotes = ref('');
+const selectedParts = ref<{sku: string, quantity: number}[]>([]);
+const spareParts = ref<any[]>([]);
+
 onMounted(() => {
   store.fetchTechnicianTasks();
+  fetchSpareParts();
 });
+
+const fetchSpareParts = async () => {
+    try {
+        const res = await apiClient.get('/inventory', { params: { storeId: 1 } }); // Default store
+        spareParts.value = res.data.filter((i: any) => i.category === 'SPARE_PART' || i.category === 'ASSET');
+    } catch (error) {
+        console.error('Failed to load spare parts');
+    }
+};
 
 const updateStatus = async (orderId: number, status: string) => {
     try {
@@ -86,6 +127,46 @@ const updateStatus = async (orderId: number, status: string) => {
         ElMessage.success('Status updated successfully');
     } catch (error) {
         ElMessage.error('Failed to update status');
+    }
+};
+
+const openCompleteDialog = (order: any) => {
+    currentOrderId.value = order.id;
+    completionNotes.value = '';
+    selectedParts.value = [];
+    showCompleteDialog.value = true;
+};
+
+const addPartRow = () => {
+    selectedParts.value.push({ sku: '', quantity: 1 });
+};
+
+const removePartRow = (index: number) => {
+    selectedParts.value.splice(index, 1);
+};
+
+const submitCompletion = async () => {
+    if (!currentOrderId.value) return;
+    
+    // Filter out empty rows
+    const partsUsed = selectedParts.value.filter(p => p.sku && p.quantity > 0);
+    
+    try {
+        // We need to update the store action to support payload
+        // For now, assume store.updateWorkOrderStatus handles the API call structure or we call API directly here for simplicity if store is rigid
+        // Actually, let's call API directly to bypass store limitation if needed, or update store.
+        // Let's call API directly for this specific complex action
+        await apiClient.put(`/workbench/technician/work-orders/${currentOrderId.value}/status`, {
+            status: 'CLOSED',
+            notes: completionNotes.value,
+            partsUsed: partsUsed
+        });
+        
+        ElMessage.success('Work Order Completed');
+        showCompleteDialog.value = false;
+        store.fetchTechnicianTasks(); // Refresh
+    } catch (error) {
+        ElMessage.error('Failed to complete order');
     }
 };
 </script>
@@ -142,5 +223,11 @@ const updateStatus = async (orderId: number, status: string) => {
 .plan-count {
     font-size: 12px;
     color: #909399;
+}
+.part-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
 }
 </style>

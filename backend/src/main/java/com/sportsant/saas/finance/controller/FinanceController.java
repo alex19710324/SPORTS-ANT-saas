@@ -1,5 +1,6 @@
 package com.sportsant.saas.finance.controller;
 
+import com.sportsant.saas.finance.entity.TransactionRecord;
 import com.sportsant.saas.finance.entity.Voucher;
 import com.sportsant.saas.finance.service.FinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,18 @@ public class FinanceController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER')")
     public List<Voucher> getAllVouchers() {
         return financeService.getAllVouchers();
+    }
+    
+    @GetMapping("/transactions")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER') or hasRole('FINANCE')")
+    public List<TransactionRecord> getTransactions(@RequestParam Long walletId) {
+        return financeService.getWalletTransactions(walletId);
+    }
+    
+    @GetMapping("/revenue/today")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER') or hasRole('FRONT_DESK')")
+    public BigDecimal getTodayRevenue() {
+        return financeService.getTodayRevenue();
     }
 
     @PostMapping("/tax/calculate")

@@ -84,9 +84,14 @@ public class FrontDeskService {
     public Member processSale(String memberCode, Double amount) {
         Member member = membershipService.findMemberByCodeOrPhone(memberCode);
         
-        // Record Financial Transaction
-        financeService.recordPayment(BigDecimal.valueOf(amount), memberCode, "Sale to " + member.getName());
+        // Use the new Finance Service method for real double-entry accounting
+        financeService.processPayment(
+            member.getUserId(), 
+            BigDecimal.valueOf(amount), 
+            "POS Sale to " + member.getName()
+        );
         
+        // Still trigger membership updates (points/growth)
         return membershipService.simulatePurchase(member.getUserId(), amount.intValue());
     }
 }

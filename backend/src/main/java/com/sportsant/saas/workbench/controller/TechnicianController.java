@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,9 +26,10 @@ public class TechnicianController {
 
     @PutMapping("/work-orders/{id}/status")
     @PreAuthorize("hasRole('TECHNICIAN') or hasRole('ADMIN')")
-    public WorkOrder updateWorkOrderStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
-        String newStatus = payload.get("status");
+    public WorkOrder updateWorkOrderStatus(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
+        String newStatus = (String) payload.get("status");
         Long mockTechId = 101L; // In real app, get from SecurityContext
-        return technicianService.updateWorkOrderStatus(id, newStatus, mockTechId);
+        List<Map<String, Object>> partsUsed = (List<Map<String, Object>>) payload.get("partsUsed");
+        return technicianService.updateWorkOrderStatus(id, newStatus, mockTechId, partsUsed);
     }
 }

@@ -15,6 +15,7 @@ import CommunicationDashboard from '../views/Communication/CommunicationDashboar
 import ReportDashboard from '../views/Report/ReportDashboard.vue';
 import MemberPortal from '../views/MemberPortal/MemberPortal.vue';
 import HRDashboard from '../views/HR/HRDashboard.vue';
+import InventoryDashboard from '../views/Inventory/InventoryDashboard.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,12 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: { layout: MainLayout },
+    },
+    {
+      path: '/inventory',
+      name: 'inventory-dashboard',
+      component: InventoryDashboard,
       meta: { layout: MainLayout },
     },
     {

@@ -4,6 +4,7 @@ import com.sportsant.saas.device.repository.DeviceRepository;
 import com.sportsant.saas.device.repository.WorkOrderRepository;
 import com.sportsant.saas.device.entity.Device;
 import com.sportsant.saas.device.entity.WorkOrder;
+import com.sportsant.saas.inventory.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,9 @@ public class TechnicianService {
 
     @Autowired
     private DeviceRepository deviceRepository;
+
+    @Autowired
+    private InventoryService inventoryService;
 
     public Map<String, Object> getTechnicianOverview(Long technicianId) {
         // Mock data for now, in real app filter by technicianId or storeId
@@ -45,7 +49,7 @@ public class TechnicianService {
     }
 
     @Transactional
-    public WorkOrder updateWorkOrderStatus(Long orderId, String newStatus, Long technicianId) {
+    public WorkOrder updateWorkOrderStatus(Long orderId, String newStatus, Long technicianId, List<Map<String, Object>> partsUsed) {
         WorkOrder order = workOrderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Work Order not found"));
         
@@ -55,6 +59,16 @@ public class TechnicianService {
         } else if ("CLOSED".equals(newStatus)) {
             order.setStatus("CLOSED");
             order.setClosedAt(LocalDateTime.now());
+            
+            // Deduct Inventory Parts
+            if (partsUsed != null && !partsUsed.isEmpty()) {
+                Long storeId = 1L; // Assuming storeId context or from order.device.store
+                for (Map<String, Object> part : partsUsed) {
+                    String sku = (String) part.get("sku");
+                    Integer quantity = (Integer) part.get("quantity");
+                    inventoryService.updateStock(storeId, sku, -quantity);
+                }
+            }
         } else {
              throw new RuntimeException("Invalid status transition: " + newStatus);
         }
