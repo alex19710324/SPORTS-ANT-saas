@@ -1,6 +1,5 @@
 package com.sportsant.saas.communication.entity;
 
-import com.sportsant.saas.entity.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,37 +10,40 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true) // Nullable for global/role-based
-    private User recipient;
+    @Column(nullable = false)
+    private Long recipientId; // Member ID or Staff ID (or 0 for Broadcast)
 
-    private String roleTarget; // e.g., "ROLE_STORE_MANAGER"
-
+    @Column(nullable = false)
     private String title;
+
     private String message;
-    private String type; // INFO, WARNING, ERROR, SUCCESS
-    private String link; // Optional action link
-    
-    private boolean isRead;
+
+    @Column(nullable = false)
+    private String type; // SYSTEM, MARKETING, ALERT, BOOKING
+
+    private Boolean isRead = false;
+
     private LocalDateTime createdAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        isRead = false;
+    }
 
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public User getRecipient() { return recipient; }
-    public void setRecipient(User recipient) { this.recipient = recipient; }
-    public String getRoleTarget() { return roleTarget; }
-    public void setRoleTarget(String roleTarget) { this.roleTarget = roleTarget; }
+    public Long getRecipientId() { return recipientId; }
+    public void setRecipientId(Long recipientId) { this.recipientId = recipientId; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
-    public String getLink() { return link; }
-    public void setLink(String link) { this.link = link; }
-    public boolean isRead() { return isRead; }
-    public void setRead(boolean read) { isRead = read; }
+    public Boolean getIsRead() { return isRead; }
+    public void setIsRead(Boolean isRead) { this.isRead = isRead; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

@@ -25,7 +25,7 @@
 
       <div class="message-badge" @click="showMessageCenter = true">
           <el-badge :value="unreadCount" :hidden="unreadCount === 0" class="item">
-              <el-icon :size="20"><Message /></el-icon>
+              <el-icon :size="20"><Bell /></el-icon>
           </el-badge>
       </div>
 
@@ -46,9 +46,9 @@
       </el-dropdown>
     </div>
 
-    <!-- Message Center Drawer -->
-    <el-drawer v-model="showMessageCenter" title="Message Center" size="400px" direction="rtl">
-        <MessageCenter />
+    <!-- Notification Drawer -->
+    <el-drawer v-model="showMessageCenter" title="Notifications" size="400px" direction="rtl">
+        <NotificationList />
     </el-drawer>
   </el-header>
 </template>
@@ -57,11 +57,12 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth.store';
-import { ArrowDown, Message, Collection } from '@element-plus/icons-vue';
+import { ArrowDown, Bell, Collection } from '@element-plus/icons-vue';
 import { useWorkbenchStore } from '../stores/workbench.store';
-import MessageCenter from '../components/communication/MessageCenter.vue';
+import NotificationList from '../views/Communication/NotificationList.vue';
 import { useI18nStore } from '../stores/i18n.store';
 import TourService from '../services/tour.service';
+import apiClient from '../services/api';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -99,7 +100,13 @@ onMounted(async () => {
 
 const checkUnread = async () => {
     try {
-        unreadCount.value = await workbenchStore.getUnreadMessageCount();
+        const user = authStore.user;
+        if (user) {
+            // Use ID 101 as mock if user.id missing
+            const userId = user.id || 101; 
+            const res = await apiClient.get('/communication/notifications/unread-count', { params: { userId } });
+            unreadCount.value = res.data;
+        }
     } catch (e) {
         console.error("Failed to check unread messages");
     }

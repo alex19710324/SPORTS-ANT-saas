@@ -47,6 +47,26 @@
             </el-table>
         </el-card>
 
+        <!-- NEW: Preventive Maintenance -->
+        <el-card class="maintenance-card">
+            <template #header>
+                <div class="card-header">
+                    <span>Preventive Maintenance</span>
+                    <el-tag type="success" v-if="preventiveTasks">{{ preventiveTasks.length }}</el-tag>
+                </div>
+            </template>
+            <el-table :data="preventiveTasks" style="width: 100%" size="small">
+                <el-table-column prop="device.name" label="Device" />
+                <el-table-column prop="description" label="Task" />
+                <el-table-column prop="dueDate" label="Due" width="100" />
+                <el-table-column label="Action" width="80">
+                    <template #default="scope">
+                        <el-button link type="primary" size="small" @click="completePreventiveTask(scope.row.id)">Done</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
+
         <!-- T03: Offline Devices -->
         <el-card class="inspection-card">
             <template #header>{{ $t('technician.offlineDevices') }}</template>
@@ -106,11 +126,32 @@ const currentOrderId = ref<number | null>(null);
 const completionNotes = ref('');
 const selectedParts = ref<{sku: string, quantity: number}[]>([]);
 const spareParts = ref<any[]>([]);
+const preventiveTasks = ref<any[]>([]);
 
 onMounted(() => {
   store.fetchTechnicianTasks();
   fetchSpareParts();
+  fetchPreventiveTasks();
 });
+
+const fetchPreventiveTasks = async () => {
+    try {
+        const res = await apiClient.get('/maintenance/tasks/pending');
+        preventiveTasks.value = res.data;
+    } catch (e) {
+        console.error('Failed to load maintenance tasks');
+    }
+};
+
+const completePreventiveTask = async (taskId: number) => {
+    try {
+        await apiClient.put(`/maintenance/tasks/${taskId}/complete`);
+        ElMessage.success('Maintenance Task Completed');
+        fetchPreventiveTasks();
+    } catch (e) {
+        ElMessage.error('Failed to complete task');
+    }
+};
 
 const fetchSpareParts = async () => {
     try {

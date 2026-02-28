@@ -1,123 +1,84 @@
 package com.sportsant.saas.finance.service;
 
-import com.sportsant.saas.ai.service.AiAware;
-import com.sportsant.saas.finance.engine.AccountingEngine;
-import com.sportsant.saas.finance.entity.TransactionRecord;
-import com.sportsant.saas.finance.entity.Voucher;
-import com.sportsant.saas.finance.entity.Wallet;
+import com.sportsant.saas.data.service.AnalyticsService;
+import com.sportsant.saas.finance.entity.Transaction;
 import com.sportsant.saas.finance.repository.TransactionRepository;
-import com.sportsant.saas.finance.repository.VoucherRepository;
-import com.sportsant.saas.finance.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service
-public class FinanceService implements AiAware {
-
-    @Autowired
-    private VoucherRepository voucherRepository;
+public class FinanceService {
 
     @Autowired
     private TransactionRepository transactionRepository;
 
     @Autowired
-    private WalletRepository walletRepository;
+    private AnalyticsService analyticsService;
 
-    @Autowired
-    private AccountingEngine accountingEngine;
+    public List<Transaction> getTransactions(LocalDate start, LocalDate end) {
+        return transactionRepository.findByTransactionDateBetween(start.atStartOfDay(), end.atTime(23, 59, 59));
+    }
 
     @Transactional
-    public void processPayment(Long payerUserId, BigDecimal amount, String description) {
-        // 1. Deduct from Member Wallet
-        Wallet payerWallet = walletRepository.findByUserId(payerUserId)
-                .orElseThrow(() -> new RuntimeException("Payer wallet not found"));
-        
-        if (payerWallet.getBalance().compareTo(amount) < 0) {
-            throw new RuntimeException("Insufficient balance");
+    public Transaction recordTransaction(Transaction transaction) {
+        if (transaction.getTransactionDate() == null) {
+            transaction.setTransactionDate(LocalDateTime.now());
         }
+        return transactionRepository.save(transaction);
+    }
+
+    public Map<String, Object> getFinancialStatement(LocalDate start, LocalDate end) {
+        List<Transaction> txs = getTransactions(start, end);
         
-        payerWallet.setBalance(payerWallet.getBalance().subtract(amount));
-        walletRepository.save(payerWallet);
+        double income = txs.stream()
+                .filter(t -> "INCOME".equals(t.getType()))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+                
+        double expense = txs.stream()
+                .filter(t -> "EXPENSE".equals(t.getType()))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
         
-        TransactionRecord debit = new TransactionRecord();
-        debit.setWalletId(payerWallet.getId());
-        debit.setType("PAYMENT_SENT");
-        debit.setAmount(amount.negate());
-        debit.setBalanceAfter(payerWallet.getBalance());
-        debit.setDescription(description);
-        transactionRepository.save(debit);
+        // Mock data if empty for demo
+        if (txs.isEmpty()) {
+            income = 150000.0;
+            expense = 85000.0;
+        }
 
-        // 2. Credit to Store Wallet (Assuming Store Admin User ID = 1 for MVP)
-        Wallet storeWallet = walletRepository.findByUserId(1L)
-                .orElseGet(() -> {
-                    Wallet w = new Wallet();
-                    w.setUserId(1L);
-                    w.setBalance(BigDecimal.ZERO);
-                    w.setCurrency("CNY");
-                    return walletRepository.save(w);
-                });
+        Map<String, Object> report = new HashMap<>();
+        report.put("totalIncome", income);
+        report.put("totalExpense", expense);
+        report.put("netProfit", income - expense);
+        report.put("margin", (income > 0) ? ((income - expense) / income) * 100 : 0);
         
-        storeWallet.setBalance(storeWallet.getBalance().add(amount));
-        walletRepository.save(storeWallet);
-
-        TransactionRecord credit = new TransactionRecord();
-        credit.setWalletId(storeWallet.getId());
-        credit.setType("PAYMENT_RECEIVED");
-        credit.setAmount(amount);
-        credit.setBalanceAfter(storeWallet.getBalance());
-        credit.setDescription("Payment from User " + payerUserId + ": " + description);
-        transactionRepository.save(credit);
+        return report;
     }
 
-    public void recordPayment(BigDecimal amount, String memberCode, String desc) {
-        // Legacy mock method, kept for backward compatibility if needed, 
-        // but now we should use processPayment
-    }
-    
-    public BigDecimal getTodayRevenue() {
-        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        BigDecimal revenue = transactionRepository.sumRevenueSince(startOfDay);
-        return revenue != null ? revenue : BigDecimal.ZERO;
-    }
-
-    public Long getTodayVisitors() {
-        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        Long visitors = transactionRepository.countVisitorsSince(startOfDay);
-        return visitors != null ? visitors : 0L;
-    }
-
+    // This would be a @Scheduled task in real life
     @Transactional
-    public Voucher createVoucherFromEvent(String sourceType, Long sourceId, BigDecimal amount) {
-        Voucher voucher = accountingEngine.generateVoucher(sourceType, sourceId, amount);
-        return voucherRepository.save(voucher);
-    }
-
-    public List<TransactionRecord> getWalletTransactions(Long walletId) {
-        return transactionRepository.findByWalletIdOrderByCreatedAtDesc(walletId);
-    }
-
-    public List<Voucher> getAllVouchers() {
-        return voucherRepository.findAll();
-    }
-
-    public Map<String, Object> calculateTax(String country, BigDecimal amount) {
-        return accountingEngine.calculateTax(country, amount);
-    }
-
-    public Map<String, Object> predictCashFlow() {
-        // AI Logic placeholder
-        return new HashMap<>();
-    }
-
-    @Override
-    public void onAiSuggestion(String suggestionType, Object payload) {
-        // AI: "High Tax Risk detected"
+    public void generateDailyLedger() {
+        // Mocking "Closing the Books"
+        // 1. Get daily revenue from Analytics (which mocks Order/Booking sum)
+        Map<String, Object> data = analyticsService.getDashboardData();
+        Double totalRevenue = (Double) data.get("totalRevenue"); // Total accumulated
+        
+        // Create a transaction for "Daily Sales" (randomized for demo variation)
+        Transaction income = new Transaction();
+        income.setDescription("Daily Sales Consolidated");
+        income.setType("INCOME");
+        income.setCategory("SALES");
+        income.setAmount(5000.0 + new Random().nextInt(2000));
+        income.setSource("SYSTEM");
+        income.setTransactionDate(LocalDateTime.now());
+        transactionRepository.save(income);
     }
 }

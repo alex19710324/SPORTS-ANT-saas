@@ -21,6 +21,7 @@ import SystemDashboard from '../views/Monitor/SystemDashboard.vue';
 import SaaSAdminDashboard from '../views/SaaSAdmin/SaaSAdminDashboard.vue';
 import VenueTwin from '../views/IoT/VenueTwin.vue';
 import SmartSchedule from '../views/HR/SmartSchedule.vue';
+import BookingView from '../views/Booking/BookingView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,12 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: { layout: MainLayout },
+    },
+    {
+      path: '/booking',
+      name: 'booking-view',
+      component: BookingView,
       meta: { layout: MainLayout },
     },
     {

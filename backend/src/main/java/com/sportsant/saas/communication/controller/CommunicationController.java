@@ -1,12 +1,13 @@
 package com.sportsant.saas.communication.controller;
 
 import com.sportsant.saas.communication.entity.Notification;
-import com.sportsant.saas.communication.service.NotificationService;
+import com.sportsant.saas.communication.service.CommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/communication")
@@ -14,39 +15,29 @@ import java.util.List;
 public class CommunicationController {
 
     @Autowired
-    private NotificationService notificationService;
+    private CommunicationService communicationService;
 
-    // --- P0: Send Notification ---
-    @PostMapping("/send")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
-    public Notification sendNotification(@RequestBody Notification notification) {
-        if (notification.getRoleTarget() != null) {
-            notificationService.sendToRole(
-                notification.getRoleTarget(),
-                notification.getTitle(),
-                notification.getMessage(),
-                notification.getType(),
-                notification.getLink()
-            );
-        } else if (notification.getRecipient() != null) {
-             notificationService.sendToUser(
-                notification.getRecipient(),
-                notification.getTitle(),
-                notification.getMessage(),
-                notification.getType(),
-                notification.getLink()
-            );
-        }
-        return notification; // Return the payload for now, as service methods are void
+    @GetMapping("/notifications")
+    @PreAuthorize("hasRole('USER')")
+    public List<Notification> getMyNotifications(@RequestParam Long userId) {
+        return communicationService.getMyNotifications(userId);
     }
 
-    // --- P1: History ---
-    @GetMapping("/history")
+    @GetMapping("/notifications/unread-count")
+    @PreAuthorize("hasRole('USER')")
+    public Long getUnreadCount(@RequestParam Long userId) {
+        return communicationService.getUnreadCount(userId);
+    }
+
+    @PutMapping("/notifications/{id}/read")
+    @PreAuthorize("hasRole('USER')")
+    public void markAsRead(@PathVariable Long id) {
+        communicationService.markAsRead(id);
+    }
+
+    @PostMapping("/broadcast")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
-    public List<Notification> getHistory() {
-        // Since getAllNotifications doesn't exist, we can use a method that returns all for admin
-        // But notificationService.getUserNotifications returns user specific
-        // Let's just return empty list or implement getAll later if needed for admin history
-        return List.of(); 
+    public void broadcast(@RequestBody Map<String, String> payload) {
+        communicationService.broadcast(payload.get("title"), payload.get("message"));
     }
 }

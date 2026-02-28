@@ -20,6 +20,16 @@
         <template #title>{{ $t('home.modules.applications.title') || 'Home' }}</template>
       </el-menu-item>
       
+      <el-menu-item index="/member/portal">
+        <el-icon><calendar /></el-icon>
+        <template #title>My Portal</template>
+      </el-menu-item>
+
+      <el-menu-item index="/booking">
+        <el-icon><calendar /></el-icon>
+        <template #title>Book Court</template>
+      </el-menu-item>
+      
       <el-sub-menu index="/hq" v-if="hasRole(['ADMIN', 'HQ'])">
         <template #title>
           <el-icon><office-building /></el-icon>
@@ -114,7 +124,8 @@ import {
   Document,
   Monitor,
   Connection,
-  MagicStick
+  MagicStick,
+  Calendar
 } from '@element-plus/icons-vue';
 
 const isCollapsed = ref(false);
