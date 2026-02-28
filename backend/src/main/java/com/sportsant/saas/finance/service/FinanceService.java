@@ -87,29 +87,45 @@ public class FinanceService {
     }
 
     public Map<String, Object> getFinancialStatement(LocalDate start, LocalDate end) {
-        List<Transaction> txs = getTransactions(start, end);
+        // 1. Get Vouchers (Accounting Data)
+        List<Voucher> vouchers = voucherRepository.findByPostedAtBetween(start.atStartOfDay(), end.atTime(23, 59, 59));
         
-        double income = txs.stream()
-                .filter(t -> "INCOME".equals(t.getType()))
-                .mapToDouble(Transaction::getAmount)
-                .sum();
-                
-        double expense = txs.stream()
-                .filter(t -> "EXPENSE".equals(t.getType()))
-                .mapToDouble(Transaction::getAmount)
-                .sum();
+        // 2. Aggregate by Account Type
+        double revenue = vouchers.stream()
+            .filter(v -> "6001-Revenue".equals(v.getCreditAccount()))
+            .mapToDouble(v -> v.getAmount().doubleValue())
+            .sum();
+            
+        double cogs = vouchers.stream() // Cost of Goods Sold (Raw Materials)
+            .filter(v -> "1403-Raw Materials".equals(v.getDebitAccount()))
+            .mapToDouble(v -> v.getAmount().doubleValue())
+            .sum();
+
+        double expense = vouchers.stream() // Salary, Rent, etc.
+            .filter(v -> v.getDebitAccount() != null && v.getDebitAccount().startsWith("6602"))
+            .mapToDouble(v -> v.getAmount().doubleValue())
+            .sum();
+            
+        // 3. Tax Calculation (Mock based on Revenue)
+        double tax = revenue * 0.13; // 13% VAT assumption for CN
         
-        // Mock data if empty for demo
-        if (txs.isEmpty()) {
-            income = 150000.0;
-            expense = 85000.0;
+        // 4. Fallback Mock Data if Empty (for Demo)
+        if (vouchers.isEmpty()) {
+            revenue = 150000.0;
+            cogs = 45000.0;
+            expense = 40000.0;
+            tax = revenue * 0.13;
         }
 
+        double netProfit = revenue - cogs - expense - tax;
+
         Map<String, Object> report = new HashMap<>();
-        report.put("totalIncome", income);
-        report.put("totalExpense", expense);
-        report.put("netProfit", income - expense);
-        report.put("margin", (income > 0) ? ((income - expense) / income) * 100 : 0);
+        report.put("totalIncome", revenue); // Revenue
+        report.put("cogs", cogs); // Cost of Goods
+        report.put("operatingExpense", expense); // OpEx
+        report.put("tax", tax);
+        report.put("netProfit", netProfit);
+        report.put("margin", (revenue > 0) ? (netProfit / revenue) * 100 : 0);
         
         return report;
     }
@@ -122,14 +138,42 @@ public class FinanceService {
         Map<String, Object> data = analyticsService.getDashboardData();
         System.out.println("Generating daily ledger with data: " + data);
         
-        // Create a transaction for "Daily Sales" (randomized for demo variation)
-        Transaction income = new Transaction();
-        income.setDescription("Daily Sales Consolidated");
-        income.setType("INCOME");
-        income.setCategory("SALES");
-        income.setAmount(5000.0 + new Random().nextInt(2000));
-        income.setSource("SYSTEM");
-        income.setTransactionDate(LocalDateTime.now());
-        transactionRepository.save(income);
+        // Create a voucher for "Daily Sales" (randomized for demo variation)
+        createVoucher("DAILY_CLOSING", 0L, BigDecimal.valueOf(5000.0 + new Random().nextInt(2000)), "Daily Sales Consolidated", "CN");
+    }
+
+    @Transactional
+    public Voucher createVoucher(String sourceType, Long sourceId, BigDecimal amount, String description, String region) {
+        Voucher voucher = new Voucher();
+        voucher.setVoucherNo("V-" + System.currentTimeMillis());
+        voucher.setSourceType(sourceType);
+        voucher.setSourceId(sourceId);
+        voucher.setAmount(amount);
+        voucher.setDescription(description);
+        voucher.setRegion(region != null ? region : "CN");
+        voucher.setCurrency("CNY");
+        
+        // Simple Rule Engine for Account Mapping
+        if ("POS_SALE".equals(sourceType) || "DAILY_CLOSING".equals(sourceType)) {
+            voucher.setDebitAccount("1001-Cash/Bank");
+            voucher.setCreditAccount("6001-Revenue");
+        } else if ("PURCHASE".equals(sourceType)) {
+            voucher.setDebitAccount("1403-Raw Materials");
+            voucher.setCreditAccount("1002-Bank Deposit");
+        } else if ("PAYROLL".equals(sourceType)) {
+            voucher.setDebitAccount("6602-Admin Expense-Salary");
+            voucher.setCreditAccount("2211-Payable Salary");
+        } else {
+            voucher.setDebitAccount("9999-Suspense");
+            voucher.setCreditAccount("9999-Suspense");
+        }
+
+        // Auto-Calculate Tax (Tax Engine Placeholder)
+        Map<String, Object> taxInfo = calculateTax(voucher.getRegion(), amount);
+        // In a real system, we'd create a separate Tax Voucher or multi-line entry
+        // For MVP, we just log it or store it (could add taxAmount field to Voucher later)
+        System.out.println("Tax Calculated for " + sourceType + ": " + taxInfo);
+
+        return voucherRepository.save(voucher);
     }
 }

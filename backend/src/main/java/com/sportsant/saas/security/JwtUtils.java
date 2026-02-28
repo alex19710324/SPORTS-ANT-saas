@@ -1,11 +1,12 @@
 package com.sportsant.saas.security;
 
+import com.sportsant.saas.config.AppProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -15,11 +16,8 @@ import java.util.Date;
 public class JwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-  @Value("${sports.ant.app.jwtSecret}")
-  private String jwtSecret;
-
-  @Value("${sports.ant.app.jwtExpirationMs}")
-  private int jwtExpirationMs;
+  @Autowired
+  private AppProperties appProperties;
 
   public String generateJwtToken(UserDetailsImpl userPrincipal) {
     return generateTokenFromUsername(userPrincipal.getUsername());
@@ -29,7 +27,7 @@ public class JwtUtils {
     return Jwts.builder()
         .subject(username)
         .issuedAt(new Date())
-        .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+        .expiration(new Date((new Date()).getTime() + appProperties.getJwtExpirationMs()))
         .signWith(key())
         .compact();
   }
@@ -39,7 +37,7 @@ public class JwtUtils {
   }
 
   private SecretKey key() {
-    return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+    return Keys.hmacShaKeyFor(Decoders.BASE64.decode(appProperties.getJwtSecret()));
   }
 
   public boolean validateJwtToken(String authToken) {

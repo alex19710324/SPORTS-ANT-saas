@@ -21,6 +21,9 @@ public class Voucher {
 
     private String debitAccount; // 借方科目
     private String creditAccount; // 贷方科目
+    
+    private String description;
+    private String region; // CN, US, EU
 
     private String status; // DRAFT, POSTED, REVERSED
     private LocalDateTime postedAt;
@@ -48,6 +51,10 @@ public class Voucher {
     public void setDebitAccount(String debitAccount) { this.debitAccount = debitAccount; }
     public String getCreditAccount() { return creditAccount; }
     public void setCreditAccount(String creditAccount) { this.creditAccount = creditAccount; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public String getRegion() { return region; }
+    public void setRegion(String region) { this.region = region; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
     public LocalDateTime getPostedAt() { return postedAt; }

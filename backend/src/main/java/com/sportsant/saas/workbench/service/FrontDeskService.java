@@ -93,6 +93,9 @@ public class FrontDeskService {
             "POS Sale to " + member.getName()
         );
         
+        // Also create a formal Accounting Voucher (Business-Finance Integration)
+        financeService.createVoucher("POS_SALE", member.getId(), BigDecimal.valueOf(amount), "POS Sale: " + member.getName(), "CN");
+        
         // Still trigger membership updates (points/growth)
         return membershipService.simulatePurchase(member.getUserId(), amount.intValue());
     }
@@ -127,6 +130,9 @@ public class FrontDeskService {
             BigDecimal.valueOf(totalAmount), 
             desc.toString()
         );
+        
+        // Accounting Voucher (Business-Finance Integration)
+        financeService.createVoucher("POS_SALE", member.getId(), BigDecimal.valueOf(totalAmount), desc.toString(), "CN");
         
         // Membership Points
         return membershipService.simulatePurchase(member.getUserId(), (int)totalAmount);

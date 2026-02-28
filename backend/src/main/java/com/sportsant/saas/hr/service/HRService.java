@@ -76,7 +76,6 @@ public class HRService {
         return staffList;
     }
 
-    @SuppressWarnings("unchecked")
     public Map<String, Object> calculatePayroll() {
         // Mock Payroll Calculation
         List<Map<String, Object>> staffList = getStaffList();
