@@ -31,6 +31,8 @@ import com.sportsant.saas.repository.RoleRepository;
 import com.sportsant.saas.repository.UserRepository;
 import com.sportsant.saas.security.JwtUtils;
 import com.sportsant.saas.security.UserDetailsImpl;
+import com.sportsant.saas.communication.service.NotificationService;
+import com.sportsant.saas.communication.entity.Notification;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -50,6 +52,9 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
+
+  @Autowired
+  NotificationService notificationService;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -123,6 +128,18 @@ public class AuthController {
 
     user.setRoles(roles);
     userRepository.save(user);
+
+    // Send Welcome Notification
+    try {
+        Notification welcomeMsg = new Notification();
+        welcomeMsg.setRecipient(user.getEmail());
+        welcomeMsg.setChannel("EMAIL");
+        welcomeMsg.setSubject("Welcome to Sports Ant SaaS!");
+        welcomeMsg.setContent("Dear " + user.getUsername() + ",\n\nThank you for registering with us. We are excited to have you on board!\n\nBest Regards,\nSports Ant Team");
+        notificationService.sendNotification(welcomeMsg);
+    } catch (Exception e) {
+        System.err.println("Failed to send welcome notification: " + e.getMessage());
+    }
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }

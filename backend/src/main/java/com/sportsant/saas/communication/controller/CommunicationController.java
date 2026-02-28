@@ -2,14 +2,11 @@ package com.sportsant.saas.communication.controller;
 
 import com.sportsant.saas.communication.entity.Notification;
 import com.sportsant.saas.communication.service.NotificationService;
-import com.sportsant.saas.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/communication")
@@ -19,20 +16,17 @@ public class CommunicationController {
     @Autowired
     private NotificationService notificationService;
 
-    @PostMapping("/notify")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Notification sendNotification(@RequestBody Map<String, Object> payload) {
-        Long userId = Long.valueOf(payload.get("userId").toString());
-        String title = (String) payload.get("title");
-        String content = (String) payload.get("content");
-        String channel = (String) payload.get("channel"); // EMAIL, SMS
-
-        return notificationService.send(userId, title, content, channel);
+    // --- P0: Send Notification ---
+    @PostMapping("/send")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
+    public Notification sendNotification(@RequestBody Notification notification) {
+        return notificationService.sendNotification(notification);
     }
 
-    @GetMapping("/notifications")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public List<Notification> getMyNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return notificationService.getUserHistory(userDetails.getId());
+    // --- P1: History ---
+    @GetMapping("/history")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
+    public List<Notification> getHistory() {
+        return notificationService.getAllNotifications();
     }
 }

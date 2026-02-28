@@ -9,6 +9,7 @@ import DataDashboard from '../views/Data/DataDashboard.vue';
 import MarketingDashboard from '../views/Marketing/MarketingDashboard.vue';
 import FinanceDashboard from '../views/Finance/FinanceDashboard.vue';
 import I18nDashboard from '../views/I18n/I18nDashboard.vue';
+import CommunicationDashboard from '../views/Communication/CommunicationDashboard.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,12 @@ const router = createRouter({
       path: '/i18n',
       name: 'i18n-dashboard',
       component: I18nDashboard,
+    },
+    // Communication Routes
+    {
+      path: '/communication',
+      name: 'communication-dashboard',
+      component: CommunicationDashboard,
     },
     // Workbench Routes
     {

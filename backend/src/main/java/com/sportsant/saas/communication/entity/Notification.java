@@ -1,40 +1,54 @@
 package com.sportsant.saas.communication.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notifications")
-@Data
 @NoArgsConstructor
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long recipientUserId;
-
-    @Column(nullable = false)
-    private String channel; // e.g., "EMAIL", "SMS", "WECHAT", "APP_PUSH"
-
-    @Column(nullable = false)
-    private String title;
-
-    @Column(columnDefinition = "TEXT", nullable = false)
+    private String recipient; // Email, Phone, or OpenID
+    private String channel; // SMS, EMAIL, WECHAT, WHATSAPP
+    private String subject; // For Email/WeChat
+    
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
-    private String status; // "SENT", "FAILED", "PENDING"
+    private String status; // PENDING, SENT, FAILED
+    private String errorMessage;
 
+    private LocalDateTime createdAt;
     private LocalDateTime sentAt;
 
     @PrePersist
     protected void onCreate() {
-        sentAt = LocalDateTime.now();
-        if (status == null) status = "PENDING";
+        createdAt = LocalDateTime.now();
+        status = "PENDING";
     }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getRecipient() { return recipient; }
+    public void setRecipient(String recipient) { this.recipient = recipient; }
+    public String getChannel() { return channel; }
+    public void setChannel(String channel) { this.channel = channel; }
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public String getErrorMessage() { return errorMessage; }
+    public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getSentAt() { return sentAt; }
+    public void setSentAt(LocalDateTime sentAt) { this.sentAt = sentAt; }
 }

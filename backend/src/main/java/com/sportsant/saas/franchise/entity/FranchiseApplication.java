@@ -1,14 +1,12 @@
 package com.sportsant.saas.franchise.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "franchise_applications")
-@Data
 @NoArgsConstructor
 public class FranchiseApplication {
     @Id
@@ -30,4 +28,20 @@ public class FranchiseApplication {
         createdAt = LocalDateTime.now();
         status = "PENDING";
     }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getApplicantName() { return applicantName; }
+    public void setApplicantName(String applicantName) { this.applicantName = applicantName; }
+    public String getContactInfo() { return contactInfo; }
+    public void setContactInfo(String contactInfo) { this.contactInfo = contactInfo; }
+    public String getProposedCity() { return proposedCity; }
+    public void setProposedCity(String proposedCity) { this.proposedCity = proposedCity; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public String getComments() { return comments; }
+    public void setComments(String comments) { this.comments = comments; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

@@ -1,40 +1,57 @@
 package com.sportsant.saas.communication.service;
 
+import com.sportsant.saas.ai.service.AiAware;
 import com.sportsant.saas.communication.entity.Notification;
 import com.sportsant.saas.communication.repository.NotificationRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 @Service
-public class NotificationService {
-    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
+public class NotificationService implements AiAware {
 
     @Autowired
     private NotificationRepository notificationRepository;
 
-    /**
-     * Sends a notification (Mock).
-     */
-    public Notification send(Long userId, String title, String content, String channel) {
-        logger.info("Sending {} to user {}: {} - {}", channel, userId, title, content);
+    private final Random random = new Random();
 
-        Notification notification = new Notification();
-        notification.setRecipientUserId(userId);
-        notification.setTitle(title);
-        notification.setContent(content);
-        notification.setChannel(channel);
-        notification.setStatus("SENT"); // Mock successful send
+    public Notification sendNotification(Notification notification) {
+        // Save first as PENDING
+        notificationRepository.save(notification);
+
+        // Mock Sending Process
+        boolean success = simulateSending(notification.getChannel());
         
-        // In real world: integrate with JavaMailSender, Twilio, WeChat SDK etc.
+        if (success) {
+            notification.setStatus("SENT");
+            notification.setSentAt(LocalDateTime.now());
+        } else {
+            notification.setStatus("FAILED");
+            notification.setErrorMessage("Gateway timeout or invalid recipient");
+        }
         
         return notificationRepository.save(notification);
     }
 
-    public List<Notification> getUserHistory(Long userId) {
-        return notificationRepository.findByRecipientUserId(userId);
+    private boolean simulateSending(String channel) {
+        // Simulate network delay
+        try { Thread.sleep(200); } catch (InterruptedException ignored) {}
+        
+        System.out.println("Sending via " + channel + "...");
+        
+        // 90% success rate
+        return random.nextInt(10) > 0;
+    }
+
+    public List<Notification> getAllNotifications() {
+        return notificationRepository.findAll();
+    }
+
+    @Override
+    public void onAiSuggestion(String suggestionType, Object payload) {
+        // AI Suggestion: "Resend failed notifications"
     }
 }

@@ -1,7 +1,6 @@
 package com.sportsant.saas.finance.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -9,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "finance_vouchers")
-@Data
 @NoArgsConstructor
 public class Voucher {
     @Id
@@ -34,4 +32,26 @@ public class Voucher {
         postedAt = LocalDateTime.now();
         status = "POSTED";
     }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getVoucherNo() { return voucherNo; }
+    public void setVoucherNo(String voucherNo) { this.voucherNo = voucherNo; }
+    public String getSourceType() { return sourceType; }
+    public void setSourceType(String sourceType) { this.sourceType = sourceType; }
+    public Long getSourceId() { return sourceId; }
+    public void setSourceId(Long sourceId) { this.sourceId = sourceId; }
+    public BigDecimal getAmount() { return amount; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
+    public String getCurrency() { return currency; }
+    public void setCurrency(String currency) { this.currency = currency; }
+    public String getDebitAccount() { return debitAccount; }
+    public void setDebitAccount(String debitAccount) { this.debitAccount = debitAccount; }
+    public String getCreditAccount() { return creditAccount; }
+    public void setCreditAccount(String creditAccount) { this.creditAccount = creditAccount; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public LocalDateTime getPostedAt() { return postedAt; }
+    public void setPostedAt(LocalDateTime postedAt) { this.postedAt = postedAt; }
 }

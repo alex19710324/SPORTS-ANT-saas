@@ -5,6 +5,8 @@ import com.sportsant.saas.franchise.entity.FranchiseApplication;
 import com.sportsant.saas.franchise.repository.FranchiseApplicationRepository;
 import com.sportsant.saas.store.entity.Store;
 import com.sportsant.saas.store.repository.StoreRepository;
+import com.sportsant.saas.communication.service.NotificationService;
+import com.sportsant.saas.communication.entity.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ public class HQService implements AiAware {
 
     @Autowired
     private FranchiseApplicationRepository franchiseApplicationRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public Map<String, Object> getGlobalOverview() {
         List<Store> stores = storeRepository.findAll();
@@ -56,6 +61,18 @@ public class HQService implements AiAware {
                 storeRepository.save(newStore);
             }
             
+            // Notify Applicant
+            try {
+                Notification msg = new Notification();
+                msg.setRecipient(app.getContactInfo()); // Assuming contactInfo is Email or Phone
+                msg.setChannel("EMAIL"); // Default to EMAIL for now
+                msg.setSubject("Franchise Application Update");
+                msg.setContent("Dear " + app.getApplicantName() + ",\n\nYour application status has been updated to: " + app.getStatus() + ".\n\nComments: " + comments);
+                notificationService.sendNotification(msg);
+            } catch (Exception e) {
+                System.err.println("Failed to notify applicant: " + e.getMessage());
+            }
+
             return franchiseApplicationRepository.save(app);
         }).orElseThrow(() -> new RuntimeException("Application not found"));
     }
