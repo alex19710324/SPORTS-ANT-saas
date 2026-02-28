@@ -2,14 +2,14 @@ import apiClient from './api';
 
 export default {
   createActivity(activity: any) {
-    return apiClient.post('/marketing/activities', activity);
+    return apiClient.post('/marketing/campaigns', activity);
   },
   
   listActivities() {
-    return apiClient.get('/marketing/activities');
+    return apiClient.get('/marketing/campaigns');
   },
   
   generateContent(activityId: number) {
-    return apiClient.post(`/marketing/activities/${activityId}/generate-content`);
+    return apiClient.post(`/marketing/campaigns/${activityId}/ai-content`);
   }
 };

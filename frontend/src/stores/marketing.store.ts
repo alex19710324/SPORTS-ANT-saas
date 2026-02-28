@@ -36,7 +36,11 @@ export const useMarketingStore = defineStore('marketing', {
       this.loading = true;
       try {
         const response = await MarketingService.generateContent(activityId);
-        this.generatedContent = response.data;
+        if (response.data && response.data.aiGeneratedContent) {
+            this.generatedContent = JSON.parse(response.data.aiGeneratedContent);
+        } else {
+            this.generatedContent = null;
+        }
       } catch (error) {
         console.error('Failed to generate content', error);
       } finally {

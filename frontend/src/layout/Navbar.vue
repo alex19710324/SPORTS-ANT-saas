@@ -8,6 +8,12 @@
     </div>
     
     <div class="navbar-right">
+      <div class="message-badge" @click="showMessageCenter = true">
+          <el-badge :value="unreadCount" :hidden="unreadCount === 0" class="item">
+              <el-icon :size="20"><Message /></el-icon>
+          </el-badge>
+      </div>
+
       <el-dropdown trigger="click" @command="handleCommand">
         <span class="user-profile">
           <el-avatar :size="32" :src="userAvatar">{{ userInitials }}</el-avatar>
@@ -23,20 +29,30 @@
         </template>
       </el-dropdown>
     </div>
+
+    <!-- Message Center Drawer -->
+    <el-drawer v-model="showMessageCenter" title="Message Center" size="400px" direction="rtl">
+        <MessageCenter />
+    </el-drawer>
   </el-header>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth.store';
-import { ArrowDown } from '@element-plus/icons-vue';
+import { ArrowDown, Message } from '@element-plus/icons-vue';
+import { useWorkbenchStore } from '../stores/workbench.store';
+import MessageCenter from '../components/communication/MessageCenter.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const workbenchStore = useWorkbenchStore();
 
 const hasLogo = true; // Set to true if logo exists
 const userAvatar = ''; // URL to user avatar
+const showMessageCenter = ref(false);
+const unreadCount = ref(0);
 
 const username = computed(() => {
   const user = authStore.user;
@@ -46,6 +62,20 @@ const username = computed(() => {
 const userInitials = computed(() => {
   return username.value.substring(0, 2).toUpperCase();
 });
+
+onMounted(async () => {
+    // Poll for unread messages every 30 seconds
+    await checkUnread();
+    setInterval(checkUnread, 30000);
+});
+
+const checkUnread = async () => {
+    try {
+        unreadCount.value = await workbenchStore.getUnreadMessageCount();
+    } catch (e) {
+        console.error("Failed to check unread messages");
+    }
+};
 
 const handleCommand = (command: string) => {
   if (command === 'logout') {
@@ -84,6 +114,18 @@ const handleCommand = (command: string) => {
 .navbar-right {
   display: flex;
   align-items: center;
+  gap: 20px;
+}
+
+.message-badge {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #606266;
+}
+
+.message-badge:hover {
+    color: #409eff;
 }
 
 .user-profile {

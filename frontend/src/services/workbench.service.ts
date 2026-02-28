@@ -33,6 +33,18 @@ export default {
     return apiClient.put(`/workbench/manager/approvals/${requestId}/approve`, {});
   },
 
+  getMessages() {
+    return apiClient.get('/communication/messages/inbox');
+  },
+  
+  getUnreadCount() {
+    return apiClient.get('/communication/messages/unread-count');
+  },
+  
+  sendMessage(receiverId: number, content: string) {
+    return apiClient.post('/communication/messages/send', { receiverId, content });
+  },
+
   getSecurityTasks() {
     return apiClient.get('/workbench/security/tasks');
   }

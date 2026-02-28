@@ -80,6 +80,14 @@ export const useWorkbenchStore = defineStore('workbench', {
             throw error;
         }
     },
+    async getUnreadMessageCount() {
+        try {
+            const res = await WorkbenchService.getUnreadCount();
+            return res.data;
+        } catch (error) {
+            return 0;
+        }
+    },
     async fetchSecurityTasks() {
       this.loading = true;
       try {
