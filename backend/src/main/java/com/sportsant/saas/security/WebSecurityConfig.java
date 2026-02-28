@@ -58,6 +58,9 @@ public class WebSecurityConfig {
               .requestMatchers("/api/test/**").permitAll()
               .requestMatchers("/api/language/**").permitAll() // Allow language APIs
               .requestMatchers("/").permitAll() // Allow root path for welcome page
+              // Swagger UI
+              .requestMatchers("/swagger-ui/**").permitAll()
+              .requestMatchers("/v3/api-docs/**").permitAll()
               // Basic Permission Checks (Example)
               .requestMatchers("/api/hq/**").hasAnyRole("ADMIN", "HQ_MANAGER")
               .requestMatchers("/api/store/**").hasAnyRole("ADMIN", "STORE_MANAGER")
