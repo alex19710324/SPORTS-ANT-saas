@@ -37,6 +37,21 @@ public class AiPerceptionService {
             );
         }
 
+        // Inventory Alert Perception
+        if ("LOW_STOCK_ALERT".equals(event.getType())) {
+            String sku = (String) event.getPayload().get("sku");
+            String name = (String) event.getPayload().get("name");
+            Integer current = (Integer) event.getPayload().get("current");
+            
+            aiBrainService.proposeSuggestion(
+                "Low Stock Alert: " + name,
+                "Item " + name + " (SKU: " + sku + ") is running low (" + current + " remaining). Suggest reordering immediately.",
+                "INVENTORY",
+                "HIGH",
+                "/api/inventory/reorder/" + sku
+            );
+        }
+
         // Security Audit Perception
         if ("SECURITY_AUDIT".equals(event.getType()) && "FAILURE".equals(event.getPayload().get("status"))) {
              // Logic already handled in onLoginFailure, but this catches generic failures

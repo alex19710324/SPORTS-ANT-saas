@@ -30,7 +30,12 @@
       </el-card>
 
       <el-card shadow="hover">
-        <template #header>{{ $t('manager.revenue') }}</template>
+        <template #header>
+            <div class="card-header">
+                <span>{{ $t('manager.revenue') }}</span>
+                <el-button type="primary" link size="small" @click="$router.push('/report')">View Report</el-button>
+            </div>
+        </template>
         <h3>¥{{ overview.todayRevenue }}</h3>
       </el-card>
       <el-card shadow="hover">
