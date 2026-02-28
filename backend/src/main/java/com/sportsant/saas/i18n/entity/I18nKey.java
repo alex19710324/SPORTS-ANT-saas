@@ -1,13 +1,11 @@
 package com.sportsant.saas.i18n.entity;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "i18n_keys")
-@NoArgsConstructor
 public class I18nKey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

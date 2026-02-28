@@ -1,15 +1,11 @@
 package com.sportsant.saas.membership.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "members")
-@Data
-@NoArgsConstructor
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,4 +43,22 @@ public class Member {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+    public MemberLevel getCurrentLevel() { return currentLevel; }
+    public void setCurrentLevel(MemberLevel currentLevel) { this.currentLevel = currentLevel; }
+    public Integer getGrowthValue() { return growthValue; }
+    public void setGrowthValue(Integer growthValue) { this.growthValue = growthValue; }
+    public Integer getPoints() { return points; }
+    public void setPoints(Integer points) { this.points = points; }
+    public LocalDateTime getExpireDate() { return expireDate; }
+    public void setExpireDate(LocalDateTime expireDate) { this.expireDate = expireDate; }
+    public String getTags() { return tags; }
+    public void setTags(String tags) { this.tags = tags; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

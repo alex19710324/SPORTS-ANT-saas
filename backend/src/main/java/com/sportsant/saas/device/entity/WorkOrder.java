@@ -1,13 +1,11 @@
 package com.sportsant.saas.device.entity;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "work_orders")
-@NoArgsConstructor
 public class WorkOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

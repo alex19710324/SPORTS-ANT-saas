@@ -2,12 +2,10 @@ package com.sportsant.saas.hq.controller;
 
 import com.sportsant.saas.franchise.entity.FranchiseApplication;
 import com.sportsant.saas.hq.service.HQService;
-import com.sportsant.saas.store.entity.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController

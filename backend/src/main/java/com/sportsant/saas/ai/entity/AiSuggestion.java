@@ -1,13 +1,11 @@
 package com.sportsant.saas.ai.entity;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ai_suggestions")
-@NoArgsConstructor
 public class AiSuggestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

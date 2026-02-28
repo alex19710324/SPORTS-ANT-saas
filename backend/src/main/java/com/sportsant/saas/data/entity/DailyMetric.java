@@ -1,15 +1,11 @@
 package com.sportsant.saas.data.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "data_metrics_daily")
-@Data
-@NoArgsConstructor
 public class DailyMetric {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +22,18 @@ public class DailyMetric {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public LocalDateTime getDate() { return date; }
+    public void setDate(LocalDateTime date) { this.date = date; }
+    public String getMetricName() { return metricName; }
+    public void setMetricName(String metricName) { this.metricName = metricName; }
+    public String getDimension() { return dimension; }
+    public void setDimension(String dimension) { this.dimension = dimension; }
+    public Double getValue() { return value; }
+    public void setValue(Double value) { this.value = value; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

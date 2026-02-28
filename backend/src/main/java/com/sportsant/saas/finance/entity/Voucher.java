@@ -1,14 +1,12 @@
 package com.sportsant.saas.finance.entity;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "finance_vouchers")
-@NoArgsConstructor
 public class Voucher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

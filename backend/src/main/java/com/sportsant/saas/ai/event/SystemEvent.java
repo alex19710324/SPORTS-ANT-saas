@@ -1,16 +1,16 @@
 package com.sportsant.saas.ai.event;
 
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
-@NoArgsConstructor
 public class SystemEvent {
     private String source; // e.g., "USER_SERVICE", "ORDER_SERVICE"
     private String type; // e.g., "USER_REGISTERED", "LARGE_TRANSACTION"
     private Map<String, Object> payload;
     private LocalDateTime timestamp = LocalDateTime.now();
+
+    public SystemEvent() {}
 
     public SystemEvent(String source, String type, Map<String, Object> payload) {
         this.source = source;

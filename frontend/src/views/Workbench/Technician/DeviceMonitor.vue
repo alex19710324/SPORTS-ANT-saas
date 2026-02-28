@@ -28,8 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useWorkbenchStore } from '../../../stores/workbench.store'; // Reuse for now or create new
+import { ref } from 'vue';
+// import { useWorkbenchStore } from '../../../stores/workbench.store'; // Reuse for now or create new
 
 // Mock Data for now as we don't have a dedicated Device API exposed to frontend yet
 // Ideally, fetch from backend

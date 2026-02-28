@@ -1,8 +1,6 @@
 package com.sportsant.saas.language.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +8,6 @@ import java.time.LocalDateTime;
 @Table(name = "language_packages", uniqueConstraints = {
     @UniqueConstraint(columnNames = "code")
 })
-@Data
-@NoArgsConstructor
 public class LanguagePackage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,4 +41,20 @@ public class LanguagePackage {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getCode() { return code; }
+    public void setCode(String code) { this.code = code; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
+    public String getVersion() { return version; }
+    public void setVersion(String version) { this.version = version; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

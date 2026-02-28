@@ -26,6 +26,7 @@ public class DataController {
     // --- P1: Tag Service ---
     @PostMapping("/tags/query")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
+    @SuppressWarnings("unchecked")
     public Map<String, Object> queryTags(@RequestBody Map<String, Object> payload) {
         List<String> tags = (List<String>) payload.get("tags");
         return dataService.queryTags(tags);

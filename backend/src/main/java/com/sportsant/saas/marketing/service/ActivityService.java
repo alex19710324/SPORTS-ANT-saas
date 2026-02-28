@@ -27,6 +27,7 @@ public class ActivityService implements AiAware {
     public Activity createActivity(Activity activity) {
         // Validate Rules
         try {
+            @SuppressWarnings("unchecked")
             Map<String, Object> rules = objectMapper.readValue(activity.getRulesJson(), Map.class);
             if (!ruleEngine.validateActivityRules(activity.getType(), rules)) {
                 throw new IllegalArgumentException("Invalid Rules for " + activity.getType());

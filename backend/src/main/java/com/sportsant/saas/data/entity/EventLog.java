@@ -1,15 +1,11 @@
 package com.sportsant.saas.data.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "data_event_logs")
-@Data
-@NoArgsConstructor
 public class EventLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +29,16 @@ public class EventLog {
             timestamp = LocalDateTime.now();
         }
     }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getSource() { return source; }
+    public void setSource(String source) { this.source = source; }
+    public String getEventType() { return eventType; }
+    public void setEventType(String eventType) { this.eventType = eventType; }
+    public String getPayloadJson() { return payloadJson; }
+    public void setPayloadJson(String payloadJson) { this.payloadJson = payloadJson; }
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 }

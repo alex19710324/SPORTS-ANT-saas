@@ -52,6 +52,7 @@ public class WorkOrderService implements AiAware {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onAiSuggestion(String suggestionType, Object payload) {
         if ("ASSIGN_TECHNICIAN".equals(suggestionType)) {
             Map<String, Object> data = (Map<String, Object>) payload;

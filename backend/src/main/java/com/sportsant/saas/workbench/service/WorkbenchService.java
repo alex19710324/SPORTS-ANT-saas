@@ -4,7 +4,6 @@ import com.sportsant.saas.ai.service.AiAware;
 import com.sportsant.saas.device.entity.Device;
 import com.sportsant.saas.device.repository.DeviceRepository;
 import com.sportsant.saas.device.repository.WorkOrderRepository;
-import com.sportsant.saas.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,6 @@ import java.util.Map;
 
 @Service
 public class WorkbenchService implements AiAware {
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private WorkOrderRepository workOrderRepository;

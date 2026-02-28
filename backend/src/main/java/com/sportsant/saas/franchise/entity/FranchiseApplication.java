@@ -1,13 +1,11 @@
 package com.sportsant.saas.franchise.entity;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "franchise_applications")
-@NoArgsConstructor
 public class FranchiseApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
