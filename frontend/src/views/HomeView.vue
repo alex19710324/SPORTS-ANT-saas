@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '../stores/auth.store';
 import { useRouter } from 'vue-router';
 import AiGuardian from '../components/ai/AiGuardian.vue';
 import AiSuggestions from '../components/ai/AiSuggestions.vue';
@@ -53,11 +52,12 @@ import {
   Setting 
 } from '@element-plus/icons-vue';
 
-import { useI18n } from 'vue-i18n';
+// import { useAuthStore } from '../stores/auth.store';
+// import { useI18n } from 'vue-i18n';
 
-const authStore = useAuthStore();
+// const authStore = useAuthStore();
 const router = useRouter();
-const { t } = useI18n();
+// const { t } = useI18n();
 
 const modules = [
   { title: 'home.modules.hq.title', desc: 'home.modules.hq.desc', path: '/hq', icon: OfficeBuilding, color: '#409EFF' },

@@ -2,7 +2,6 @@ package com.sportsant.saas.integration;
 
 import com.sportsant.saas.device.entity.Device;
 import com.sportsant.saas.device.repository.DeviceRepository;
-import com.sportsant.saas.finance.repository.TransactionRepository;
 import com.sportsant.saas.membership.entity.Member;
 import com.sportsant.saas.membership.service.MembershipService;
 import com.sportsant.saas.workbench.service.FrontDeskService;
@@ -17,7 +16,6 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -31,9 +29,6 @@ public class ClosedLoopIntegrationTest {
 
     @Autowired
     private StoreManagerService storeManagerService;
-
-    @Autowired
-    private TransactionRepository transactionRepository;
 
     @Autowired
     private DeviceRepository deviceRepository;

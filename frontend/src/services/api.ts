@@ -1,4 +1,4 @@
-import { apiClient, AuthError } from '@sportsant/utils';
+import { apiClient } from '@sportsant/utils';
 
 // Re-configure interceptors to match frontend specific logic (like redirection)
 apiClient.interceptors.request.use(

@@ -71,7 +71,7 @@ const getStatusType = (status: string) => {
 };
 
 const viewDetails = (campaign: any) => {
-    ElMessage.info('Campaign details view coming soon');
+    ElMessage.info(`Campaign details view for ${campaign.name} coming soon`);
 };
 
 onMounted(() => {
