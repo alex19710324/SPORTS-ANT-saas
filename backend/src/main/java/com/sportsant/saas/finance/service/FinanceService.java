@@ -2,11 +2,14 @@ package com.sportsant.saas.finance.service;
 
 import com.sportsant.saas.data.service.AnalyticsService;
 import com.sportsant.saas.finance.entity.Transaction;
+import com.sportsant.saas.finance.entity.Voucher;
 import com.sportsant.saas.finance.repository.TransactionRepository;
+import com.sportsant.saas.finance.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -21,7 +24,29 @@ public class FinanceService {
     private TransactionRepository transactionRepository;
 
     @Autowired
+    private VoucherRepository voucherRepository;
+
+    @Autowired
     private AnalyticsService analyticsService;
+
+    public Map<String, Object> calculateTax(String region, BigDecimal amount) {
+        Map<String, Object> result = new HashMap<>();
+        double rate = "CN".equals(region) ? 0.13 : 0.10;
+        result.put("taxRate", rate);
+        result.put("taxAmount", amount.multiply(BigDecimal.valueOf(rate)));
+        return result;
+    }
+
+    public Map<String, Object> predictCashFlow() {
+        Map<String, Object> prediction = new HashMap<>();
+        prediction.put("forecast", 10000.0);
+        prediction.put("confidence", 0.95);
+        return prediction;
+    }
+
+    public List<Voucher> getAllVouchers() {
+        return voucherRepository.findAll();
+    }
 
     public List<Transaction> getTransactions(LocalDate start, LocalDate end) {
         return transactionRepository.findByTransactionDateBetween(start.atStartOfDay(), end.atTime(23, 59, 59));

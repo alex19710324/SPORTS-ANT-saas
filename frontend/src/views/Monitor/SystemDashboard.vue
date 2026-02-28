@@ -39,7 +39,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import apiClient from '../../services/api';
-import { ElMessage } from 'element-plus';
 
 const metrics = ref<any>({
     systemCpu: 0,

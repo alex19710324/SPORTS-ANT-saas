@@ -108,7 +108,6 @@
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useWorkbenchStore } from '../../../stores/workbench.store';
 import { ElMessage } from 'element-plus';
-import { Search, Delete } from '@element-plus/icons-vue';
 import apiClient from '../../../services/api';
 
 const store = useWorkbenchStore();

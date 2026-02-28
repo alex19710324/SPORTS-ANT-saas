@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive } from 'vue';
 import apiClient from '../../services/api';
 import { ElMessage } from 'element-plus';
 import { Promotion } from '@element-plus/icons-vue';

@@ -124,7 +124,6 @@ import {
   Document,
   Monitor,
   Connection,
-  MagicStick,
   Calendar
 } from '@element-plus/icons-vue';
 

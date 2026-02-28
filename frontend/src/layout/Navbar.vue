@@ -58,7 +58,6 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth.store';
 import { ArrowDown, Bell, Collection } from '@element-plus/icons-vue';
-import { useWorkbenchStore } from '../stores/workbench.store';
 import NotificationList from '../views/Communication/NotificationList.vue';
 import { useI18nStore } from '../stores/i18n.store';
 import TourService from '../services/tour.service';
@@ -66,7 +65,6 @@ import apiClient from '../services/api';
 
 const router = useRouter();
 const authStore = useAuthStore();
-const workbenchStore = useWorkbenchStore();
 const i18nStore = useI18nStore();
 
 const hasLogo = true; // Set to true if logo exists

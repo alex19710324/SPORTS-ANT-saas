@@ -20,4 +20,28 @@ public class HQController {
     public Map<String, Object> getDashboard() {
         return hqService.getExecutiveDashboard();
     }
+
+    @GetMapping("/global-overview")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('HQ')")
+    public Map<String, Object> getGlobalOverview() {
+        return hqService.getGlobalOverview();
+    }
+
+    @GetMapping("/store-map")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('HQ')")
+    public Map<String, Object> getStoreMapData() {
+        return Map.of("stores", hqService.getStoreMapData());
+    }
+
+    @GetMapping("/franchise/applications")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('HQ')")
+    public Map<String, Object> getFranchiseApplications() {
+        return Map.of("applications", hqService.getFranchiseApplications());
+    }
+
+    @PostMapping("/franchise/applications/{id}/approve")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('HQ')")
+    public com.sportsant.saas.franchise.entity.FranchiseApplication approveApplication(@PathVariable Long id) {
+        return hqService.approveFranchise(id, true, "Approved via Controller");
+    }
 }

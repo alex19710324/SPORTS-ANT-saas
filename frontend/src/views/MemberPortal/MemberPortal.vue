@@ -92,6 +92,7 @@ const fetchData = async () => {
         const userStr = localStorage.getItem('user');
         if (userStr) {
             const user = JSON.parse(userStr);
+            console.log("Logged in user:", user.username);
             wallet.value = { balance: 1250.00, id: 101, points: 750 }; // Mock points
             transactions.value = [
                 { createdAt: '2025-03-01T10:00:00', type: 'PAYMENT_SENT', amount: -100.00 },

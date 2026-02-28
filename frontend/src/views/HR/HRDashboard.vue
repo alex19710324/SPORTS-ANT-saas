@@ -35,10 +35,9 @@
                         <el-rate v-model="scope.row.rating" disabled show-score text-color="#ff9900" />
                     </template>
                 </el-table-column>
-                <el-table-column label="Actions" width="150">
+                <el-table-column label="Actions">
                     <template #default="scope">
-                        <el-button size="small">Edit</el-button>
-                        <el-button size="small" type="danger">Fire</el-button>
+                        <el-button size="small" @click="viewProfile(scope.row)">View</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -64,8 +63,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import apiClient from '../../services/api';
 import { ElMessage } from 'element-plus';
+import apiClient from '../../services/api';
 
 const staffList = ref<any[]>([]);
 const payroll = ref<any>({ totalPayroll: 0, breakdown: [] });
@@ -80,6 +79,10 @@ const fetchData = async () => {
     } catch (error) {
         ElMessage.error('Failed to load HR data');
     }
+};
+
+const viewProfile = (staff: any) => {
+    ElMessage.info(`View profile for ${staff.username}`);
 };
 
 onMounted(() => {

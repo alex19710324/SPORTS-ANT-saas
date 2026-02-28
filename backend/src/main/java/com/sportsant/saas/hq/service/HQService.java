@@ -2,6 +2,8 @@ package com.sportsant.saas.hq.service;
 
 import com.sportsant.saas.data.service.AnalyticsService;
 import com.sportsant.saas.finance.service.FinanceService;
+import com.sportsant.saas.franchise.entity.FranchiseApplication;
+import com.sportsant.saas.store.entity.Store;
 import com.sportsant.saas.inventory.service.InventoryService;
 import com.sportsant.saas.maintenance.service.MaintenanceService;
 import com.sportsant.saas.marketing.service.MarketingService;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +37,25 @@ public class HQService {
 
     @Autowired
     private AnalyticsService analyticsService;
+
+    public Map<String, Object> getGlobalOverview() {
+        return getExecutiveDashboard();
+    }
+
+    public List<Store> getStoreMapData() {
+        return Collections.emptyList(); // Mock
+    }
+
+    public List<FranchiseApplication> getFranchiseApplications() {
+        return Collections.emptyList(); // Mock
+    }
+
+    public FranchiseApplication approveFranchise(Long appId, boolean approved, String reason) {
+        FranchiseApplication app = new FranchiseApplication();
+        app.setId(appId);
+        app.setStatus(approved ? "APPROVED" : "REJECTED");
+        return app;
+    }
 
     public Map<String, Object> getExecutiveDashboard() {
         Map<String, Object> dashboard = new HashMap<>();

@@ -106,7 +106,7 @@ const handleRestock = (item: any) => {
 };
 
 const handleAdjust = (item: any) => {
-    ElMessage.info('Manual adjustment feature coming soon');
+    ElMessage.info('Manual adjustment feature coming soon for: ' + item.name);
 };
 
 const submitRestock = async () => {
