@@ -39,6 +39,20 @@ export const useWorkbenchStore = defineStore('workbench', {
             throw error;
         }
     },
+    async registerMember(name: string, phone: string) {
+        try {
+            return await WorkbenchService.registerMember(name, phone);
+        } catch (error) {
+            throw error;
+        }
+    },
+    async processSale(code: string, amount: number) {
+        try {
+            return await WorkbenchService.processSale(code, amount);
+        } catch (error) {
+            throw error;
+        }
+    },
     async fetchTechnicianTasks() {
       this.loading = true;
       try {

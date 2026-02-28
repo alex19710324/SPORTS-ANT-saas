@@ -28,4 +28,26 @@ public class FrontDeskController {
         String code = payload.get("memberCode");
         return frontDeskService.quickCheckIn(code);
     }
+
+    @PostMapping("/register")
+    @PreAuthorize("hasRole('RECEPTIONIST') or hasRole('ADMIN')")
+    public Member register(@RequestBody Map<String, String> payload) {
+        String name = payload.get("name");
+        String phone = payload.get("phone");
+        if (name == null || phone == null) {
+            throw new RuntimeException("Name and Phone are required");
+        }
+        return frontDeskService.registerMember(name, phone);
+    }
+
+    @PostMapping("/sale")
+    @PreAuthorize("hasRole('RECEPTIONIST') or hasRole('ADMIN')")
+    public Member processSale(@RequestBody Map<String, Object> payload) {
+        String code = (String) payload.get("memberCode");
+        Double amount = Double.valueOf(payload.get("amount").toString());
+        if (code == null || amount == null) {
+            throw new RuntimeException("Member Code and Amount are required");
+        }
+        return frontDeskService.processSale(code, amount);
+    }
 }

@@ -47,6 +47,29 @@ public class MembershipService implements AiAware {
     }
 
     @Transactional
+    public Member createMember(Long userId, String name, String phoneNumber) {
+        if (memberRepository.findByPhoneNumber(phoneNumber).isPresent()) {
+            throw new RuntimeException("Phone number already registered as member: " + phoneNumber);
+        }
+
+        Member member = new Member();
+        member.setUserId(userId);
+        member.setName(name);
+        member.setPhoneNumber(phoneNumber);
+        
+        // Generate unique member code (simple random for now)
+        String code = "M" + System.currentTimeMillis() % 1000000;
+        member.setMemberCode(code);
+
+        // Default to level 1
+        MemberLevel level1 = memberLevelRepository.findByLevelOrder(1)
+                .orElseThrow(() -> new RuntimeException("Level 1 not configured"));
+        member.setCurrentLevel(level1);
+        
+        return memberRepository.save(member);
+    }
+
+    @Transactional
     public Member dailyCheckIn(Long userId) {
         // Daily Check-in gives 10 Growth
         addGrowth(userId, 10, "Daily Check-in");

@@ -13,6 +13,14 @@ export default {
     return apiClient.post('/workbench/frontdesk/checkin', { memberCode });
   },
 
+  registerMember(name: string, phone: string) {
+    return apiClient.post('/workbench/frontdesk/register', { name, phone });
+  },
+
+  processSale(memberCode: string, amount: number) {
+    return apiClient.post('/workbench/frontdesk/sale', { memberCode, amount });
+  },
+
   getTechnicianTasks() {
     return apiClient.get('/workbench/technician/overview');
   },
