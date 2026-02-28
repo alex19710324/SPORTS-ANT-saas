@@ -19,6 +19,7 @@ import HRDashboard from '../views/HR/HRDashboard.vue';
 import InventoryDashboard from '../views/Inventory/InventoryDashboard.vue';
 import SystemDashboard from '../views/Monitor/SystemDashboard.vue';
 import SaaSAdminDashboard from '../views/SaaSAdmin/SaaSAdminDashboard.vue';
+import VenueTwin from '../views/IoT/VenueTwin.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,12 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: { layout: MainLayout },
+    },
+    {
+      path: '/iot/venue',
+      name: 'venue-twin',
+      component: VenueTwin,
+      meta: { layout: MainLayout, roles: ['ADMIN', 'STORE_MANAGER', 'TECHNICIAN'] },
     },
     {
       path: '/saas/admin',

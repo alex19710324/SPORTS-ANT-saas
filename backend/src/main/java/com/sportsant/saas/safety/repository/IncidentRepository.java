@@ -1,9 +1,12 @@
 package com.sportsant.saas.safety.repository;
 
-import com.sportsant.saas.safety.entity.IncidentReport;
+import com.sportsant.saas.safety.entity.Incident;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface IncidentRepository extends JpaRepository<IncidentReport, Long> {
+public interface IncidentRepository extends JpaRepository<Incident, Long> {
+    List<Incident> findByStatus(String status);
 }

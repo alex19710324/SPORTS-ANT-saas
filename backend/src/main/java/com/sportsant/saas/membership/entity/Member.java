@@ -42,8 +42,8 @@ public class Member {
 
     @PrePersist
     protected void onCreate() {
-        growthValue = 0;
-        points = 0;
+        if (growthValue == null) growthValue = 0;
+        if (points == null) points = 0;
         updatedAt = LocalDateTime.now();
     }
 

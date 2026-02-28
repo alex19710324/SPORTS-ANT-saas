@@ -73,6 +73,11 @@
         <template #title>Reports</template>
       </el-menu-item>
 
+      <el-menu-item index="/iot/venue" v-if="hasRole(['ADMIN', 'STORE_MANAGER', 'TECHNICIAN'])">
+        <el-icon><connection /></el-icon>
+        <template #title>Smart Venue (IoT)</template>
+      </el-menu-item>
+
       <el-menu-item index="/monitor" v-if="hasRole(['ADMIN'])">
         <el-icon><monitor /></el-icon>
         <template #title>System Monitor</template>
@@ -103,7 +108,8 @@ import {
   Box,
   UserFilled,
   Document,
-  Monitor
+  Monitor,
+  Connection
 } from '@element-plus/icons-vue';
 
 const isCollapsed = ref(false);

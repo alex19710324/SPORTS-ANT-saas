@@ -24,6 +24,26 @@
             </div>
         </el-card>
 
+        <el-card class="rewards-card">
+            <template #header>Rewards Shop ({{ wallet.points }} Points)</template>
+            <el-scrollbar height="300px">
+                <div v-for="reward in rewards" :key="reward.id" class="reward-item">
+                    <div class="reward-info">
+                        <h4>{{ reward.name }}</h4>
+                        <p>{{ reward.description }}</p>
+                    </div>
+                    <el-button 
+                        size="small" 
+                        type="warning" 
+                        :disabled="wallet.points < reward.pointsCost"
+                        @click="redeemReward(reward)"
+                    >
+                        {{ reward.pointsCost }} pts
+                    </el-button>
+                </div>
+            </el-scrollbar>
+        </el-card>
+
         <el-card class="history-card">
             <template #header>Transaction History</template>
             <el-table :data="transactions" style="width: 100%" max-height="400">
@@ -59,42 +79,44 @@ import apiClient from '../../services/api';
 import { ElMessage } from 'element-plus';
 import dayjs from 'dayjs';
 
-const wallet = ref({ balance: 0, id: 0 });
+const wallet = ref({ balance: 0, id: 0, points: 0 });
 const bookings = ref<any[]>([]);
 const transactions = ref<any[]>([]);
+const rewards = ref<any[]>([]);
 const showTopUp = ref(false);
 const topUpAmount = ref(100);
 
 const fetchData = async () => {
     try {
-        // Mock member fetching logic (usually via /api/member/me)
-        // For MVP, we need an endpoint. Assuming auth user is linked.
-        // We'll use a specific endpoint or just mock for now if backend isn't ready for "me" context
-        
-        // Let's assume we can get wallet via a new endpoint or reusing existing with user context
-        // Since we don't have /api/member/me/wallet yet, let's mock the data structure 
-        // but try to fetch if possible.
-        
-        // For demonstration of "Closed Loop", we need to see the balance change after a sale.
-        // We need the user's wallet ID.
-        // Let's fetch current user info first
+        // ... existing mock ...
         const userStr = localStorage.getItem('user');
         if (userStr) {
             const user = JSON.parse(userStr);
-            // Fetch wallet for this user
-            // We need a backend endpoint: GET /api/finance/wallet/my
-            // Since it doesn't exist, we will mock the display for now, 
-            // BUT to show "Closed Loop", we really should implement that endpoint.
-            
-            // Temporary Mock to allow UI development
-            wallet.value = { balance: 1250.00, id: 101 };
+            wallet.value = { balance: 1250.00, id: 101, points: 750 }; // Mock points
             transactions.value = [
                 { createdAt: '2025-03-01T10:00:00', type: 'PAYMENT_SENT', amount: -100.00 },
                 { createdAt: '2025-02-28T14:00:00', type: 'TOP_UP', amount: 500.00 }
             ];
+            
+            // Fetch rewards
+            const res = await apiClient.get('/marketing/loyalty/rewards');
+            rewards.value = res.data;
         }
     } catch (error) {
         console.error("Failed to load member data");
+    }
+};
+
+const redeemReward = async (reward: any) => {
+    try {
+        await apiClient.post('/marketing/loyalty/redeem', {
+            memberId: wallet.value.id,
+            rewardId: reward.id
+        });
+        wallet.value.points -= reward.pointsCost;
+        ElMessage.success(`Redeemed ${reward.name}!`);
+    } catch (e) {
+        ElMessage.error('Redemption failed');
     }
 };
 
@@ -159,4 +181,13 @@ onMounted(() => {
 }
 .booking-info h4 { margin: 0 0 5px 0; }
 .booking-info p { margin: 0; color: #999; font-size: 14px; }
+.reward-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+.reward-info h4 { margin: 0 0 5px 0; }
+.reward-info p { margin: 0; color: #999; font-size: 14px; }
 </style>

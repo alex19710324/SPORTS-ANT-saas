@@ -1,78 +1,67 @@
 package com.sportsant.saas.safety.service;
 
-import com.sportsant.saas.ai.service.AiAware;
-import com.sportsant.saas.safety.entity.IncidentReport;
+import com.sportsant.saas.ai.service.AiBrainService;
+import com.sportsant.saas.safety.entity.Incident;
 import com.sportsant.saas.safety.repository.IncidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
-public class SafetyService implements AiAware {
+public class SafetyService {
 
     @Autowired
     private IncidentRepository incidentRepository;
 
-    // Removed unused eventPublisher
+    @Autowired
+    private AiBrainService aiBrainService;
 
-    public IncidentReport reportIncident(String type, String location, String description, String reporter) {
-        IncidentReport report = new IncidentReport();
-        report.setType(type);
-        report.setLocation(location);
-        report.setDescription(description);
-        report.setReporter(reporter);
-        report.setStatus("REPORTED");
-        
-        IncidentReport saved = incidentRepository.save(report);
-
-        // Notify AI Brain immediately
-        // eventPublisher.publishEvent(createEvent("SAFETY_INCIDENT", Map.of(...))); // Mock event creation
-        
-        return saved;
+    public List<Incident> getAllIncidents() {
+        return incidentRepository.findAll();
     }
 
-    public Map<String, Object> getSafetyOverview() {
-        Map<String, Object> data = new HashMap<>();
-        
-        // S01: Safety Inspections (Mock)
-        data.put("todayInspections", List.of(
-            Map.of("id", 201, "area", "Fire Exits", "status", "Pending", "items", 5),
-            Map.of("id", 202, "area", "Electrical Room", "status", "Completed", "items", 3)
-        ));
-        
-        // S02: Incidents (Real)
-        List<IncidentReport> incidents = incidentRepository.findAll();
-        // Transform to match frontend expectation
-        List<Map<String, Object>> incidentList = incidents.stream().map(inc -> {
-            Map<String, Object> m = new HashMap<>();
-            m.put("id", inc.getId());
-            m.put("type", inc.getType());
-            m.put("location", inc.getLocation());
-            m.put("status", inc.getStatus());
-            m.put("description", inc.getDescription());
-            m.put("time", inc.getReportedAt().toString());
-            return m;
-        }).toList();
-        data.put("incidents", incidentList);
-        
-        // S04: Fire Equipment Expiry
-        data.put("expiringEquipment", 2); // 2 items expiring soon
-        
-        return data;
+    public List<Incident> getActiveIncidents() {
+        // Return incidents that are not RESOLVED
+        // For MVP, just simple filter or custom query. 
+        // Using findAll + stream for simplicity
+        return incidentRepository.findAll().stream()
+                .filter(i -> !"RESOLVED".equals(i.getStatus()))
+                .toList();
     }
-    
-    public void resolveIncident(Long id) {
-        IncidentReport report = incidentRepository.findById(id)
+
+    @Transactional
+    public Incident reportIncident(Incident incident) {
+        // AI Analysis: If severity is HIGH/CRITICAL, suggest immediate action
+        if ("HIGH".equals(incident.getSeverity()) || "CRITICAL".equals(incident.getSeverity())) {
+            aiBrainService.proposeSuggestion(
+                "CRITICAL INCIDENT: " + incident.getTitle(),
+                "A severe incident has been reported at " + incident.getLocation() + ". Immediate response required.",
+                "SAFETY",
+                "CRITICAL",
+                "/workbench/security" // Link to security dashboard
+            );
+        }
+
+        return incidentRepository.save(incident);
+    }
+
+    @Transactional
+    public Incident updateStatus(Long id, String status, String notes) {
+        Incident incident = incidentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incident not found"));
-        report.setStatus("RESOLVED");
-        incidentRepository.save(report);
-    }
+        
+        incident.setStatus(status);
+        if (notes != null) {
+            incident.setResolutionNotes(notes);
+        }
+        
+        if ("RESOLVED".equals(status)) {
+            incident.setResolvedAt(LocalDateTime.now());
+        }
 
-    @Override
-    public void onAiSuggestion(String suggestionType, Object payload) {
-        // e.g. AI suggests triggering specific emergency protocol
+        return incidentRepository.save(incident);
     }
 }
