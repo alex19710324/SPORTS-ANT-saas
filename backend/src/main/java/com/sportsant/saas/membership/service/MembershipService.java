@@ -82,7 +82,23 @@ public class MembershipService implements AiAware {
         if (amount == null || amount <= 0) amount = 100;
         int growth = (int) (amount * 1.5);
         addGrowth(userId, growth, "Purchase Reward");
+        
+        // Also give points = amount
+        Member member = getMember(userId);
+        member.setPoints(member.getPoints() + amount);
+        memberRepository.save(member);
+        
         return getMember(userId);
+    }
+
+    @Transactional
+    public void redeemPoints(Long userId, Integer points) {
+        Member member = getMember(userId);
+        if (member.getPoints() < points) {
+            throw new RuntimeException("Insufficient points");
+        }
+        member.setPoints(member.getPoints() - points);
+        memberRepository.save(member);
     }
 
     @Transactional

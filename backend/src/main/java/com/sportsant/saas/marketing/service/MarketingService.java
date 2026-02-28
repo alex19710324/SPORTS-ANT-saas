@@ -29,6 +29,36 @@ public class MarketingService {
     @Autowired
     private CommunicationService communicationService;
 
+    @Autowired
+    private com.sportsant.saas.marketing.repository.RewardRepository rewardRepository;
+
+    public List<com.sportsant.saas.marketing.entity.Reward> getRewards() {
+        return rewardRepository.findByActiveTrue();
+    }
+
+    @Transactional
+    public void redeemReward(Long memberId, Long rewardId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        
+        com.sportsant.saas.marketing.entity.Reward reward = rewardRepository.findById(rewardId)
+                .orElseThrow(() -> new RuntimeException("Reward not found"));
+
+        if (member.getPoints() < reward.getPointsCost()) {
+             throw new RuntimeException("Insufficient Points");
+        }
+        
+        member.setPoints(member.getPoints() - reward.getPointsCost());
+        memberRepository.save(member);
+        
+        communicationService.sendNotification(
+            member.getId(),
+            "Reward Redeemed: " + reward.getName(),
+            "You have successfully redeemed " + reward.getName(),
+            "SYSTEM"
+        );
+    }
+
     public List<Campaign> getAllCampaigns() {
         return campaignRepository.findAll();
     }
@@ -55,7 +85,8 @@ public class MarketingService {
 
         List<Member> targets;
         if ("ACTIVE_MEMBERS".equals(campaign.getTargetSegment())) {
-            targets = memberRepository.findByStatus("ACTIVE");
+            // MVP: Treat all as active since we don't track status yet
+            targets = memberRepository.findAll();
         } else {
             // Simplified: Default to all for other segments in MVP
             targets = memberRepository.findAll();

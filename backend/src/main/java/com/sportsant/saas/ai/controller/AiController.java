@@ -1,5 +1,6 @@
 package com.sportsant.saas.ai.controller;
 
+import com.sportsant.saas.ai.entity.AiSuggestion;
 import com.sportsant.saas.ai.service.AiBrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +19,7 @@ public class AiController {
 
     @GetMapping("/insights")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER') or hasRole('HQ')")
-    public List<Map<String, Object>> getInsights() {
+    public List<AiSuggestion> getInsights() {
         // Delegate to AiBrainService to fetch latest suggestions/insights
         // For MVP, we can reuse getSuggestions but filter for "INSIGHT" type or similar
         // Or just return all active suggestions as insights

@@ -48,4 +48,10 @@ public class InventoryService {
     public InventoryItem createItem(InventoryItem item) {
         return inventoryRepository.save(item);
     }
+
+    @Transactional
+    public void updateStock(Long storeId, String sku, int quantityChange) {
+        // StoreId ignored for MVP as items are global or we assume single store context
+        adjustStock(sku, quantityChange, "WORK_ORDER_USAGE");
+    }
 }

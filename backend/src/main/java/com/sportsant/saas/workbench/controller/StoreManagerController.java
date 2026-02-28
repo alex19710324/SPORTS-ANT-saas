@@ -40,6 +40,6 @@ public class StoreManagerController {
     @GetMapping("/suggestions")
     @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('ADMIN')")
     public List<AiSuggestion> getAiSuggestions() {
-        return aiBrainService.getPendingSuggestions();
+        return aiBrainService.getSuggestions();
     }
 }

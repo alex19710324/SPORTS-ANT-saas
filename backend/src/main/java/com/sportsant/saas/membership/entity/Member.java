@@ -36,6 +36,8 @@ public class Member {
 
     // AI Labels
     private String tags; // "HIGH_VALUE,CHURN_RISK"
+    
+    private String status = "ACTIVE"; // ACTIVE, INACTIVE, SUSPENDED
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
@@ -44,8 +46,13 @@ public class Member {
     protected void onCreate() {
         if (growthValue == null) growthValue = 0;
         if (points == null) points = 0;
+        if (status == null) status = "ACTIVE";
         updatedAt = LocalDateTime.now();
     }
+
+    // Getters and Setters
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
     @PreUpdate
     protected void onUpdate() {

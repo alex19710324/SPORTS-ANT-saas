@@ -56,6 +56,11 @@ public class FinanceService {
                 .sum();
     }
 
+    public Integer getTodayVisitors() {
+        // Mock visitor count for MVP
+        return 125;
+    }
+
     public Map<String, Object> getFinancialStatement(LocalDate start, LocalDate end) {
         List<Transaction> txs = getTransactions(start, end);
         

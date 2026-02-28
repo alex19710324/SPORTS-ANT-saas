@@ -37,28 +37,53 @@
         </template>
     </el-dialog>
 
-    <!-- New Sale Modal -->
-    <el-dialog v-model="showSaleModal" :title="$t('frontdesk.newSale')">
-        <el-form :model="saleForm" label-width="100px">
-            <el-form-item label="Member Code" required>
-                <el-input v-model="saleForm.code" placeholder="Scan Member Code / Phone"></el-input>
-            </el-form-item>
-            <el-form-item label="Amount (CNY)" required>
-                <el-input-number v-model="saleForm.amount" :min="0" :precision="2" :step="10"></el-input-number>
-            </el-form-item>
-            <el-form-item label="Payment Method">
-                <el-select v-model="saleForm.method" placeholder="Select Method">
-                    <el-option label="Wallet Balance" value="WALLET" />
-                    <el-option label="WeChat Pay" value="WECHAT" />
-                    <el-option label="Alipay" value="ALIPAY" />
-                    <el-option label="Cash" value="CASH" />
-                </el-select>
-            </el-form-item>
-        </el-form>
-        <template #footer>
-            <el-button @click="showSaleModal = false">Cancel</el-button>
-            <el-button type="success" :loading="saleLoading" @click="performSale">Confirm Payment</el-button>
-        </template>
+    <!-- New Sale Modal (Smart POS) -->
+    <el-dialog v-model="showSaleModal" :title="$t('frontdesk.newSale')" width="800px" @open="initPOS">
+        <div class="pos-container">
+            <div class="product-list">
+                <el-input v-model="productSearch" placeholder="Search Product" prefix-icon="Search" style="margin-bottom: 10px" />
+                <el-scrollbar height="400px">
+                    <div class="product-grid">
+                        <div v-for="prod in filteredProducts" :key="prod.id" class="product-card" @click="addToCart(prod)">
+                            <div class="prod-name">{{ prod.name }}</div>
+                            <div class="prod-price">¥{{ prod.sellPrice || 0 }}</div>
+                            <el-tag size="small" :type="prod.quantity > 0 ? 'success' : 'danger'">{{ prod.quantity > 0 ? 'In Stock' : 'Out' }}</el-tag>
+                        </div>
+                    </div>
+                </el-scrollbar>
+            </div>
+            
+            <div class="cart-panel">
+                <div class="cart-header">
+                    <span>Current Cart</span>
+                    <el-button link type="danger" @click="clearCart">Clear</el-button>
+                </div>
+                <el-scrollbar height="300px">
+                    <div v-for="(item, idx) in cart" :key="idx" class="cart-item">
+                        <div class="item-info">
+                            <div>{{ item.name }}</div>
+                            <small>¥{{ item.sellPrice }} x {{ item.qty }}</small>
+                        </div>
+                        <div class="item-total">¥{{ (item.sellPrice * item.qty).toFixed(2) }}</div>
+                        <el-button icon="Delete" circle size="small" type="danger" @click="removeFromCart(idx)" />
+                    </div>
+                </el-scrollbar>
+                <div class="cart-footer">
+                    <div class="total-row">
+                        <span>Total:</span>
+                        <span class="total-amount">¥{{ cartTotal }}</span>
+                    </div>
+                    <el-input v-model="saleForm.code" placeholder="Scan Member Code" style="margin-bottom: 10px" />
+                    <el-select v-model="saleForm.method" placeholder="Payment Method" style="width: 100%; margin-bottom: 10px">
+                        <el-option label="Wallet Balance" value="WALLET" />
+                        <el-option label="WeChat Pay" value="WECHAT" />
+                        <el-option label="Alipay" value="ALIPAY" />
+                        <el-option label="Cash" value="CASH" />
+                    </el-select>
+                    <el-button type="success" style="width: 100%" :loading="saleLoading" :disabled="cart.length === 0" @click="performCartSale">Checkout</el-button>
+                </div>
+            </div>
+        </div>
     </el-dialog>
 
     <!-- Member Registration Modal -->
@@ -80,132 +105,154 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import { useWorkbenchStore } from '../../../stores/workbench.store';
-import { ElMessage, ElNotification } from 'element-plus';
+import { ElMessage } from 'element-plus';
+import { Search, Delete } from '@element-plus/icons-vue';
+import apiClient from '../../../services/api';
 
 const store = useWorkbenchStore();
 const tasks = computed(() => store.frontDeskTasks);
-const loading = computed(() => store.loading);
-
-// Check-in
+const loading = ref(false);
 const showCheckinModal = ref(false);
-const checkinCode = ref('');
+const showRegisterModal = ref(false);
+const showSaleModal = ref(false);
+const saleLoading = ref(false);
+const regLoading = ref(false);
 const checkinLoading = ref(false);
 
-// Registration
-const showRegisterModal = ref(false);
-const regLoading = ref(false);
+const productSearch = ref('');
+const products = ref<any[]>([]);
+const cart = ref<any[]>([]);
+
+const checkinCode = ref('');
 const regForm = reactive({
     name: '',
     phone: ''
 });
-
-// Sale
-const showSaleModal = ref(false);
-const saleLoading = ref(false);
 const saleForm = reactive({
     code: '',
     amount: 0,
     method: 'WALLET'
 });
 
-onMounted(() => {
-  store.fetchFrontDeskTasks();
+const filteredProducts = computed(() => {
+    if (!productSearch.value) return products.value;
+    return products.value.filter(p => p.name.toLowerCase().includes(productSearch.value.toLowerCase()));
 });
 
-const handleQuickCheckin = () => {
-    checkinCode.value = '';
-    showCheckinModal.value = true;
-};
+const cartTotal = computed(() => {
+    return cart.value.reduce((sum, item) => sum + (item.sellPrice * item.qty), 0).toFixed(2);
+});
 
-const handleNewSale = () => {
-    saleForm.code = '';
-    saleForm.amount = 0;
-    showSaleModal.value = true;
-};
-
-const handleRegister = () => {
-    regForm.name = '';
-    regForm.phone = '';
-    showRegisterModal.value = true;
-};
-
-const performRegister = async () => {
-    if (!regForm.name || !regForm.phone) {
-        ElMessage.warning('Name and Phone are required.');
-        return;
-    }
-    regLoading.value = true;
-    try {
-        const res = await store.registerMember(regForm.name, regForm.phone);
-        const member = res.data;
-        ElNotification({
-            title: 'Registration Successful',
-            message: `Member ${member.name} registered. Code: ${member.memberCode}`,
-            type: 'success',
-            duration: 5000
-        });
-        showRegisterModal.value = false;
-    } catch (error: any) {
-        ElMessage.error(error.response?.data?.message || 'Registration failed.');
-    } finally {
-        regLoading.value = false;
-    }
-};
-
-const performSale = async () => {
-    if (!saleForm.code || !saleForm.amount) {
-        ElMessage.warning('Member Code and Amount are required.');
-        return;
-    }
-    saleLoading.value = true;
-    try {
-        const res = await store.processSale(saleForm.code, saleForm.amount);
-        const member = res.data;
-        ElNotification({
-            title: 'Sale Successful',
-            message: `Sale recorded for ${member.name}. Growth: ${member.growthValue}`,
-            type: 'success',
-            duration: 5000
-        });
-        showSaleModal.value = false;
-        // Refresh tasks
-        store.fetchFrontDeskTasks();
-    } catch (error: any) {
-        ElMessage.error(error.response?.data?.message || 'Sale failed.');
-    } finally {
-        saleLoading.value = false;
-    }
-};
-
-const performCheckin = async () => {
-    if (!checkinCode.value) return;
-    checkinLoading.value = true;
-    try {
-        const res = await store.checkInMember(checkinCode.value);
-        const member = res.data;
-        ElNotification({
-            title: 'Check-in Successful',
-            message: `Member: ${member.name} (Level: ${member.currentLevel.name}) - Growth +10`,
-            type: 'success',
-            duration: 5000
-        });
-        showCheckinModal.value = false;
-        // Refresh tasks
-        store.fetchFrontDeskTasks();
-    } catch (error) {
-        ElMessage.error('Check-in failed. Member not found or invalid code.');
-    } finally {
-        checkinLoading.value = false;
-    }
-};
+onMounted(async () => {
+    loading.value = true;
+    await store.fetchFrontDeskTasks();
+    loading.value = false;
+});
 
 const getProgressStatus = (val: number) => {
     if (val >= 1) return 'success';
     if (val >= 0.8) return 'warning';
     return 'exception';
 };
+
+const handleQuickCheckin = () => {
+    showCheckinModal.value = true;
+};
+
+const handleNewSale = () => {
+    showSaleModal.value = true;
+};
+
+const handleRegister = () => {
+    showRegisterModal.value = true;
+};
+
+const performCheckin = async () => {
+    if (!checkinCode.value) return;
+    checkinLoading.value = true;
+    try {
+        await store.checkInMember(checkinCode.value);
+        ElMessage.success('Check-in Successful');
+        showCheckinModal.value = false;
+        checkinCode.value = '';
+        store.fetchFrontDeskTasks();
+    } catch (e) {
+        ElMessage.error('Check-in Failed');
+    } finally {
+        checkinLoading.value = false;
+    }
+};
+
+const performRegister = async () => {
+    regLoading.value = true;
+    try {
+        await store.registerMember(regForm.name, regForm.phone);
+        ElMessage.success('Member Registered');
+        showRegisterModal.value = false;
+    } catch (e) {
+        ElMessage.error('Registration Failed');
+    } finally {
+        regLoading.value = false;
+    }
+};
+
+const initPOS = async () => {
+    try {
+        const res = await apiClient.get('/inventory');
+        products.value = res.data;
+    } catch (e) {
+        ElMessage.error('Failed to load products');
+    }
+};
+
+const addToCart = (prod: any) => {
+    if (prod.quantity <= 0) {
+        ElMessage.warning('Out of stock');
+        return;
+    }
+    const existing = cart.value.find(i => i.id === prod.id);
+    if (existing) {
+        if (existing.qty < prod.quantity) {
+            existing.qty++;
+        } else {
+            ElMessage.warning('Max stock reached');
+        }
+    } else {
+        // Create a copy to avoid reactive issues with original product list
+        cart.value.push({ ...prod, qty: 1 });
+    }
+};
+
+const removeFromCart = (idx: number) => {
+    cart.value.splice(idx, 1);
+};
+
+const clearCart = () => {
+    cart.value = [];
+};
+
+const performCartSale = async () => {
+    if (!saleForm.code) {
+        ElMessage.warning('Please scan member code');
+        return;
+    }
+    saleLoading.value = true;
+    try {
+        await store.processCartSale(saleForm.code, cart.value, saleForm.method);
+        ElMessage.success('Sale Completed!');
+        showSaleModal.value = false;
+        cart.value = [];
+        saleForm.code = '';
+        store.fetchFrontDeskTasks();
+    } catch (e) {
+        ElMessage.error('Sale Failed');
+    } finally {
+        saleLoading.value = false;
+    }
+};
+
 </script>
 
 <style scoped>

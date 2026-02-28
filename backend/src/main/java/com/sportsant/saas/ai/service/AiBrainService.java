@@ -31,7 +31,7 @@ public class AiBrainService {
     /**
      * Get pending suggestions for the admin/user dashboard.
      */
-    public List<AiSuggestion> getPendingSuggestions() {
+    public List<AiSuggestion> getSuggestions() {
         return suggestionRepository.findByStatusOrderByCreatedAtDesc("PENDING");
     }
 

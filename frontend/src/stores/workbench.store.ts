@@ -62,6 +62,13 @@ export const useWorkbenchStore = defineStore('workbench', {
             throw error;
         }
     },
+    async processCartSale(code: string, cartItems: any[], paymentMethod: string) {
+        try {
+            return await WorkbenchService.processCartSale(code, cartItems, paymentMethod);
+        } catch (error) {
+            throw error;
+        }
+    },
     async fetchTechnicianTasks() {
       this.loading = true;
       try {

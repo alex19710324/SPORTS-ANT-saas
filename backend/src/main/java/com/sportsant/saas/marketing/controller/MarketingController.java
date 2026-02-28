@@ -46,4 +46,16 @@ public class MarketingController {
     public Coupon validateCoupon(@RequestBody Map<String, String> payload) {
         return marketingService.validateCoupon(payload.get("code"));
     }
+
+    @GetMapping("/loyalty/rewards")
+    public List<com.sportsant.saas.marketing.entity.Reward> getRewards() {
+        return marketingService.getRewards();
+    }
+
+    @PostMapping("/loyalty/redeem")
+    public void redeemReward(@RequestBody Map<String, Long> payload) {
+        Long memberId = Long.valueOf(payload.get("memberId").toString());
+        Long rewardId = Long.valueOf(payload.get("rewardId").toString());
+        marketingService.redeemReward(memberId, rewardId);
+    }
 }

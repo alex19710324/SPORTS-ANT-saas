@@ -21,6 +21,10 @@ public class Notification {
     @Column(nullable = false)
     private String type; // SYSTEM, MARKETING, ALERT, BOOKING
 
+    private String link; // Actionable link
+
+    private String roleTarget; // e.g. "ADMIN", "TECHNICIAN"
+
     private Boolean isRead = false;
 
     private LocalDateTime createdAt;
@@ -36,14 +40,20 @@ public class Notification {
     public void setId(Long id) { this.id = id; }
     public Long getRecipientId() { return recipientId; }
     public void setRecipientId(Long recipientId) { this.recipientId = recipientId; }
+    public void setRecipient(com.sportsant.saas.entity.User user) { this.recipientId = user.getId(); }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
+    public String getLink() { return link; }
+    public void setLink(String link) { this.link = link; }
+    public String getRoleTarget() { return roleTarget; }
+    public void setRoleTarget(String roleTarget) { this.roleTarget = roleTarget; }
     public Boolean getIsRead() { return isRead; }
     public void setIsRead(Boolean isRead) { this.isRead = isRead; }
+    public void setRead(boolean isRead) { this.isRead = isRead; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

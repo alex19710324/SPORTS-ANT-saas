@@ -22,7 +22,7 @@ public class AiBrainController {
     @GetMapping("/suggestions")
     @PreAuthorize("hasRole('ADMIN')")
     public List<AiSuggestion> getSuggestions() {
-        return aiBrainService.getPendingSuggestions();
+        return aiBrainService.getSuggestions();
     }
 
     // 2. Feedback loop (Accept/Reject) - Evolution

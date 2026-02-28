@@ -3,7 +3,6 @@ package com.sportsant.saas.data.service;
 import com.sportsant.saas.iot.entity.Zone;
 import com.sportsant.saas.iot.repository.ZoneRepository;
 import com.sportsant.saas.membership.repository.MemberRepository;
-import com.sportsant.saas.order.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +17,6 @@ public class AnalyticsService {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
 
     @Autowired
     private ZoneRepository zoneRepository;

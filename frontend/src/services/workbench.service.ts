@@ -21,6 +21,10 @@ export default {
     return apiClient.post('/workbench/frontdesk/sale', { memberCode, amount });
   },
 
+  processCartSale(memberCode: string, cartItems: any[], paymentMethod: string) {
+    return apiClient.post('/workbench/frontdesk/sale', { memberCode, cartItems, paymentMethod });
+  },
+
   getTechnicianTasks() {
     return apiClient.get('/workbench/technician/overview');
   },

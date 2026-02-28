@@ -44,10 +44,20 @@ public class FrontDeskController {
     @PreAuthorize("hasRole('RECEPTIONIST') or hasRole('ADMIN')")
     public Member processSale(@RequestBody Map<String, Object> payload) {
         String code = (String) payload.get("memberCode");
-        Double amount = Double.valueOf(payload.get("amount").toString());
-        if (code == null || amount == null) {
-            throw new RuntimeException("Member Code and Amount are required");
+        
+        if (payload.containsKey("cartItems")) {
+            // New Cart Logic
+            java.util.List<Map<String, Object>> cartItems = (java.util.List<Map<String, Object>>) payload.get("cartItems");
+            String method = (String) payload.get("paymentMethod");
+            return frontDeskService.processCartSale(code, cartItems, method);
+        } else {
+            // Legacy Logic
+            Object amountObj = payload.get("amount");
+            if (code == null || amountObj == null) {
+                throw new RuntimeException("Member Code and Amount are required");
+            }
+            Double amount = Double.valueOf(amountObj.toString());
+            return frontDeskService.processSale(code, amount);
         }
-        return frontDeskService.processSale(code, amount);
     }
 }
