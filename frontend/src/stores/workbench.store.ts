@@ -98,6 +98,22 @@ export const useWorkbenchStore = defineStore('workbench', {
       } finally {
         this.loading = false;
       }
+    },
+    async createIncident(type: string, location: string, description: string) {
+        try {
+            await WorkbenchService.createIncident(type, location, description);
+            await this.fetchSecurityTasks();
+        } catch (error) {
+            throw error;
+        }
+    },
+    async resolveIncident(id: number) {
+        try {
+            await WorkbenchService.resolveIncident(id);
+            await this.fetchSecurityTasks();
+        } catch (error) {
+            throw error;
+        }
     }
   }
 });

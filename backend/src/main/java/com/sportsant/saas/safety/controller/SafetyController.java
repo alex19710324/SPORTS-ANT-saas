@@ -20,4 +20,20 @@ public class SafetyController {
     public Map<String, Object> getSafetyOverview() {
         return safetyService.getSafetyOverview();
     }
+
+    @PostMapping("/incidents")
+    @PreAuthorize("hasRole('SECURITY') or hasRole('ADMIN')")
+    public void reportIncident(@RequestBody Map<String, String> payload) {
+        String type = payload.get("type");
+        String location = payload.get("location");
+        String description = payload.get("description");
+        // For now, hardcode reporter or get from context
+        safetyService.reportIncident(type, location, description, "Security Officer");
+    }
+
+    @PostMapping("/incidents/{id}/resolve")
+    @PreAuthorize("hasRole('SECURITY') or hasRole('ADMIN')")
+    public void resolveIncident(@PathVariable Long id) {
+        safetyService.resolveIncident(id);
+    }
 }

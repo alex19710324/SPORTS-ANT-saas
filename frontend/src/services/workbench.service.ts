@@ -47,5 +47,13 @@ export default {
 
   getSecurityTasks() {
     return apiClient.get('/safety/tasks');
+  },
+  
+  createIncident(type: string, location: string, description: string) {
+    return apiClient.post('/safety/incidents', { type, location, description });
+  },
+  
+  resolveIncident(id: number) {
+    return apiClient.post(`/safety/incidents/${id}/resolve`);
   }
 };

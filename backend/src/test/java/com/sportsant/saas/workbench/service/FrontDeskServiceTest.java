@@ -3,6 +3,7 @@ package com.sportsant.saas.workbench.service;
 import com.sportsant.saas.entity.ERole;
 import com.sportsant.saas.entity.Role;
 import com.sportsant.saas.entity.User;
+import com.sportsant.saas.finance.service.FinanceService;
 import com.sportsant.saas.membership.entity.Member;
 import com.sportsant.saas.membership.service.MembershipService;
 import com.sportsant.saas.repository.RoleRepository;
@@ -33,6 +34,9 @@ public class FrontDeskServiceTest {
 
     @Mock
     private PasswordEncoder encoder;
+
+    @Mock
+    private FinanceService financeService;
 
     @InjectMocks
     private FrontDeskService frontDeskService;

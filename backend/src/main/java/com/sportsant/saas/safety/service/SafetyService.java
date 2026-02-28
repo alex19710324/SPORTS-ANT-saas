@@ -54,6 +54,7 @@ public class SafetyService implements AiAware {
             m.put("type", inc.getType());
             m.put("location", inc.getLocation());
             m.put("status", inc.getStatus());
+            m.put("description", inc.getDescription());
             m.put("time", inc.getReportedAt().toString());
             return m;
         }).toList();
@@ -63,6 +64,13 @@ public class SafetyService implements AiAware {
         data.put("expiringEquipment", 2); // 2 items expiring soon
         
         return data;
+    }
+    
+    public void resolveIncident(Long id) {
+        IncidentReport report = incidentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Incident not found"));
+        report.setStatus("RESOLVED");
+        incidentRepository.save(report);
     }
 
     @Override

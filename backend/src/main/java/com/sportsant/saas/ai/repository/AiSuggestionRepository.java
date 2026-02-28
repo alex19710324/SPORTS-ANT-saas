@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface AiSuggestionRepository extends JpaRepository<AiSuggestion, Long> {
     List<AiSuggestion> findByStatusOrderByCreatedAtDesc(String status);
-    List<AiSuggestion> findByPriority(String priority);
 }
