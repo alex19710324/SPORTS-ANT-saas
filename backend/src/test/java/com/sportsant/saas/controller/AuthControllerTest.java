@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@org.springframework.test.context.ActiveProfiles("test")
 public class AuthControllerTest {
 
     @Autowired
@@ -28,7 +29,7 @@ public class AuthControllerTest {
 
     @Test
     public void testSignupAndLogin() throws Exception {
-        String uniqueUsername = "testuser_" + System.currentTimeMillis();
+        String uniqueUsername = "user" + System.currentTimeMillis() % 10000; // Keep username short (<20 chars)
         String uniqueEmail = uniqueUsername + "@example.com";
         String password = "password123";
 
@@ -54,7 +55,7 @@ public class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accessToken").exists())
+                .andExpect(jsonPath("$.token").exists())
                 .andExpect(jsonPath("$.username").value(uniqueUsername));
     }
 
