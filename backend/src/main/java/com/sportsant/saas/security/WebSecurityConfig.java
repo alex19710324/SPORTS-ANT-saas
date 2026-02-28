@@ -57,6 +57,7 @@ public class WebSecurityConfig {
           auth.requestMatchers("/api/auth/**").permitAll()
               .requestMatchers("/api/test/**").permitAll()
               .requestMatchers("/api/language/**").permitAll() // Allow language APIs
+              .requestMatchers("/").permitAll() // Allow root path for welcome page
               .anyRequest().authenticated()
         );
     
