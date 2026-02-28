@@ -1,120 +1,123 @@
-# SPORTS ANT SaaS Super System
+# SPORTS ANT SaaS
 
-## 1. 项目简介 (Project Overview)
-本项目是基于“SPORTS ANT SaaS”产品需求文档（PRD）构建的超乐场潮玩馆一体化管理系统。
-系统采用前后端分离架构，旨在实现多区域自动适配、全角色AI深度赋能、线上线下全链路闭环。
+A comprehensive SaaS platform for the sports and entertainment industry, featuring a powerful HQ dashboard, multi-store management, and AI-driven insights.
 
-## 2. 技术栈 (Tech Stack)
+## Table of Contents
 
-### 前端 (Frontend)
-- **Framework**: Vue 3
-- **Language**: TypeScript
-- **UI Library**: Element Plus
-- **Build Tool**: Vite
-- **Location**: `/frontend`
+- [Introduction](#introduction)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Installation & Setup](#installation--setup)
+    - [Backend Setup](#backend-setup)
+    - [Frontend Setup](#frontend-setup)
+- [Running Tests](#running-tests)
+- [Contributing](#contributing)
+- [License](#license)
 
-### 后端 (Backend)
-- **Framework**: Spring Boot 3.x
-- **Language**: Java 24
-- **Database**: MySQL 8.0 (目前配置为 H2 内存数据库，方便快速启动)
-- **Build Tool**: Maven
-- **Location**: `/backend`
+## Introduction
 
-### 文档 (Documentation)
-- 所有 PRD 和设计文档均归档在 `/docs` 目录下。
+SPORTS ANT SaaS is designed to streamline operations for large-scale sports franchises. It includes modules for:
+- **Headquarters (HQ)**: Global overview, franchise management, and data analytics.
+- **Store Operations**: Daily management, staff scheduling, and inventory.
+- **Member Management**: Loyalty programs, membership levels, and AI-driven recommendations.
+- **Technician Workbench**: Device monitoring and maintenance.
 
----
+## Tech Stack
 
-## 3. 快速开始 (Quick Start)
+### Backend
+*   **Java 21** (JDK 21)
+*   **Spring Boot 3.2.3**
+*   **Spring Security** (JWT Authentication)
+*   **Spring Data JPA** (Hibernate)
+*   **H2 Database** (Dev/Test), MySQL (Prod)
+*   **Maven** (Build Tool)
 
-### 环境要求
-- Java 17+ (推荐 21+)
-- Node.js 18+
-- Maven 3.x
+### Frontend
+*   **Vue 3** (Composition API)
+*   **TypeScript**
+*   **Vite** (Build Tool)
+*   **Pinia** (State Management)
+*   **Vue Router**
+*   **Element Plus** (UI Component Library)
+*   **Vitest** (Unit Testing)
+*   **Playwright** (E2E Testing)
 
-### 启动后端
+## Prerequisites
+
+Ensure you have the following installed on your local machine:
+*   [Java JDK 21](https://adoptium.net/)
+*   [Maven 3.8+](https://maven.apache.org/)
+*   [Node.js 18+](https://nodejs.org/)
+*   [npm 9+](https://www.npmjs.com/)
+
+## Installation & Setup
+
+Clone the repository:
+```bash
+git clone https://github.com/your-org/sports-ant-saas.git
+cd sports-ant-saas
+```
+
+### Backend Setup
+
+1.  Navigate to the backend directory:
+    ```bash
+    cd backend
+    ```
+2.  Install dependencies and build:
+    ```bash
+    mvn clean install
+    ```
+3.  Run the application:
+    ```bash
+    mvn spring-boot:run
+    ```
+    The backend server will start at `http://localhost:8080`.
+    *   **Swagger UI**: `http://localhost:8080/swagger-ui/index.html`
+    *   **H2 Console**: `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:file:./data/sports_ant_db`, User: `sa`, Password: `password`)
+
+### Frontend Setup
+
+1.  Navigate to the frontend directory:
+    ```bash
+    cd frontend
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Start the development server:
+    ```bash
+    npm run dev
+    ```
+    The frontend application will be available at `http://localhost:5173` (or the port shown in the terminal).
+
+## Running Tests
+
+### Backend Tests
+Run unit and integration tests using Maven:
 ```bash
 cd backend
-mvn spring-boot:run
+mvn test
 ```
-服务默认运行在: `http://localhost:8080`
 
-### 启动前端
+### Frontend Tests
+Run unit tests using Vitest:
 ```bash
 cd frontend
-npm install # 初次运行需要
-npm run dev
+npm run test:unit
 ```
-服务默认运行在: `http://localhost:5173`
 
----
-
-## 4. 团队协作与 Git 版本控制指南 (Collaboration Guide)
-
-为了保证多人协作时互不干扰，且代码安全可回溯，请严格遵守以下流程。
-
-### 开发宪法2：Git 自动化管理 (Development Constitution 2)
-本项目强制执行 **每10分钟自动保存** 策略，确保代码零丢失。
-
-#### 1. 启动自动保存服务
-在开发前，请在终端运行以下命令：
+Run End-to-End (E2E) tests using Playwright:
 ```bash
-./auto_save_git.sh &
+cd frontend
+npx playwright test
 ```
-该脚本会每隔 10 分钟自动执行 `git commit`，提交信息包含时间戳。
 
-#### 2. 版本回退 (Rollback)
-如果你改坏了代码，想回到之前的某个版本：
-```bash
-./restore_version.sh
-```
-按照提示选择 Commit Hash 即可一键回退。
+## Contributing
 
-### 分支策略 (Branching Strategy)
-- **main**: 主分支，仅存放随时可发布的稳定代码。**严禁直接 Push**。
-- **develop**: 开发主分支，所有新功能开发完成后合并至此进行测试。
-- **feature/xxx**: 功能分支，每位开发者开发新功能时，必须从 develop 切出独立的 feature 分支（例如: `feature/user-login`, `feature/payment-module`）。
+Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
-### 开发流程 (Workflow)
-1. **获取最新代码**: 每天开始工作前，先拉取最新 develop 分支。
-   ```bash
-   git checkout develop
-   git pull origin develop
-   ```
-2. **创建功能分支**:
-   ```bash
-   git checkout -b feature/你的功能名称
-   ```
-3. **开发与提交**:
-   - 在你的分支上进行开发。
-   - 频繁提交，填写清晰的 Commit Message (例如: `feat: add user login API`).
-   ```bash
-   git add .
-   git commit -m "feat: 描述你的改动"
-   ```
-4. **合并代码 (Pull Request)**:
-   - **不要**直接合并到 develop 或 main。
-   - 将你的分支推送到远程仓库: `git push origin feature/你的功能名称`
-   - 在代码托管平台 (GitHub/GitLab) 上发起 **Pull Request (PR)** 或 **Merge Request (MR)** 请求合并到 `develop`。
-   - **Code Review**: 让其他同事（或你自己）审查代码，确保无误后再点击合并。
+## License
 
-### 如何防止代码“改烂”与回退 (Rollback)
-- **代码隔离**: 每个人在自己的 `feature` 分支开发，即使改烂了，也不会影响 `develop` 或 `main` 分支的正常运行。
-- **回退版本**: 如果某个提交引入了严重 Bug，可以使用 Git 回退。
-  - 回退某次提交（保留历史，推荐）: `git revert <commit-hash>`
-  - 重置到旧版本（慎用）: `git reset --hard <commit-hash>`
-
----
-
-## 5. 目录结构 (Directory Structure)
-```
-/
-├── backend/            # 后端工程 (Spring Boot)
-│   ├── src/main/java   # Java 源代码
-│   └── src/main/resources # 配置文件
-├── frontend/           # 前端工程 (Vue 3 + Vite)
-│   ├── src/            # Vue 源代码
-│   └── index.html      # 入口文件
-├── docs/               # 产品需求文档与设计资料
-└── README.md           # 项目说明书
-```
+This project is licensed under the MIT License - see the LICENSE file for details.
