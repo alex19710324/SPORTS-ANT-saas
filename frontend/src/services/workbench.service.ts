@@ -46,6 +46,6 @@ export default {
   },
 
   getSecurityTasks() {
-    return apiClient.get('/workbench/security/tasks');
+    return apiClient.get('/safety/tasks');
   }
 };

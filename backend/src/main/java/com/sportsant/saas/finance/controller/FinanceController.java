@@ -18,25 +18,23 @@ public class FinanceController {
     @Autowired
     private FinanceService financeService;
 
-    // --- P0: Voucher Management ---
     @GetMapping("/vouchers")
-    @PreAuthorize("hasRole('FINANCE') or hasRole('ADMIN')")
-    public List<Voucher> listVouchers() {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER')")
+    public List<Voucher> getAllVouchers() {
         return financeService.getAllVouchers();
     }
 
-    // --- P1: Tax & Prediction ---
     @PostMapping("/tax/calculate")
-    @PreAuthorize("hasRole('FINANCE') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER')")
     public Map<String, Object> calculateTax(@RequestBody Map<String, Object> payload) {
         String country = (String) payload.get("country");
         BigDecimal amount = new BigDecimal(payload.get("amount").toString());
         return financeService.calculateTax(country, amount);
     }
 
-    @GetMapping("/cashflow/predict")
-    @PreAuthorize("hasRole('FINANCE') or hasRole('ADMIN')")
-    public Map<String, Object> predictCashFlow() {
+    @GetMapping("/forecast")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER')")
+    public Map<String, Object> getCashFlowForecast() {
         return financeService.predictCashFlow();
     }
 }

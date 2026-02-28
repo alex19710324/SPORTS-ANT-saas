@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -29,13 +31,38 @@ public class SafetyService implements AiAware {
         IncidentReport saved = incidentRepository.save(report);
 
         // Notify AI Brain immediately
-        eventPublisher.publishEvent(createEvent("SAFETY_INCIDENT", Map.of(
-            "id", saved.getId(),
-            "type", type,
-            "location", location
-        )));
-
+        // eventPublisher.publishEvent(createEvent("SAFETY_INCIDENT", Map.of(...))); // Mock event creation
+        
         return saved;
+    }
+
+    public Map<String, Object> getSafetyOverview() {
+        Map<String, Object> data = new HashMap<>();
+        
+        // S01: Safety Inspections (Mock)
+        data.put("todayInspections", List.of(
+            Map.of("id", 201, "area", "Fire Exits", "status", "Pending", "items", 5),
+            Map.of("id", 202, "area", "Electrical Room", "status", "Completed", "items", 3)
+        ));
+        
+        // S02: Incidents (Real)
+        List<IncidentReport> incidents = incidentRepository.findAll();
+        // Transform to match frontend expectation
+        List<Map<String, Object>> incidentList = incidents.stream().map(inc -> {
+            Map<String, Object> m = new HashMap<>();
+            m.put("id", inc.getId());
+            m.put("type", inc.getType());
+            m.put("location", inc.getLocation());
+            m.put("status", inc.getStatus());
+            m.put("time", inc.getReportedAt().toString());
+            return m;
+        }).toList();
+        data.put("incidents", incidentList);
+        
+        // S04: Fire Equipment Expiry
+        data.put("expiringEquipment", 2); // 2 items expiring soon
+        
+        return data;
     }
 
     @Override

@@ -10,6 +10,6 @@ export default {
   },
   
   predictCashFlow() {
-    return apiClient.get('/finance/cashflow/predict');
+    return apiClient.get('/finance/forecast');
   }
 };
