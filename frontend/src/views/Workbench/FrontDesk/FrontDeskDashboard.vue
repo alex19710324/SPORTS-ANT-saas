@@ -5,7 +5,8 @@
       <el-card shadow="hover">
         <template #header>{{ $t('frontdesk.target') }}</template>
         <h3>¥{{ tasks.todayTarget }}</h3>
-        <el-progress :percentage="tasks.targetCompletion * 100" :status="getProgressStatus(tasks.targetCompletion)"></el-progress>
+        <el-progress :percentage="tasks.todayTarget > 0 ? Math.min((tasks.currentSales / tasks.todayTarget) * 100, 100) : 0" 
+                     :status="getProgressStatus(tasks.currentSales / tasks.todayTarget)"></el-progress>
       </el-card>
       <el-card shadow="hover">
         <template #header>{{ $t('frontdesk.sales') }}</template>

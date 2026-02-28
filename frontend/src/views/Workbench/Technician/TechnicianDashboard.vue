@@ -4,19 +4,15 @@
     <div class="task-grid" v-if="tasks">
       <el-card shadow="hover">
         <template #header>{{ $t('technician.workOrders') }}</template>
-        <h3>{{ tasks.pendingWorkOrders }}</h3>
-      </el-card>
-      <el-card shadow="hover">
-        <template #header>{{ $t('technician.faultyDevices') }}</template>
-        <h3 class="text-danger">{{ tasks.faultyDevices }}</h3>
+        <h3>{{ tasks.pendingOrders ? tasks.pendingOrders.length : 0 }}</h3>
       </el-card>
       <el-card shadow="hover">
         <template #header>{{ $t('technician.offlineDevices') }}</template>
-        <h3 class="text-warning">{{ tasks.offlineDevices }}</h3>
+        <h3 class="text-warning">{{ tasks.offlineDevices ? tasks.offlineDevices.length : 0 }}</h3>
       </el-card>
       <el-card shadow="hover">
         <template #header>{{ $t('technician.inspection') }}</template>
-        <h3>{{ (tasks.inspectionProgress * 100).toFixed(0) }}%</h3>
+        <h3>{{ tasks.todayInspectionsTotal > 0 ? ((tasks.todayInspectionsCompleted / tasks.todayInspectionsTotal) * 100).toFixed(0) : 0 }}%</h3>
       </el-card>
     </div>
     
@@ -26,40 +22,40 @@
     </div>
     
     <div class="dashboard-split" v-if="tasks">
-        <!-- T06: Preventive Maintenance Suggestions -->
+        <!-- T01: Pending Work Orders -->
         <el-card class="maintenance-card">
             <template #header>
                 <div class="card-header">
-                    <span>{{ $t('technician.preventive') }}</span>
-                    <el-tag type="warning">AI</el-tag>
+                    <span>{{ $t('technician.workOrders') }}</span>
+                    <el-tag type="danger" v-if="tasks.pendingOrders">{{ tasks.pendingOrders.length }}</el-tag>
                 </div>
             </template>
-            <el-table :data="tasks.maintenanceSuggestions" style="width: 100%" size="small">
-                <el-table-column prop="deviceId" label="Device" width="100" />
-                <el-table-column prop="reason" label="Reason" />
-                <el-table-column prop="urgency" label="Urgency" width="80">
+            <el-table :data="tasks.pendingOrders" style="width: 100%" size="small">
+                <el-table-column prop="deviceId" label="Device" width="80" />
+                <el-table-column prop="description" label="Issue" />
+                <el-table-column prop="priority" label="Priority" width="80">
                     <template #default="scope">
-                        <el-tag :type="scope.row.urgency === 'High' ? 'danger' : 'warning'" size="small">{{ scope.row.urgency }}</el-tag>
+                        <el-tag :type="scope.row.priority === 'HIGH' ? 'danger' : 'warning'" size="small">{{ scope.row.priority }}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="Action" width="80">
                     <template #default>
-                        <el-button link type="primary" size="small">Create WO</el-button>
+                        <el-button link type="primary" size="small">Start</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </el-card>
 
-        <!-- T02: Inspection Plan -->
+        <!-- T03: Offline Devices -->
         <el-card class="inspection-card">
-            <template #header>{{ $t('technician.maintenance') }}</template>
-            <div class="inspection-list" v-if="tasks.todayInspections">
-                <div class="inspection-item" v-for="plan in tasks.todayInspections" :key="plan.id">
+            <template #header>{{ $t('technician.offlineDevices') }}</template>
+            <div class="inspection-list" v-if="tasks.offlineDevices">
+                <div class="inspection-item" v-for="device in tasks.offlineDevices" :key="device.id">
                     <div class="plan-info">
-                        <span class="plan-area">{{ plan.area }}</span>
-                        <span class="plan-count">{{ plan.deviceCount }} Devices</span>
+                        <span class="plan-area">{{ device.name }}</span>
+                        <span class="plan-count">{{ device.location }}</span>
                     </div>
-                    <el-tag :type="plan.status === 'Completed' ? 'success' : 'info'" size="small">{{ plan.status }}</el-tag>
+                    <el-tag type="info" size="small">Offline</el-tag>
                 </div>
             </div>
         </el-card>

@@ -6,27 +6,19 @@
     <div class="kpi-grid" v-if="overview">
       <el-card shadow="hover">
         <template #header>{{ $t('manager.revenue') }}</template>
-        <h3>¥{{ overview.revenue }}</h3>
+        <h3>¥{{ overview.todayRevenue }}</h3>
       </el-card>
       <el-card shadow="hover">
         <template #header>{{ $t('manager.visitors') }}</template>
-        <h3>{{ overview.visitors }}</h3>
+        <h3>{{ overview.todayVisitors }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>{{ $t('manager.redemptions') }}</template>
-        <h3>{{ overview.redemptions }}</h3>
-      </el-card>
-      <el-card shadow="hover">
-        <template #header>{{ $t('manager.blindbox') }}</template>
-        <h3>¥{{ overview.blindboxSales }}</h3>
+        <template #header>{{ $t('manager.deviceRate') }}</template>
+        <h3 class="text-success">{{ overview.deviceOnlineRate }}%</h3>
       </el-card>
       <el-card shadow="hover">
         <template #header>{{ $t('manager.koc') }}</template>
         <h3>¥{{ overview.kocContribution }}</h3>
-      </el-card>
-      <el-card shadow="hover">
-        <template #header>{{ $t('manager.deviceRate') }}</template>
-        <h3 class="text-success">{{ overview.deviceOnlineRate }}</h3>
       </el-card>
       <el-card shadow="hover">
         <template #header>{{ $t('manager.alerts') }}</template>
