@@ -22,7 +22,8 @@
       "data": { "title": "数据中心", "desc": "分析与报表" },
       "marketing": { "title": "营销中心", "desc": "活动与会员" },
       "finance": { "title": "财务中心", "desc": "发票与薪资" },
-      "communication": { "title": "通讯中心", "desc": "消息与通知" }
+      "communication": { "title": "通讯中心", "desc": "消息与通知" },
+      "security": { "title": "安监机修", "desc": "安全巡检与维护" }
     }
   },
   "technician": {
@@ -32,7 +33,39 @@
     "offlineDevices": "离线设备",
     "inspection": "巡检进度",
     "scanQr": "扫描设备二维码",
-    "reportFault": "上报故障"
+    "reportFault": "上报故障",
+    "preventive": "预防性维护",
+    "maintenance": "今日巡检"
+  },
+  "manager": {
+    "title": "店长工作台",
+    "revenue": "今日营收",
+    "visitors": "今日客流",
+    "redemptions": "核销数",
+    "blindbox": "盲盒销售",
+    "koc": "KOC贡献",
+    "deviceRate": "设备在线率",
+    "alerts": "预警数",
+    "approvals": "待办审批",
+    "cost": "成本构成"
+  },
+  "frontdesk": {
+    "title": "前台工作台",
+    "target": "今日目标",
+    "sales": "当前销售",
+    "checkins": "待签到",
+    "verifications": "待核销",
+    "quickCheckin": "快速签到",
+    "newSale": "新销售",
+    "memberReg": "会员注册"
+  },
+  "security": {
+    "title": "安监机修工作台",
+    "inspections": "今日巡检",
+    "incidents": "突发事件",
+    "equipment": "消防设施",
+    "reportIncident": "上报事件",
+    "checkEquipment": "检查设施"
   },
   "common": {
     "loading": "加载中...",

@@ -30,6 +30,12 @@ public class HQController {
     }
 
     // --- P0: Franchise Management ---
+    @GetMapping("/franchise/applications")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('HQ_MANAGER')")
+    public Map<String, Object> getFranchiseApplications() {
+        return Map.of("applications", hqService.getFranchiseApplications());
+    }
+
     @PostMapping("/franchise/apply")
     public FranchiseApplication submitApplication(@RequestBody FranchiseApplication app) {
         return hqService.submitFranchiseApplication(app);

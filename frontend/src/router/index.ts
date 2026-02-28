@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue';
 import ManagerDashboard from '../views/Workbench/Manager/ManagerDashboard.vue';
 import FrontDeskDashboard from '../views/Workbench/FrontDesk/FrontDeskDashboard.vue';
 import TechnicianDashboard from '../views/Workbench/Technician/TechnicianDashboard.vue';
+import SecurityDashboard from '../views/Workbench/Security/SecurityDashboard.vue';
 import HQDashboard from '../views/HQ/HQDashboard.vue';
 import DataDashboard from '../views/Data/DataDashboard.vue';
 import MarketingDashboard from '../views/Marketing/MarketingDashboard.vue';
@@ -75,6 +76,11 @@ const router = createRouter({
       path: '/workbench/technician',
       name: 'technician-workbench',
       component: TechnicianDashboard,
+    },
+    {
+      path: '/workbench/security',
+      name: 'security-workbench',
+      component: SecurityDashboard,
     }
   ],
 });

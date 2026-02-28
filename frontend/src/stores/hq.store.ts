@@ -5,6 +5,7 @@ export const useHQStore = defineStore('hq', {
   state: () => ({
     overview: null as any,
     storeMapData: [] as any[],
+    franchiseApplications: [] as any[],
     loading: false
   }),
   actions: {
@@ -25,6 +26,22 @@ export const useHQStore = defineStore('hq', {
         this.storeMapData = response.data.stores;
       } catch (error) {
         console.error('Failed to fetch store map data', error);
+      }
+    },
+    async fetchFranchiseApplications() {
+      try {
+        const response = await HQService.getFranchiseApplications();
+        this.franchiseApplications = response.data.applications;
+      } catch (error) {
+        console.error('Failed to fetch franchise applications', error);
+      }
+    },
+    async approveApplication(appId: number, approve: boolean, comments: string) {
+      try {
+        await HQService.approveFranchiseApplication({ applicationId: appId, approve, comments });
+        await this.fetchFranchiseApplications();
+      } catch (error) {
+        console.error('Failed to approve application', error);
       }
     }
   }

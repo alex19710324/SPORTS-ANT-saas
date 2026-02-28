@@ -25,30 +25,104 @@
       <template #header>Global Store Map</template>
       <div class="map-placeholder">
         <!-- In real app, integrate Baidu Map or Google Maps here -->
-        <p>Map Visualization Placeholder</p>
-        <ul>
+        <div class="map-visual">
+             <div class="store-dot" v-for="store in storeMapData" :key="store.id" 
+                  :style="{ left: (store.longitude + 180) / 3.6 + '%', top: (90 - store.latitude) / 1.8 + '%' }"
+                  :title="store.name">
+             </div>
+        </div>
+        <ul class="store-list">
           <li v-for="store in storeMapData" :key="store.id">
+            <span class="status-dot" :class="store.status.toLowerCase()"></span>
             {{ store.name }} - {{ store.city }} (Rev: ¥{{ store.todayRevenue }})
           </li>
         </ul>
       </div>
     </el-card>
+
+    <el-card class="franchise-card">
+      <template #header>Franchise Applications</template>
+      <el-table :data="franchiseApplications" style="width: 100%">
+        <el-table-column prop="applicantName" label="Applicant" />
+        <el-table-column prop="proposedCity" label="City" />
+        <el-table-column prop="contactInfo" label="Contact" />
+        <el-table-column prop="status" label="Status">
+             <template #default="scope">
+                <el-tag :type="getStatusType(scope.row.status)">{{ scope.row.status }}</el-tag>
+             </template>
+        </el-table-column>
+        <el-table-column label="Action" width="200">
+          <template #default="scope">
+            <div v-if="scope.row.status === 'PENDING'">
+                <el-button size="small" type="success" @click="handleApprove(scope.row, true)">Approve</el-button>
+                <el-button size="small" type="danger" @click="handleApprove(scope.row, false)">Reject</el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <!-- Approval Dialog -->
+    <el-dialog v-model="showApprovalDialog" title="Application Review">
+        <el-form>
+            <el-form-item label="Decision">
+                <el-tag :type="currentApprovalType ? 'success' : 'danger'">
+                    {{ currentApprovalType ? 'Approve' : 'Reject' }}
+                </el-tag>
+            </el-form-item>
+            <el-form-item label="Comments">
+                <el-input type="textarea" v-model="approvalComments"></el-input>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <el-button @click="showApprovalDialog = false">Cancel</el-button>
+            <el-button type="primary" @click="submitApproval">Confirm</el-button>
+        </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useHQStore } from '../../stores/hq.store';
+import { ElMessage } from 'element-plus';
 
 const store = useHQStore();
 const overview = computed(() => store.overview);
 const storeMapData = computed(() => store.storeMapData);
+const franchiseApplications = computed(() => store.franchiseApplications);
 const loading = computed(() => store.loading);
+
+const showApprovalDialog = ref(false);
+const currentApp = ref<any>(null);
+const currentApprovalType = ref(true);
+const approvalComments = ref('');
 
 onMounted(() => {
   store.fetchGlobalOverview();
   store.fetchStoreMapData();
+  store.fetchFranchiseApplications();
 });
+
+const getStatusType = (status: string) => {
+    if (status === 'APPROVED') return 'success';
+    if (status === 'REJECTED') return 'danger';
+    return 'warning';
+};
+
+const handleApprove = (app: any, approve: boolean) => {
+    currentApp.value = app;
+    currentApprovalType.value = approve;
+    approvalComments.value = approve ? 'Approved. Welcome to SPORTS ANT!' : 'Application rejected due to incomplete documents.';
+    showApprovalDialog.value = true;
+};
+
+const submitApproval = async () => {
+    if (!currentApp.value) return;
+    await store.approveApplication(currentApp.value.id, currentApprovalType.value, approvalComments.value);
+    showApprovalDialog.value = false;
+    ElMessage.success('Application processed successfully');
+};
 </script>
 
 <style scoped>
@@ -61,15 +135,56 @@ onMounted(() => {
 
 .map-card {
   height: 400px;
+  margin-bottom: 20px;
+}
+
+.franchise-card {
+  margin-bottom: 20px;
 }
 
 .map-placeholder {
   background: #f0f2f5;
   height: 300px;
+  position: relative;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #909399;
 }
+
+.map-visual {
+    flex: 1;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg'); /* Placeholder */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    opacity: 0.3;
+}
+
+.store-list {
+    width: 250px;
+    background: white;
+    overflow-y: auto;
+    padding: 10px;
+    border-left: 1px solid #eee;
+}
+
+.store-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: red;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.status-dot.normal { background: #67C23A; }
+.status-dot.warning { background: #E6A23C; }
+.status-dot.closed { background: #F56C6C; }
+
 </style>

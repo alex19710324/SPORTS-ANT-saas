@@ -44,6 +44,10 @@ public class HQService implements AiAware {
         return storeRepository.findAll();
     }
 
+    public List<FranchiseApplication> getFranchiseApplications() {
+        return franchiseApplicationRepository.findAll();
+    }
+
     public FranchiseApplication submitFranchiseApplication(FranchiseApplication app) {
         return franchiseApplicationRepository.save(app);
     }

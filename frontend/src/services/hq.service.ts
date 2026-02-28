@@ -9,6 +9,10 @@ export default {
     return apiClient.get('/hq/map/stores');
   },
   
+  getFranchiseApplications() {
+    return apiClient.get('/hq/franchise/applications');
+  },
+
   submitFranchiseApplication(app: any) {
     return apiClient.post('/hq/franchise/apply', app);
   },

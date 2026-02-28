@@ -65,6 +65,7 @@ const modules = [
   { title: 'home.modules.manager.title', desc: 'home.modules.manager.desc', path: '/workbench/manager', icon: User, color: '#67C23A' },
   { title: 'home.modules.frontdesk.title', desc: 'home.modules.frontdesk.desc', path: '/workbench/frontdesk', icon: Service, color: '#E6A23C' },
   { title: 'home.modules.technician.title', desc: 'home.modules.technician.desc', path: '/workbench/technician', icon: Setting, color: '#F56C6C' },
+  { title: 'home.modules.security.title', desc: 'home.modules.security.desc', path: '/workbench/security', icon: Setting, color: '#F56C6C' },
   { title: 'home.modules.data.title', desc: 'home.modules.data.desc', path: '/data', icon: DataLine, color: '#909399' },
   { title: 'home.modules.marketing.title', desc: 'home.modules.marketing.desc', path: '/marketing', icon: Promotion, color: '#F56C6C' },
   { title: 'home.modules.finance.title', desc: 'home.modules.finance.desc', path: '/finance', icon: Money, color: '#E6A23C' },

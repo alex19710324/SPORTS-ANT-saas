@@ -35,4 +35,11 @@ public class WorkbenchController {
     public Map<String, Object> getTechnicianTasks() {
         return workbenchService.getTechnicianTasks();
     }
+
+    // --- P0: Security & Maintenance Workbench ---
+    @GetMapping("/security/tasks")
+    @PreAuthorize("hasRole('SECURITY') or hasRole('ADMIN')")
+    public Map<String, Object> getSecurityTasks() {
+        return workbenchService.getSecurityTasks();
+    }
 }

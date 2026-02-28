@@ -22,7 +22,8 @@
       "data": { "title": "Data Center", "desc": "Analytics & Reports" },
       "marketing": { "title": "Marketing", "desc": "Campaigns & Members" },
       "finance": { "title": "Finance", "desc": "Invoices & Payroll" },
-      "communication": { "title": "Communication", "desc": "Messages & Notifications" }
+      "communication": { "title": "Communication", "desc": "Messages & Notifications" },
+      "security": { "title": "Security & Maintenance", "desc": "Safety & Inspections" }
     }
   },
   "technician": {
@@ -32,7 +33,39 @@
     "offlineDevices": "Offline Devices",
     "inspection": "Inspection",
     "scanQr": "Scan Device QR",
-    "reportFault": "Report Fault"
+    "reportFault": "Report Fault",
+    "preventive": "Preventive Maint",
+    "maintenance": "Today's Plan"
+  },
+  "manager": {
+    "title": "Store Manager",
+    "revenue": "Revenue",
+    "visitors": "Visitors",
+    "redemptions": "Redemptions",
+    "blindbox": "Blindbox Sales",
+    "koc": "KOC Contrib",
+    "deviceRate": "Device Online",
+    "alerts": "Alerts",
+    "approvals": "Approvals",
+    "cost": "Cost Breakdown"
+  },
+  "frontdesk": {
+    "title": "Front Desk",
+    "target": "Today's Target",
+    "sales": "Current Sales",
+    "checkins": "Pending Check-ins",
+    "verifications": "Pending Verifications",
+    "quickCheckin": "Quick Check-in",
+    "newSale": "New Sale",
+    "memberReg": "Member Reg"
+  },
+  "security": {
+    "title": "Security Workbench",
+    "inspections": "Today's Inspections",
+    "incidents": "Incidents",
+    "equipment": "Fire Equipment",
+    "reportIncident": "Report Incident",
+    "checkEquipment": "Check Equipment"
   },
   "common": {
     "loading": "Loading...",

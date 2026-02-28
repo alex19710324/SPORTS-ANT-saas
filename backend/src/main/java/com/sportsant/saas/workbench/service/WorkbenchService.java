@@ -96,8 +96,40 @@ public class WorkbenchService implements AiAware {
         data.put("offlineDevices", offlineDevices.size());
         data.put("faultyDevices", faultyDevices.size());
         
-        // 3. Inspection Progress (Mock for now)
+        // 3. Inspection Progress (Mock for now - T02)
+        // TODO: Fetch from InspectionRepository once created
         data.put("inspectionProgress", 0.45); 
+        data.put("todayInspections", List.of(
+            Map.of("id", 101, "area", "Zone A", "status", "Pending", "deviceCount", 12),
+            Map.of("id", 102, "area", "Zone B", "status", "Completed", "deviceCount", 8)
+        ));
+
+        // 4. Preventive Maintenance (T06 - AI Driven)
+        // Mocking AI suggestions
+        data.put("maintenanceSuggestions", List.of(
+            Map.of("deviceId", "VR-005", "reason", "Runtime > 500h", "urgency", "Medium"),
+            Map.of("deviceId", "ARC-012", "reason", "Temp Spikes", "urgency", "High")
+        ));
+        
+        return data;
+    }
+
+    public Map<String, Object> getSecurityTasks() {
+        Map<String, Object> data = new HashMap<>();
+        
+        // S01: Safety Inspections
+        data.put("todayInspections", List.of(
+            Map.of("id", 201, "area", "Fire Exits", "status", "Pending", "items", 5),
+            Map.of("id", 202, "area", "Electrical Room", "status", "Completed", "items", 3)
+        ));
+        
+        // S02: Incidents
+        data.put("incidents", List.of(
+            Map.of("id", 301, "type", "Injury", "location", "Zone A", "status", "Investigating", "time", "10:30 AM")
+        ));
+        
+        // S04: Fire Equipment Expiry
+        data.put("expiringEquipment", 2); // 2 items expiring soon
         
         return data;
     }

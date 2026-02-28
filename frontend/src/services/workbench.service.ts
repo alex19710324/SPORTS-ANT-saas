@@ -11,5 +11,9 @@ export default {
   
   getTechnicianTasks() {
     return apiClient.get('/workbench/technician/tasks');
+  },
+
+  getSecurityTasks() {
+    return apiClient.get('/workbench/security/tasks');
   }
 };

@@ -6,6 +6,7 @@ export const useWorkbenchStore = defineStore('workbench', {
     managerOverview: null as any,
     frontDeskTasks: null as any,
     technicianTasks: null as any,
+    securityTasks: null as any,
     loading: false
   }),
   actions: {
@@ -38,6 +39,17 @@ export const useWorkbenchStore = defineStore('workbench', {
         this.technicianTasks = response.data;
       } catch (error) {
         console.error('Failed to fetch technician tasks', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchSecurityTasks() {
+      this.loading = true;
+      try {
+        const response = await WorkbenchService.getSecurityTasks();
+        this.securityTasks = response.data;
+      } catch (error) {
+        console.error('Failed to fetch security tasks', error);
       } finally {
         this.loading = false;
       }
