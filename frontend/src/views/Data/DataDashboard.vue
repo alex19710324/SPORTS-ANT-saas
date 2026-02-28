@@ -28,19 +28,20 @@
 
     <div class="charts-row">
         <el-card class="chart-card">
-            <template #header>Revenue Trend (Last 7 Days)</template>
-            <v-chart class="chart" :option="revenueOption" autoresize />
+            <template #header>Member Growth Trend</template>
+            <v-chart class="chart" :option="growthOption" autoresize />
         </el-card>
         
         <el-card class="chart-card">
-            <template #header>Store Leaderboard (Top 5)</template>
-            <el-table :data="leaderboard" style="width: 100%" :show-header="false">
-                <el-table-column type="index" width="50" />
-                <el-table-column prop="name" />
-                <el-table-column prop="revenue" align="right">
-                    <template #default="scope">¥{{ scope.row.revenue }}</template>
-                </el-table-column>
-            </el-table>
+            <template #header>Revenue Composition</template>
+            <v-chart class="chart" :option="pieOption" autoresize />
+        </el-card>
+    </div>
+    
+    <div class="charts-row" style="margin-top: 20px">
+         <el-card class="chart-card">
+            <template #header>Peak Hours (Occupancy)</template>
+            <v-chart class="chart" :option="peakOption" autoresize />
         </el-card>
     </div>
   </div>
@@ -50,29 +51,32 @@
 import { ref, onMounted, computed } from 'vue';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
-import { LineChart, BarChart } from 'echarts/charts';
-import { GridComponent, TooltipComponent, LegendComponent } from 'echarts/components';
+import { LineChart, BarChart, PieChart } from 'echarts/charts';
+import { GridComponent, TooltipComponent, LegendComponent, TitleComponent } from 'echarts/components';
 import VChart from 'vue-echarts';
 import apiClient from '../../services/api';
 
-use([CanvasRenderer, LineChart, BarChart, GridComponent, TooltipComponent, LegendComponent]);
+use([CanvasRenderer, LineChart, BarChart, PieChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent]);
 
 const dateRange = ref([]);
-const kpis = ref({
+const kpis = ref<any>({
     totalRevenue: 0,
-    activeStores: 0,
+    activeStores: 0, // Mock
     totalMembers: 0,
-    totalDevices: 0
+    totalDevices: 0 // Mock
 });
-const revenueData = ref({ dates: [], values: [] });
-const leaderboard = ref([]);
 
-const revenueOption = computed(() => ({
+const memberGrowth = ref<number[]>([]);
+const peakHours = ref<any>({});
+const categorySales = ref<any>({});
+
+const growthOption = computed(() => ({
+    title: { text: 'New Members (Last 7 Days)' },
     tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: revenueData.value.dates },
+    xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
     yAxis: { type: 'value' },
     series: [{
-        data: revenueData.value.values,
+        data: memberGrowth.value,
         type: 'line',
         smooth: true,
         areaStyle: { opacity: 0.3 },
@@ -80,16 +84,42 @@ const revenueOption = computed(() => ({
     }]
 }));
 
+const pieOption = computed(() => ({
+    tooltip: { trigger: 'item' },
+    legend: { bottom: '0%' },
+    series: [{
+        type: 'pie',
+        radius: ['40%', '70%'],
+        data: Object.keys(categorySales.value).map(key => ({
+            name: key,
+            value: categorySales.value[key]
+        }))
+    }]
+}));
+
+const peakOption = computed(() => ({
+    tooltip: { trigger: 'axis' },
+    xAxis: { type: 'category', data: Object.keys(peakHours.value).sort() },
+    yAxis: { type: 'value' },
+    series: [{
+        data: Object.keys(peakHours.value).sort().map(k => peakHours.value[k]),
+        type: 'bar',
+        itemStyle: { color: '#67c23a' }
+    }]
+}));
+
 const fetchData = async () => {
     try {
-        const kpiRes = await apiClient.get('/data/kpi');
-        kpis.value = kpiRes.data;
-
-        const trendRes = await apiClient.get('/data/revenue-trend');
-        revenueData.value = trendRes.data;
-
-        const leadRes = await apiClient.get('/data/store-leaderboard');
-        leaderboard.value = leadRes.data.slice(0, 5);
+        const res = await apiClient.get('/analytics/dashboard');
+        const data = res.data;
+        
+        kpis.value.totalRevenue = data.totalRevenue;
+        kpis.value.totalMembers = 1205; // Mock total
+        
+        memberGrowth.value = data.memberGrowth;
+        peakHours.value = data.peakHours;
+        categorySales.value = data.categorySales;
+        
     } catch (error) {
         console.error("Failed to load data");
     }

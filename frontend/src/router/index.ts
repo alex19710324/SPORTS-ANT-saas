@@ -20,6 +20,7 @@ import InventoryDashboard from '../views/Inventory/InventoryDashboard.vue';
 import SystemDashboard from '../views/Monitor/SystemDashboard.vue';
 import SaaSAdminDashboard from '../views/SaaSAdmin/SaaSAdminDashboard.vue';
 import VenueTwin from '../views/IoT/VenueTwin.vue';
+import SmartSchedule from '../views/HR/SmartSchedule.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +36,12 @@ const router = createRouter({
       name: 'venue-twin',
       component: VenueTwin,
       meta: { layout: MainLayout, roles: ['ADMIN', 'STORE_MANAGER', 'TECHNICIAN'] },
+    },
+    {
+      path: '/hr/schedule',
+      name: 'smart-schedule',
+      component: SmartSchedule,
+      meta: { layout: MainLayout, roles: ['ADMIN', 'HR', 'STORE_MANAGER'] },
     },
     {
       path: '/saas/admin',

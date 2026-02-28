@@ -63,10 +63,14 @@
         <template #title>Inventory</template>
       </el-menu-item>
 
-      <el-menu-item index="/hr" v-if="hasRole(['ADMIN', 'HR', 'STORE_MANAGER'])">
-        <el-icon><user-filled /></el-icon>
-        <template #title>HR</template>
-      </el-menu-item>
+      <el-sub-menu index="/hr" v-if="hasRole(['ADMIN', 'HR', 'STORE_MANAGER'])">
+        <template #title>
+          <el-icon><user-filled /></el-icon>
+          <span>HR & Staff</span>
+        </template>
+        <el-menu-item index="/hr">Dashboard</el-menu-item>
+        <el-menu-item index="/hr/schedule">Smart Schedule</el-menu-item>
+      </el-sub-menu>
 
       <el-menu-item index="/report" v-if="hasRole(['ADMIN', 'STORE_MANAGER', 'HQ'])">
         <el-icon><document /></el-icon>
@@ -109,7 +113,8 @@ import {
   UserFilled,
   Document,
   Monitor,
-  Connection
+  Connection,
+  MagicStick
 } from '@element-plus/icons-vue';
 
 const isCollapsed = ref(false);
