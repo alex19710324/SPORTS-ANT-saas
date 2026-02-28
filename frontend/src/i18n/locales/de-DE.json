@@ -1,0 +1,41 @@
+{
+  "login": {
+    "title": "SPORTS ANT SaaS Anmeldung",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "submit": "Anmelden",
+    "reset": "Zurücksetzen",
+    "placeholder": {
+      "username": "Benutzername eingeben",
+      "password": "Passwort eingeben"
+    }
+  },
+  "home": {
+    "welcome": "Willkommen bei SPORTS ANT SaaS",
+    "logout": "Abmelden",
+    "applications": "Anwendungen",
+    "modules": {
+      "hq": { "title": "HQ-Zentrum", "desc": "Franchise & Globales Management" },
+      "manager": { "title": "Filialleiter", "desc": "Täglicher Betrieb & Personal" },
+      "frontdesk": { "title": "Empfang", "desc": "Check-in & POS" },
+      "technician": { "title": "Techniker", "desc": "Geräteüberwachung & Reparatur" },
+      "data": { "title": "Datenzentrum", "desc": "Analysen & Berichte" },
+      "marketing": { "title": "Marketing", "desc": "Kampagnen & Mitglieder" },
+      "finance": { "title": "Finanzen", "desc": "Rechnungen & Gehaltsabrechnung" },
+      "communication": { "title": "Kommunikation", "desc": "Nachrichten & Benachrichtigungen" }
+    }
+  },
+  "technician": {
+    "title": "Techniker-Arbeitsplatz",
+    "workOrders": "Arbeitsaufträge",
+    "faultyDevices": "Defekte Geräte",
+    "offlineDevices": "Offline-Geräte",
+    "inspection": "Inspektion",
+    "scanQr": "Geräte-QR scannen",
+    "reportFault": "Fehler melden"
+  },
+  "common": {
+    "loading": "Wird geladen...",
+    "error": "Ein Fehler ist aufgetreten"
+  }
+}

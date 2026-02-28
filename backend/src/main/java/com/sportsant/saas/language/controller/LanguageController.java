@@ -41,10 +41,20 @@ public class LanguageController {
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<LanguagePackage> getLanguage(@PathVariable String code) {
+    public ResponseEntity<LanguagePackage> getLanguage(@PathVariable String code, @RequestParam(required = false) String version) {
         Optional<LanguagePackage> language = languageService.getLanguageByCode(code);
-        return language.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        
+        if (language.isPresent()) {
+            LanguagePackage pkg = language.get();
+            // If client version matches server version, return 304 Not Modified (simulated with empty content)
+            // In a real scenario, use ETag or actual 304
+            if (version != null && version.equals(pkg.getVersion())) {
+                return ResponseEntity.status(304).build();
+            }
+            return ResponseEntity.ok(pkg);
+        }
+        
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping

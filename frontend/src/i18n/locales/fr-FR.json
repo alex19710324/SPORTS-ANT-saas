@@ -1,0 +1,41 @@
+{
+  "login": {
+    "title": "Connexion SPORTS ANT SaaS",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "submit": "Connexion",
+    "reset": "Réinitialiser",
+    "placeholder": {
+      "username": "Entrez votre nom d'utilisateur",
+      "password": "Entrez votre mot de passe"
+    }
+  },
+  "home": {
+    "welcome": "Bienvenue sur SPORTS ANT SaaS",
+    "logout": "Déconnexion",
+    "applications": "Applications",
+    "modules": {
+      "hq": { "title": "Centre HQ", "desc": "Franchise & Gestion Globale" },
+      "manager": { "title": "Directeur de Magasin", "desc": "Opérations Quotidiennes & Personnel" },
+      "frontdesk": { "title": "Réception", "desc": "Enregistrement & POS" },
+      "technician": { "title": "Technicien", "desc": "Surveillance & Réparation d'Appareils" },
+      "data": { "title": "Centre de Données", "desc": "Analytique & Rapports" },
+      "marketing": { "title": "Marketing", "desc": "Campagnes & Membres" },
+      "finance": { "title": "Finance", "desc": "Factures & Paie" },
+      "communication": { "title": "Communication", "desc": "Messages & Notifications" }
+    }
+  },
+  "technician": {
+    "title": "Atelier Technicien",
+    "workOrders": "Ordres de Travail",
+    "faultyDevices": "Appareils Défectueux",
+    "offlineDevices": "Appareils Hors Ligne",
+    "inspection": "Inspection",
+    "scanQr": "Scanner QR Appareil",
+    "reportFault": "Signaler un Défaut"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue"
+  }
+}

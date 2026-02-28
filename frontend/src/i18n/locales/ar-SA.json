@@ -1,0 +1,41 @@
+{
+  "login": {
+    "title": "SPORTS ANT SaaS تسجيل الدخول",
+    "username": "اسم المستخدم",
+    "password": "كلمة المرور",
+    "submit": "دخول",
+    "reset": "إعادة تعيين",
+    "placeholder": {
+      "username": "أدخل اسم المستخدم",
+      "password": "أدخل كلمة المرور"
+    }
+  },
+  "home": {
+    "welcome": "مرحبًا بك في SPORTS ANT SaaS",
+    "logout": "تسجيل الخروج",
+    "applications": "التطبيقات",
+    "modules": {
+      "hq": { "title": "المركز الرئيسي", "desc": "الامتياز والإدارة العالمية" },
+      "manager": { "title": "مدير المتجر", "desc": "العمليات اليومية والموظفين" },
+      "frontdesk": { "title": "الاستقبال", "desc": "تسجيل الوصول ونقاط البيع" },
+      "technician": { "title": "فني", "desc": "مراقبة الأجهزة والإصلاح" },
+      "data": { "title": "مركز البيانات", "desc": "التحليلات والتقارير" },
+      "marketing": { "title": "التسويق", "desc": "الحملات والأعضاء" },
+      "finance": { "title": "المالية", "desc": "الفواتير والرواتب" },
+      "communication": { "title": "الاتصالات", "desc": "الرسائل والإشعارات" }
+    }
+  },
+  "technician": {
+    "title": "منصة عمل الفني",
+    "workOrders": "أوامر العمل",
+    "faultyDevices": "الأجهزة المعطلة",
+    "offlineDevices": "الأجهزة غير المتصلة",
+    "inspection": "التفتيش",
+    "scanQr": "مسح رمز الجهاز",
+    "reportFault": "الإبلاغ عن عطل"
+  },
+  "common": {
+    "loading": "جارٍ التحميل...",
+    "error": "حدث خطأ"
+  }
+}

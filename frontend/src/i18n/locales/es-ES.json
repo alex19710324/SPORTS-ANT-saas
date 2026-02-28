@@ -1,0 +1,41 @@
+{
+  "login": {
+    "title": "Inicio de Sesión SPORTS ANT SaaS",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "submit": "Iniciar Sesión",
+    "reset": "Restablecer",
+    "placeholder": {
+      "username": "Ingrese nombre de usuario",
+      "password": "Ingrese contraseña"
+    }
+  },
+  "home": {
+    "welcome": "Bienvenido a SPORTS ANT SaaS",
+    "logout": "Cerrar Sesión",
+    "applications": "Aplicaciones",
+    "modules": {
+      "hq": { "title": "Centro HQ", "desc": "Franquicia & Gestión Global" },
+      "manager": { "title": "Gerente de Tienda", "desc": "Operaciones Diarias & Personal" },
+      "frontdesk": { "title": "Recepción", "desc": "Registro & POS" },
+      "technician": { "title": "Técnico", "desc": "Monitoreo & Reparación de Dispositivos" },
+      "data": { "title": "Centro de Datos", "desc": "Análisis & Informes" },
+      "marketing": { "title": "Marketing", "desc": "Campañas & Miembros" },
+      "finance": { "title": "Finanzas", "desc": "Facturas & Nómina" },
+      "communication": { "title": "Comunicación", "desc": "Mensajes & Notificaciones" }
+    }
+  },
+  "technician": {
+    "title": "Banco de Trabajo Técnico",
+    "workOrders": "Órdenes de Trabajo",
+    "faultyDevices": "Dispositivos Defectuosos",
+    "offlineDevices": "Dispositivos Desconectados",
+    "inspection": "Inspección",
+    "scanQr": "Escanear QR del Dispositivo",
+    "reportFault": "Reportar Falla"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error"
+  }
+}

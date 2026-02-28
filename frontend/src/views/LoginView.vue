@@ -4,10 +4,23 @@
       <template #header>
         <div class="card-header">
           <span>{{ $t('login.title') }}</span>
-          <div class="lang-switch">
-             <el-button link @click="switchLang('zh-CN')">中文</el-button>
-             <el-button link @click="switchLang('en-US')">English</el-button>
-          </div>
+          <el-dropdown @command="switchLang">
+            <span class="el-dropdown-link">
+              Language<el-icon class="el-icon--right"><arrow-down /></el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="zh-CN">简体中文</el-dropdown-item>
+                <el-dropdown-item command="en-US">English</el-dropdown-item>
+                <el-dropdown-item command="fr-FR">Français</el-dropdown-item>
+                <el-dropdown-item command="it-IT">Italiano</el-dropdown-item>
+                <el-dropdown-item command="de-DE">Deutsch</el-dropdown-item>
+                <el-dropdown-item command="es-ES">Español</el-dropdown-item>
+                <el-dropdown-item command="pt-PT">Português</el-dropdown-item>
+                <el-dropdown-item command="ar-SA">العربية</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
       </template>
       <el-form :model="loginForm" ref="formRef" :rules="rules" label-width="80px">
@@ -34,8 +47,9 @@ import { reactive, ref } from 'vue';
 import { useAuthStore } from '../stores/auth.store';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import { ArrowDown } from '@element-plus/icons-vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import { setLanguage } from '../i18n';
+import { loadLanguageAsync } from '../i18n';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -82,8 +96,8 @@ const resetForm = () => {
   formRef.value.resetFields();
 };
 
-const switchLang = (lang: string) => {
-    setLanguage(lang);
+const switchLang = async (lang: string) => {
+    await loadLanguageAsync(lang);
 };
 </script>
 
@@ -111,5 +125,12 @@ const switchLang = (lang: string) => {
   color: red;
   margin-top: 10px;
   text-align: center;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409EFF;
+  display: flex;
+  align-items: center;
 }
 </style>

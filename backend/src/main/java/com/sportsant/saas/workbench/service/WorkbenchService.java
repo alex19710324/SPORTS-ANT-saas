@@ -21,12 +21,40 @@ public class WorkbenchService implements AiAware {
     private DeviceRepository deviceRepository;
 
     public Map<String, Object> getManagerOverview(Long storeId) {
-        // ... (Existing Logic) ...
         Map<String, Object> data = new HashMap<>();
+        
+        // M01: Business Overview
         data.put("revenue", 12345.67);
         data.put("visitors", 230);
         data.put("redemptions", 189);
-        data.put("alertCount", 2);
+        data.put("blindboxSales", 3456.78);
+        data.put("kocContribution", 890.12);
+        
+        // M01: Device Status
+        long totalDevices = deviceRepository.count();
+        long onlineDevices = deviceRepository.findByStatus("ONLINE").size();
+        double onlineRate = totalDevices > 0 ? (double) onlineDevices / totalDevices : 0.0;
+        data.put("deviceOnlineRate", String.format("%.1f%%", onlineRate * 100));
+        
+        // M01: Alerts
+        data.put("alertCount", 5); // Total Alerts
+        data.put("securityAlerts", 2); // Security-specific
+        data.put("complaintPending", 3); // Complaints
+        
+        // M02: Pending Approvals (Mock)
+        data.put("pendingApprovals", List.of(
+            Map.of("id", 1, "type", "Purchase", "summary", "Office Supplies", "applicant", "Alice", "date", "2026-02-28"),
+            Map.of("id", 2, "type", "Leave", "summary", "Sick Leave", "applicant", "Bob", "date", "2026-02-28")
+        ));
+        
+        // M04: Cost Breakdown (Mock)
+        data.put("costBreakdown", Map.of(
+            "labor", 5000,
+            "utilities", 1200,
+            "materials", 800,
+            "marketing", 1500
+        ));
+
         data.put("trend", Map.of(
             "revenue", new int[]{12000, 12500, 12345},
             "visitors", new int[]{200, 210, 230}
@@ -35,11 +63,20 @@ public class WorkbenchService implements AiAware {
     }
 
     public Map<String, Object> getFrontDeskTasks() {
-        // ... (Existing Logic) ...
         Map<String, Object> data = new HashMap<>();
-        data.put("todayTarget", 5000);
-        data.put("currentSales", 1200);
-        data.put("pendingCheckins", 3);
+        
+        // F04: Personal Performance
+        data.put("todayTarget", 5000.00);
+        data.put("currentSales", 1250.50);
+        data.put("targetCompletion", 0.25); // 25%
+        
+        // F01: Pending Tasks
+        data.put("pendingCheckins", 5);
+        data.put("pendingVerifications", 2);
+        
+        // F06: High Peak Alert (Mock)
+        data.put("peakAlert", true); // Should trigger a UI warning
+        
         return data;
     }
     

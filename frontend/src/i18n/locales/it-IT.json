@@ -1,0 +1,41 @@
+{
+  "login": {
+    "title": "SPORTS ANT SaaS Login",
+    "username": "Nome utente",
+    "password": "Password",
+    "submit": "Accedi",
+    "reset": "Reimposta",
+    "placeholder": {
+      "username": "Inserisci nome utente",
+      "password": "Inserisci password"
+    }
+  },
+  "home": {
+    "welcome": "Benvenuto in SPORTS ANT SaaS",
+    "logout": "Esci",
+    "applications": "Applicazioni",
+    "modules": {
+      "hq": { "title": "Centro HQ", "desc": "Franchising & Gestione Globale" },
+      "manager": { "title": "Store Manager", "desc": "Operazioni Quotidiane & Personale" },
+      "frontdesk": { "title": "Reception", "desc": "Check-in & POS" },
+      "technician": { "title": "Tecnico", "desc": "Monitoraggio Dispositivi & Riparazioni" },
+      "data": { "title": "Data Center", "desc": "Analisi & Report" },
+      "marketing": { "title": "Marketing", "desc": "Campagne & Membri" },
+      "finance": { "title": "Finanza", "desc": "Fatture & Buste Paga" },
+      "communication": { "title": "Comunicazione", "desc": "Messaggi & Notifiche" }
+    }
+  },
+  "technician": {
+    "title": "Banco di Lavoro Tecnico",
+    "workOrders": "Ordini di Lavoro",
+    "faultyDevices": "Dispositivi Guasti",
+    "offlineDevices": "Dispositivi Offline",
+    "inspection": "Ispezione",
+    "scanQr": "Scansiona QR Dispositivo",
+    "reportFault": "Segnala Guasto"
+  },
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Si è verificato un errore"
+  }
+}
