@@ -1,0 +1,15 @@
+package com.sportsant.saas.entity;
+
+public enum ERole {
+  ROLE_USER,
+  ROLE_MODERATOR,
+  ROLE_ADMIN,
+  ROLE_STORE_MANAGER,
+  ROLE_HR,
+  ROLE_RECEPTIONIST,
+  ROLE_OPERATOR,
+  ROLE_MECHANIC,
+  ROLE_TEAM_BUILDER,
+  ROLE_GUIDE,
+  ROLE_MARKETING
+}

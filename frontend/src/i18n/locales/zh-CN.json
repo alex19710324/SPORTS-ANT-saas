@@ -1,0 +1,21 @@
+{
+  "login": {
+    "title": "SPORTS ANT SaaS 登录",
+    "username": "用户名",
+    "password": "密码",
+    "submit": "登录",
+    "reset": "重置",
+    "placeholder": {
+      "username": "请输入用户名",
+      "password": "请输入密码"
+    }
+  },
+  "home": {
+    "welcome": "欢迎来到 SPORTS ANT SaaS",
+    "logout": "退出登录"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "发生错误"
+  }
+}

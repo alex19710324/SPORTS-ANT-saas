@@ -1,0 +1,21 @@
+{
+  "login": {
+    "title": "SPORTS ANT SaaS Login",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Login",
+    "reset": "Reset",
+    "placeholder": {
+      "username": "Enter Username",
+      "password": "Enter Password"
+    }
+  },
+  "home": {
+    "welcome": "Welcome to SPORTS ANT SaaS",
+    "logout": "Logout"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred"
+  }
+}

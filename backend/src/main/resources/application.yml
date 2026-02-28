@@ -7,7 +7,8 @@ spring:
 
   # Default to H2 for easy start-up without external DB
   datasource:
-    url: jdbc:h2:mem:testdb
+    # Use file-based H2 database for persistence
+    url: jdbc:h2:file:./data/sports_ant_db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
     driverClassName: org.h2.Driver
     username: sa
     password: password
@@ -29,4 +30,10 @@ spring:
 logging:
   level:
     root: INFO
-    com.sportsant.saas: DEBUG
+    "[com.sportsant.saas]": DEBUG
+
+sports:
+  ant:
+    app:
+      jwtSecret: sportsAntSaasSecretKeyThatShouldBeVeryLongAndSecure1234567890
+      jwtExpirationMs: 86400000
