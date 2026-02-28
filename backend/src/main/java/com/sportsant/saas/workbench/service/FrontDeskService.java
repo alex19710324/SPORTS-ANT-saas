@@ -1,7 +1,7 @@
 package com.sportsant.saas.workbench.service;
 
 import com.sportsant.saas.membership.entity.Member;
-import com.sportsant.saas.membership.repository.MemberRepository;
+import com.sportsant.saas.membership.service.MembershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 public class FrontDeskService {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MembershipService membershipService;
 
     public Map<String, Object> getFrontDeskOverview() {
         // Mock data
@@ -25,8 +25,7 @@ public class FrontDeskService {
     }
 
     public Member quickCheckIn(String memberCode) {
-        // Mock implementation
-        // In real app: find member by code (QR/Phone), create check-in record
-        return memberRepository.findAll().stream().findFirst().orElseThrow(() -> new RuntimeException("Member not found"));
+        Member member = membershipService.findMemberByCodeOrPhone(memberCode);
+        return membershipService.dailyCheckIn(member.getUserId());
     }
 }

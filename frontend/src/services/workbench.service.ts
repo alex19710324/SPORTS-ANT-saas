@@ -6,11 +6,15 @@ export default {
   },
   
   getFrontDeskTasks() {
-    return apiClient.get('/workbench/frontdesk/tasks');
+    return apiClient.get('/workbench/frontdesk/overview');
   },
   
+  checkInMember(memberCode: string) {
+    return apiClient.post('/workbench/frontdesk/checkin', { memberCode });
+  },
+
   getTechnicianTasks() {
-    return apiClient.get('/workbench/technician/tasks');
+    return apiClient.get('/workbench/technician/overview');
   },
 
   getSecurityTasks() {

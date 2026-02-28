@@ -32,6 +32,13 @@ export const useWorkbenchStore = defineStore('workbench', {
         this.loading = false;
       }
     },
+    async checkInMember(code: string) {
+        try {
+            return await WorkbenchService.checkInMember(code);
+        } catch (error) {
+            throw error;
+        }
+    },
     async fetchTechnicianTasks() {
       this.loading = true;
       try {

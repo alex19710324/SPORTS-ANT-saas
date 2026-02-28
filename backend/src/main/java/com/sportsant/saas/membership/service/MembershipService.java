@@ -40,6 +40,12 @@ public class MembershipService implements AiAware {
         return memberRepository.save(member);
     }
 
+    public Member findMemberByCodeOrPhone(String code) {
+        return memberRepository.findByMemberCode(code)
+                .or(() -> memberRepository.findByPhoneNumber(code))
+                .orElseThrow(() -> new RuntimeException("Member not found with code/phone: " + code));
+    }
+
     @Transactional
     public Member dailyCheckIn(Long userId) {
         // Daily Check-in gives 10 Growth

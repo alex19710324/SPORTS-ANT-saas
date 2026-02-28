@@ -14,6 +14,14 @@ public class Member {
     @Column(nullable = false, unique = true)
     private Long userId;
 
+    private String name;
+
+    @Column(unique = true)
+    private String memberCode;
+
+    @Column(unique = true)
+    private String phoneNumber;
+
     @ManyToOne
     @JoinColumn(name = "level_id", nullable = false)
     private MemberLevel currentLevel;
@@ -61,4 +69,10 @@ public class Member {
     public void setTags(String tags) { this.tags = tags; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getMemberCode() { return memberCode; }
+    public void setMemberCode(String memberCode) { this.memberCode = memberCode; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 }

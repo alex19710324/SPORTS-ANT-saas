@@ -2,7 +2,7 @@
   <el-header class="navbar">
     <div class="navbar-left">
       <div class="logo">
-        <img src="/src/assets/logo.png" alt="Logo" class="logo-img" v-if="hasLogo" />
+        <img src="../assets/vue.svg" alt="Logo" class="logo-img" v-if="hasLogo" />
         <span class="logo-text">SPORTS ANT SaaS</span>
       </div>
     </div>
@@ -29,13 +29,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../stores/auth.store';
+import { useAuthStore } from '../stores/auth.store';
 import { ArrowDown } from '@element-plus/icons-vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
 
-const hasLogo = false; // Set to true if logo exists
+const hasLogo = true; // Set to true if logo exists
 const userAvatar = ''; // URL to user avatar
 
 const username = computed(() => {
