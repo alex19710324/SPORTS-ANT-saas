@@ -1,28 +1,28 @@
 <template>
   <div class="technician-dashboard" v-loading="loading">
-    <h2>Technician Workbench</h2>
+    <h2>{{ $t('technician.title') }}</h2>
     <div class="task-grid" v-if="tasks">
       <el-card shadow="hover">
-        <template #header>Work Orders</template>
+        <template #header>{{ $t('technician.workOrders') }}</template>
         <h3>{{ tasks.pendingWorkOrders }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>Faulty Devices</template>
+        <template #header>{{ $t('technician.faultyDevices') }}</template>
         <h3 class="text-danger">{{ tasks.faultyDevices }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>Offline Devices</template>
+        <template #header>{{ $t('technician.offlineDevices') }}</template>
         <h3 class="text-warning">{{ tasks.offlineDevices }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>Inspection</template>
+        <template #header>{{ $t('technician.inspection') }}</template>
         <h3>{{ (tasks.inspectionProgress * 100).toFixed(0) }}%</h3>
       </el-card>
     </div>
     
     <div class="action-list">
-      <el-button type="primary">Scan Device QR</el-button>
-      <el-button type="info">Report Fault</el-button>
+      <el-button type="primary">{{ $t('technician.scanQr') }}</el-button>
+      <el-button type="info">{{ $t('technician.reportFault') }}</el-button>
     </div>
     
     <DeviceMonitor />
@@ -46,7 +46,7 @@ onMounted(() => {
 <style scoped>
 .task-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-top: 20px;
 }

@@ -12,7 +12,27 @@
   },
   "home": {
     "welcome": "欢迎来到 SPORTS ANT SaaS",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "applications": "应用中心",
+    "modules": {
+      "hq": { "title": "总部中心", "desc": "加盟与全球管理" },
+      "manager": { "title": "店长工作台", "desc": "日常运营与员工管理" },
+      "frontdesk": { "title": "前台收银", "desc": "签到与POS" },
+      "technician": { "title": "技术员", "desc": "设备监控与维修" },
+      "data": { "title": "数据中心", "desc": "分析与报表" },
+      "marketing": { "title": "营销中心", "desc": "活动与会员" },
+      "finance": { "title": "财务中心", "desc": "发票与薪资" },
+      "communication": { "title": "通讯中心", "desc": "消息与通知" }
+    }
+  },
+  "technician": {
+    "title": "技术员工作台",
+    "workOrders": "待处理工单",
+    "faultyDevices": "故障设备",
+    "offlineDevices": "离线设备",
+    "inspection": "巡检进度",
+    "scanQr": "扫描设备二维码",
+    "reportFault": "上报故障"
   },
   "common": {
     "loading": "加载中...",

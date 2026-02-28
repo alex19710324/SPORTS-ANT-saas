@@ -7,7 +7,7 @@
 
     <!-- Navigation Modules -->
     <div class="module-nav">
-      <h2 class="section-title">Applications</h2>
+      <h2 class="section-title">{{ $t('home.applications') }}</h2>
       <el-row :gutter="20">
         <el-col :span="6" v-for="mod in modules" :key="mod.path">
           <el-card class="module-card" shadow="hover" @click="router.push(mod.path)">
@@ -17,8 +17,8 @@
               </el-icon>
             </div>
             <div class="module-info">
-              <h3>{{ mod.title }}</h3>
-              <p>{{ mod.desc }}</p>
+              <h3>{{ $t(mod.title) }}</h3>
+              <p>{{ $t(mod.desc) }}</p>
             </div>
           </el-card>
         </el-col>
@@ -54,18 +54,21 @@ import {
   Setting 
 } from '@element-plus/icons-vue';
 
+import { useI18n } from 'vue-i18n';
+
 const authStore = useAuthStore();
 const router = useRouter();
+const { t } = useI18n();
 
 const modules = [
-  { title: 'HQ Center', desc: 'Franchise & Global Management', path: '/hq', icon: OfficeBuilding, color: '#409EFF' },
-  { title: 'Store Manager', desc: 'Daily Operations & Staff', path: '/workbench/manager', icon: User, color: '#67C23A' },
-  { title: 'Front Desk', desc: 'Check-in & POS', path: '/workbench/frontdesk', icon: Service, color: '#E6A23C' },
-  { title: 'Technician', desc: 'Device Monitoring & Repair', path: '/workbench/technician', icon: Setting, color: '#F56C6C' },
-  { title: 'Data Center', desc: 'Analytics & Reports', path: '/data', icon: DataLine, color: '#909399' },
-  { title: 'Marketing', desc: 'Campaigns & Members', path: '/marketing', icon: Promotion, color: '#F56C6C' },
-  { title: 'Finance', desc: 'Invoices & Payroll', path: '/finance', icon: Money, color: '#E6A23C' },
-  { title: 'Communication', desc: 'Messages & Notifications', path: '/communication', icon: ChatDotRound, color: '#409EFF' },
+  { title: 'home.modules.hq.title', desc: 'home.modules.hq.desc', path: '/hq', icon: OfficeBuilding, color: '#409EFF' },
+  { title: 'home.modules.manager.title', desc: 'home.modules.manager.desc', path: '/workbench/manager', icon: User, color: '#67C23A' },
+  { title: 'home.modules.frontdesk.title', desc: 'home.modules.frontdesk.desc', path: '/workbench/frontdesk', icon: Service, color: '#E6A23C' },
+  { title: 'home.modules.technician.title', desc: 'home.modules.technician.desc', path: '/workbench/technician', icon: Setting, color: '#F56C6C' },
+  { title: 'home.modules.data.title', desc: 'home.modules.data.desc', path: '/data', icon: DataLine, color: '#909399' },
+  { title: 'home.modules.marketing.title', desc: 'home.modules.marketing.desc', path: '/marketing', icon: Promotion, color: '#F56C6C' },
+  { title: 'home.modules.finance.title', desc: 'home.modules.finance.desc', path: '/finance', icon: Money, color: '#E6A23C' },
+  { title: 'home.modules.communication.title', desc: 'home.modules.communication.desc', path: '/communication', icon: ChatDotRound, color: '#409EFF' },
 ];
 
 const handleLogout = () => {

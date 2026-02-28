@@ -7,6 +7,8 @@ import com.sportsant.saas.ai.service.FeatureStoreService;
 import com.sportsant.saas.entity.ERole;
 import com.sportsant.saas.entity.Role;
 import com.sportsant.saas.entity.User;
+import com.sportsant.saas.language.entity.LanguagePackage;
+import com.sportsant.saas.language.repository.LanguagePackageRepository;
 import com.sportsant.saas.store.entity.Store;
 import com.sportsant.saas.store.repository.StoreRepository;
 import com.sportsant.saas.repository.RoleRepository;
@@ -30,7 +32,8 @@ public class DataInitializer {
                                     AiInferenceService aiInferenceService,
                                     FeatureStoreService featureStoreService,
                                     MemberLevelRepository memberLevelRepository,
-                                    StoreRepository storeRepository) {
+                                    StoreRepository storeRepository,
+                                    LanguagePackageRepository languagePackageRepository) {
         return args -> {
             // ... (Existing Init Logic) ...
             // 1. Initialize Roles if not exist
@@ -117,6 +120,111 @@ public class DataInitializer {
                 storeRepository.save(s2);
                 storeRepository.save(s3);
                 System.out.println(">>> Initialized Mock Stores (3 Stores)");
+            }
+
+            // 6. Initialize Language Packages (P0)
+            if (languagePackageRepository.count() == 0) {
+                // zh-CN
+                LanguagePackage zh = new LanguagePackage();
+                zh.setCode("zh-CN");
+                zh.setName("简体中文");
+                zh.setVersion("1.0.0");
+                zh.setContent("""
+                    {
+                      "login": {
+                        "title": "SPORTS ANT SaaS 登录",
+                        "username": "用户名",
+                        "password": "密码",
+                        "submit": "登录",
+                        "reset": "重置",
+                        "placeholder": {
+                          "username": "请输入用户名",
+                          "password": "请输入密码"
+                        }
+                      },
+                      "home": {
+                        "welcome": "欢迎来到 SPORTS ANT SaaS",
+                        "logout": "退出登录",
+                        "applications": "应用中心",
+                        "modules": {
+                          "hq": { "title": "总部中心", "desc": "加盟与全球管理" },
+                          "manager": { "title": "店长工作台", "desc": "日常运营与员工管理" },
+                          "frontdesk": { "title": "前台收银", "desc": "签到与POS" },
+                          "technician": { "title": "技术员", "desc": "设备监控与维修" },
+                          "data": { "title": "数据中心", "desc": "分析与报表" },
+                          "marketing": { "title": "营销中心", "desc": "活动与会员" },
+                          "finance": { "title": "财务中心", "desc": "发票与薪资" },
+                          "communication": { "title": "通讯中心", "desc": "消息与通知" }
+                        }
+                      },
+                      "technician": {
+                        "title": "技术员工作台",
+                        "workOrders": "待处理工单",
+                        "faultyDevices": "故障设备",
+                        "offlineDevices": "离线设备",
+                        "inspection": "巡检进度",
+                        "scanQr": "扫描设备二维码",
+                        "reportFault": "上报故障"
+                      },
+                      "common": {
+                        "loading": "加载中...",
+                        "error": "发生错误"
+                      }
+                    }
+                    """);
+                languagePackageRepository.save(zh);
+
+                // en-US
+                LanguagePackage en = new LanguagePackage();
+                en.setCode("en-US");
+                en.setName("English (US)");
+                en.setVersion("1.0.0");
+                en.setContent("""
+                    {
+                      "login": {
+                        "title": "SPORTS ANT SaaS Login",
+                        "username": "Username",
+                        "password": "Password",
+                        "submit": "Login",
+                        "reset": "Reset",
+                        "placeholder": {
+                          "username": "Enter Username",
+                          "password": "Enter Password"
+                        }
+                      },
+                      "home": {
+                        "welcome": "Welcome to SPORTS ANT SaaS",
+                        "logout": "Logout",
+                        "applications": "Applications",
+                        "modules": {
+                          "hq": { "title": "HQ Center", "desc": "Franchise & Global Management" },
+                          "manager": { "title": "Store Manager", "desc": "Daily Operations & Staff" },
+                          "frontdesk": { "title": "Front Desk", "desc": "Check-in & POS" },
+                          "technician": { "title": "Technician", "desc": "Device Monitoring & Repair" },
+                          "data": { "title": "Data Center", "desc": "Analytics & Reports" },
+                          "marketing": { "title": "Marketing", "desc": "Campaigns & Members" },
+                          "finance": { "title": "Finance", "desc": "Invoices & Payroll" },
+                          "communication": { "title": "Communication", "desc": "Messages & Notifications" }
+                        }
+                      },
+                      "technician": {
+                        "title": "Technician Workbench",
+                        "workOrders": "Work Orders",
+                        "faultyDevices": "Faulty Devices",
+                        "offlineDevices": "Offline Devices",
+                        "inspection": "Inspection",
+                        "scanQr": "Scan Device QR",
+                        "reportFault": "Report Fault"
+                      },
+                      "common": {
+                        "loading": "Loading...",
+                        "error": "An error occurred"
+                      }
+                    }
+                    """);
+                languagePackageRepository.save(en);
+                
+                System.out.println(">>> Initialized Language Packages (zh-CN, en-US)");
             }
         };
     }

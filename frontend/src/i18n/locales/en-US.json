@@ -12,7 +12,27 @@
   },
   "home": {
     "welcome": "Welcome to SPORTS ANT SaaS",
-    "logout": "Logout"
+    "logout": "Logout",
+    "applications": "Applications",
+    "modules": {
+      "hq": { "title": "HQ Center", "desc": "Franchise & Global Management" },
+      "manager": { "title": "Store Manager", "desc": "Daily Operations & Staff" },
+      "frontdesk": { "title": "Front Desk", "desc": "Check-in & POS" },
+      "technician": { "title": "Technician", "desc": "Device Monitoring & Repair" },
+      "data": { "title": "Data Center", "desc": "Analytics & Reports" },
+      "marketing": { "title": "Marketing", "desc": "Campaigns & Members" },
+      "finance": { "title": "Finance", "desc": "Invoices & Payroll" },
+      "communication": { "title": "Communication", "desc": "Messages & Notifications" }
+    }
+  },
+  "technician": {
+    "title": "Technician Workbench",
+    "workOrders": "Work Orders",
+    "faultyDevices": "Faulty Devices",
+    "offlineDevices": "Offline Devices",
+    "inspection": "Inspection",
+    "scanQr": "Scan Device QR",
+    "reportFault": "Report Fault"
   },
   "common": {
     "loading": "Loading...",
