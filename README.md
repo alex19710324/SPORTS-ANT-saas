@@ -92,6 +92,20 @@ cd SPORTS-ANT-saas
     ```
     The frontend application will be available at `http://localhost:5173` (or the port shown in the terminal).
 
+## Deployment (Docker)
+
+To deploy the entire stack (Frontend + Backend + Database) using Docker Compose:
+
+1.  Ensure Docker and Docker Compose are installed.
+2.  Run the following command from the root directory:
+    ```bash
+    docker-compose up --build -d
+    ```
+3.  Access the application:
+    -   **Frontend**: `http://localhost:80`
+    -   **Backend**: `http://localhost:8080`
+    -   **Database**: `localhost:3306` (User: `sa`, Password: `password`)
+
 ## Running Tests
 
 ### Backend Tests

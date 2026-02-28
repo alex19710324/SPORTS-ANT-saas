@@ -17,6 +17,8 @@ import ReportDashboard from '../views/Report/ReportDashboard.vue';
 import MemberPortal from '../views/MemberPortal/MemberPortal.vue';
 import HRDashboard from '../views/HR/HRDashboard.vue';
 import InventoryDashboard from '../views/Inventory/InventoryDashboard.vue';
+import SystemDashboard from '../views/Monitor/SystemDashboard.vue';
+import SaaSAdminDashboard from '../views/SaaSAdmin/SaaSAdminDashboard.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +28,12 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: { layout: MainLayout },
+    },
+    {
+      path: '/saas/admin',
+      name: 'saas-admin-dashboard',
+      component: SaaSAdminDashboard,
+      meta: { layout: MainLayout, roles: ['SUPER_ADMIN'] },
     },
     {
       path: '/inventory',
@@ -44,6 +52,12 @@ const router = createRouter({
       name: 'report-dashboard',
       component: ReportDashboard,
       meta: { layout: MainLayout, roles: ['ADMIN', 'STORE_MANAGER', 'HQ'] },
+    },
+    {
+      path: '/monitor',
+      name: 'system-dashboard',
+      component: SystemDashboard,
+      meta: { layout: MainLayout, roles: ['ADMIN'] },
     },
     {
       path: '/member/portal',

@@ -37,3 +37,14 @@ sports:
     app:
       jwtSecret: sportsAntSaasSecretKeyThatShouldBeVeryLongAndSecure1234567890
       jwtExpirationMs: 86400000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true

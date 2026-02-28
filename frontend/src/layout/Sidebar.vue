@@ -73,6 +73,11 @@
         <template #title>Reports</template>
       </el-menu-item>
 
+      <el-menu-item index="/monitor" v-if="hasRole(['ADMIN'])">
+        <el-icon><monitor /></el-icon>
+        <template #title>System Monitor</template>
+      </el-menu-item>
+
       <el-menu-item index="/communication/dashboard">
         <el-icon><chat-dot-round /></el-icon>
         <template #title>{{ $t('home.modules.communication.title') }}</template>
@@ -97,7 +102,8 @@ import {
   ChatDotRound,
   Box,
   UserFilled,
-  Document
+  Document,
+  Monitor
 } from '@element-plus/icons-vue';
 
 const isCollapsed = ref(false);
