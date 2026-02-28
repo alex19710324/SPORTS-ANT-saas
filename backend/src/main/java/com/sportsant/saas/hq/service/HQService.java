@@ -1,6 +1,5 @@
 package com.sportsant.saas.hq.service;
 
-import com.sportsant.saas.data.service.AnalyticsService;
 import com.sportsant.saas.finance.service.FinanceService;
 import com.sportsant.saas.franchise.entity.FranchiseApplication;
 import com.sportsant.saas.store.entity.Store;
@@ -34,9 +33,6 @@ public class HQService {
 
     @Autowired
     private InventoryService inventoryService;
-
-    @Autowired
-    private AnalyticsService analyticsService;
 
     public Map<String, Object> getGlobalOverview() {
         return getExecutiveDashboard();

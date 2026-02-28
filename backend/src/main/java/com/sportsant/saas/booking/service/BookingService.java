@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,6 +35,7 @@ public class BookingService {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public Booking createBooking(Long memberId, Long resourceId, LocalDateTime startTime, LocalDateTime endTime) {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));

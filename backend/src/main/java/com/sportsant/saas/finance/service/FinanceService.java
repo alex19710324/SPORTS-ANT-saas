@@ -120,7 +120,7 @@ public class FinanceService {
         // Mocking "Closing the Books"
         // 1. Get daily revenue from Analytics (which mocks Order/Booking sum)
         Map<String, Object> data = analyticsService.getDashboardData();
-        Double totalRevenue = (Double) data.get("totalRevenue"); // Total accumulated
+        System.out.println("Generating daily ledger with data: " + data);
         
         // Create a transaction for "Daily Sales" (randomized for demo variation)
         Transaction income = new Transaction();

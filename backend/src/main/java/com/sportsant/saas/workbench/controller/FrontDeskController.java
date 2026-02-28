@@ -42,6 +42,7 @@ public class FrontDeskController {
 
     @PostMapping("/sale")
     @PreAuthorize("hasRole('RECEPTIONIST') or hasRole('ADMIN')")
+    @SuppressWarnings("unchecked")
     public Member processSale(@RequestBody Map<String, Object> payload) {
         String code = (String) payload.get("memberCode");
         

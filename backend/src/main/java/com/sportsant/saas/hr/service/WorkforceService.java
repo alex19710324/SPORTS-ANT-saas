@@ -28,6 +28,7 @@ public class WorkforceService {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<Shift> generateSchedule(LocalDate weekStart) {
         // Simple AI Logic:
         // 1. Get Peak Hours from Analytics

@@ -1,10 +1,12 @@
 package com.sportsant.saas.hr.service;
 
 import com.sportsant.saas.entity.ERole;
-import com.sportsant.saas.entity.Role;
 import com.sportsant.saas.entity.User;
+import com.sportsant.saas.hr.entity.Employee;
+import com.sportsant.saas.hr.entity.Schedule;
+import com.sportsant.saas.hr.repository.EmployeeRepository;
+import com.sportsant.saas.hr.repository.ScheduleRepository;
 import com.sportsant.saas.repository.UserRepository;
-import com.sportsant.saas.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +21,32 @@ public class HRService {
     private UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
     public List<Map<String, Object>> getStaffList() {
-        return getStoreEmployees(null);
+        return getStaffListMap(null);
     }
 
-    public List<Map<String, Object>> getStoreEmployees(Long storeId) {
+    public List<Employee> getStoreEmployees(Long storeId) {
+        if (storeId == null) {
+            return employeeRepository.findAll();
+        }
+        return employeeRepository.findByStoreId(storeId);
+    }
+
+    public Schedule createSchedule(Schedule schedule) {
+        return scheduleRepository.save(schedule);
+    }
+
+    public void createSchedule(Map<String, Object> scheduleMap) {
+        // Mock schedule creation from Map (Legacy/Frontend)
+        System.out.println("Created schedule from map: " + scheduleMap);
+    }
+
+    public List<Map<String, Object>> getStaffListMap(Long storeId) {
         // Fetch users who are NOT just ROLE_USER (which are members)
         // For MVP, we'll iterate all users and filter by roles that are staff-like
         // StoreId filtering would happen here in real DB
@@ -53,11 +74,6 @@ public class HRService {
             }
         }
         return staffList;
-    }
-
-    public void createSchedule(Map<String, Object> schedule) {
-        // Mock schedule creation
-        System.out.println("Created schedule: " + schedule);
     }
 
     @SuppressWarnings("unchecked")

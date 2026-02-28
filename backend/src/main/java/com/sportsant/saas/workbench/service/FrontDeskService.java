@@ -111,8 +111,10 @@ public class FrontDeskService {
             com.sportsant.saas.inventory.entity.InventoryItem invItem = inventoryService.adjustStock(sku, -qty, "POS Sale");
             
             Double price = invItem.getSellPrice();
-            if (price == null) price = invItem.getCostPrice() * 1.5;
-            if (price == null) price = 0.0;
+            if (price == null) {
+                Double cost = invItem.getCostPrice();
+                price = (cost != null) ? cost * 1.5 : 0.0;
+            }
             
             double itemTotal = price * qty;
             totalAmount += itemTotal;

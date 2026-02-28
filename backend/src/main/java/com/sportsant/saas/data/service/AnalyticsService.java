@@ -1,25 +1,13 @@
 package com.sportsant.saas.data.service;
 
-import com.sportsant.saas.iot.entity.Zone;
-import com.sportsant.saas.iot.repository.ZoneRepository;
-import com.sportsant.saas.membership.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 @Service
 public class AnalyticsService {
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ZoneRepository zoneRepository;
 
     public Map<String, Object> getDashboardData() {
         Map<String, Object> data = new HashMap<>();
