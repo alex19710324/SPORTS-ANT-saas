@@ -33,6 +33,7 @@
 import { reactive, ref } from 'vue';
 import { useAuthStore } from '../stores/auth.store';
 import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { setLanguage } from '../i18n';
 
@@ -63,6 +64,7 @@ const handleLogin = async () => {
       loading.value = true;
       try {
         await authStore.login(loginForm);
+        ElMessage.success('Login successful');
         router.push('/');
       } catch (error: any) {
         message.value =

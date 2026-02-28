@@ -7,6 +7,8 @@ import com.sportsant.saas.ai.service.FeatureStoreService;
 import com.sportsant.saas.entity.ERole;
 import com.sportsant.saas.entity.Role;
 import com.sportsant.saas.entity.User;
+import com.sportsant.saas.store.entity.Store;
+import com.sportsant.saas.store.repository.StoreRepository;
 import com.sportsant.saas.repository.RoleRepository;
 import com.sportsant.saas.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +29,8 @@ public class DataInitializer {
                                     PasswordEncoder passwordEncoder,
                                     AiInferenceService aiInferenceService,
                                     FeatureStoreService featureStoreService,
-                                    MemberLevelRepository memberLevelRepository) {
+                                    MemberLevelRepository memberLevelRepository,
+                                    StoreRepository storeRepository) {
         return args -> {
             // ... (Existing Init Logic) ...
             // 1. Initialize Roles if not exist
@@ -75,6 +79,44 @@ public class DataInitializer {
                 memberLevelRepository.save(l4);
                 memberLevelRepository.save(l5);
                 System.out.println(">>> Initialized Member Levels (5 Levels)");
+            }
+
+            // 5. Initialize Stores (Mock Data for HQ Dashboard)
+            if (storeRepository.count() == 0) {
+                Store s1 = new Store();
+                s1.setName("Sports Ant - Beijing Flagship");
+                s1.setCity("Beijing");
+                s1.setCountry("China");
+                s1.setLatitude(39.9042);
+                s1.setLongitude(116.4074);
+                s1.setTodayRevenue(new BigDecimal("12500.50"));
+                s1.setTodayVisitors(320);
+                s1.setStatus("NORMAL");
+                
+                Store s2 = new Store();
+                s2.setName("Sports Ant - Shanghai Center");
+                s2.setCity("Shanghai");
+                s2.setCountry("China");
+                s2.setLatitude(31.2304);
+                s2.setLongitude(121.4737);
+                s2.setTodayRevenue(new BigDecimal("18200.00"));
+                s2.setTodayVisitors(450);
+                s2.setStatus("WARNING"); // Mock Warning
+                
+                Store s3 = new Store();
+                s3.setName("Sports Ant - Tokyo Shibuya");
+                s3.setCity("Tokyo");
+                s3.setCountry("Japan");
+                s3.setLatitude(35.6895);
+                s3.setLongitude(139.6917);
+                s3.setTodayRevenue(new BigDecimal("9800.00"));
+                s3.setTodayVisitors(210);
+                s3.setStatus("NORMAL");
+                
+                storeRepository.save(s1);
+                storeRepository.save(s2);
+                storeRepository.save(s3);
+                System.out.println(">>> Initialized Mock Stores (3 Stores)");
             }
         };
     }

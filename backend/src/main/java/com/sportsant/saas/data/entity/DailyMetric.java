@@ -14,6 +14,8 @@ public class DailyMetric {
     private LocalDateTime date;
     private String metricName; // REVENUE, VISITORS, ACTIVE_USERS
     private String dimension; // STORE_ID:1, REGION:ASIA
+    
+    @Column(name = "metric_value")
     private Double value;
 
     private LocalDateTime updatedAt;

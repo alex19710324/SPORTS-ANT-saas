@@ -7,8 +7,12 @@
         <h3>{{ tasks.pendingWorkOrders }}</h3>
       </el-card>
       <el-card shadow="hover">
+        <template #header>Faulty Devices</template>
+        <h3 class="text-danger">{{ tasks.faultyDevices }}</h3>
+      </el-card>
+      <el-card shadow="hover">
         <template #header>Offline Devices</template>
-        <h3 class="text-danger">{{ tasks.offlineDevices }}</h3>
+        <h3 class="text-warning">{{ tasks.offlineDevices }}</h3>
       </el-card>
       <el-card shadow="hover">
         <template #header>Inspection</template>
@@ -48,6 +52,9 @@ onMounted(() => {
 }
 .text-danger {
   color: #f56c6c;
+}
+.text-warning {
+  color: #e6a23c;
 }
 .action-list {
   margin-top: 20px;
