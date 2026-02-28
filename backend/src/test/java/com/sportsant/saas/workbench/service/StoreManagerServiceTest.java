@@ -39,16 +39,16 @@ public class StoreManagerServiceTest {
     public void testGetStoreOverview() {
         Long storeId = 1L;
         
-        when(financeService.getTodayRevenue()).thenReturn(new BigDecimal("1000.00"));
-        when(financeService.getTodayVisitors()).thenReturn(50L);
+        when(financeService.getTodayRevenue()).thenReturn(1000.00);
+        when(financeService.getTodayVisitors()).thenReturn(50);
         when(deviceRepository.count()).thenReturn(10L);
         when(deviceRepository.countByStatus("OFFLINE")).thenReturn(1L);
         
         Map<String, Object> overview = storeManagerService.getStoreOverview(storeId);
         
         assertNotNull(overview);
-        assertEquals(new BigDecimal("1000.00"), overview.get("todayRevenue"));
-        assertEquals(50L, overview.get("todayVisitors"));
+        assertEquals(1000.00, overview.get("todayRevenue"));
+        assertEquals(50, overview.get("todayVisitors"));
         assertTrue(overview.containsKey("pendingApprovals"));
         
         Object approvals = overview.get("pendingApprovals");

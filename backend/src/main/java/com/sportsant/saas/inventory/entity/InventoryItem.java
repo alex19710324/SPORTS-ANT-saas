@@ -9,8 +9,10 @@ public class InventoryItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String sku; // e.g. "DRINK-COKE-330"
+
+    private Long storeId; // Nullable for global items, or specific to a store
 
     @Column(nullable = false)
     private String name;
@@ -35,6 +37,8 @@ public class InventoryItem {
     public void setId(Long id) { this.id = id; }
     public String getSku() { return sku; }
     public void setSku(String sku) { this.sku = sku; }
+    public Long getStoreId() { return storeId; }
+    public void setStoreId(Long storeId) { this.storeId = storeId; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getCategory() { return category; }

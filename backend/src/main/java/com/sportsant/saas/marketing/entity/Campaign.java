@@ -27,9 +27,18 @@ public class Campaign {
     
     private Integer convertedCount = 0;
 
+    private String type; // FLASH_SALE, GROUP_BUY, etc.
+
+    @Column(columnDefinition = "TEXT")
+    private String aiGeneratedContent;
+
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+    public String getAiGeneratedContent() { return aiGeneratedContent; }
+    public void setAiGeneratedContent(String aiGeneratedContent) { this.aiGeneratedContent = aiGeneratedContent; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getDescription() { return description; }

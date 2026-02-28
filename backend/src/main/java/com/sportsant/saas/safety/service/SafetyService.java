@@ -49,6 +49,11 @@ public class SafetyService {
     }
 
     @Transactional
+    public Incident resolveIncident(Long id) {
+        return updateStatus(id, "RESOLVED", "Auto-resolved via test or API");
+    }
+
+    @Transactional
     public Incident updateStatus(Long id, String status, String notes) {
         Incident incident = incidentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incident not found"));

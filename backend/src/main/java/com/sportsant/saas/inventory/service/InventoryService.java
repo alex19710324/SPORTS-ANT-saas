@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InventoryService {
@@ -50,8 +51,28 @@ public class InventoryService {
     }
 
     @Transactional
-    public void updateStock(Long storeId, String sku, int quantityChange) {
-        // StoreId ignored for MVP as items are global or we assume single store context
-        adjustStock(sku, quantityChange, "WORK_ORDER_USAGE");
+    public InventoryItem updateStock(Long storeId, String sku, int quantityChange) {
+        // Find item by store ID if provided, otherwise default to SKU only (Global)
+        Optional<InventoryItem> itemOpt = (storeId != null) 
+            ? inventoryRepository.findBySkuAndStoreId(sku, storeId)
+            : inventoryRepository.findBySku(sku);
+
+        InventoryItem item = itemOpt.orElseThrow(() -> new RuntimeException("Item not found: " + sku));
+
+        int newQty = item.getQuantity() + quantityChange;
+        if (newQty < 0) {
+            throw new RuntimeException("Insufficient stock");
+        }
+        item.setQuantity(newQty);
+
+        // Low Stock Alert
+        if (newQty <= item.getReorderPoint()) {
+            communicationService.broadcast(
+                "LOW STOCK ALERT: " + item.getName(), 
+                "Current Qty: " + newQty + ". Reorder Point: " + item.getReorderPoint()
+            );
+        }
+
+        return inventoryRepository.save(item);
     }
 }

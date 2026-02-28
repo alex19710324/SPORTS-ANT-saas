@@ -37,6 +37,19 @@ public class MarketingService {
     }
 
     @Transactional
+    public Campaign generateAiContent(Long campaignId) {
+        Campaign campaign = campaignRepository.findById(campaignId)
+                .orElseThrow(() -> new RuntimeException("Campaign not found"));
+
+        // Mock AI Content Generation
+        String content = String.format("{\"wechat_title\": \"🔥 %s - Limited Time!\", \"body\": \"Don't miss out on our %s event!\"}", 
+            campaign.getName(), campaign.getType());
+            
+        campaign.setAiGeneratedContent(content);
+        return campaignRepository.save(campaign);
+    }
+
+    @Transactional
     public void redeemReward(Long memberId, Long rewardId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));

@@ -22,8 +22,13 @@ public class HRService {
     private RoleRepository roleRepository;
 
     public List<Map<String, Object>> getStaffList() {
+        return getStoreEmployees(null);
+    }
+
+    public List<Map<String, Object>> getStoreEmployees(Long storeId) {
         // Fetch users who are NOT just ROLE_USER (which are members)
         // For MVP, we'll iterate all users and filter by roles that are staff-like
+        // StoreId filtering would happen here in real DB
         List<User> allUsers = userRepository.findAll();
         
         List<Map<String, Object>> staffList = new ArrayList<>();
@@ -48,6 +53,11 @@ public class HRService {
             }
         }
         return staffList;
+    }
+
+    public void createSchedule(Map<String, Object> schedule) {
+        // Mock schedule creation
+        System.out.println("Created schedule: " + schedule);
     }
 
     @SuppressWarnings("unchecked")
