@@ -23,7 +23,7 @@ export const useHQStore = defineStore('hq', {
     async fetchStoreMapData() {
       try {
         const response = await HQService.getStoreMapData();
-        this.storeMapData = response.data.stores;
+        this.storeMapData = response.data;
       } catch (error) {
         console.error('Failed to fetch store map data', error);
       }
@@ -31,17 +31,17 @@ export const useHQStore = defineStore('hq', {
     async fetchFranchiseApplications() {
       try {
         const response = await HQService.getFranchiseApplications();
-        this.franchiseApplications = response.data.applications;
+        this.franchiseApplications = response.data;
       } catch (error) {
         console.error('Failed to fetch franchise applications', error);
       }
     },
-    async approveApplication(appId: number, approve: boolean, comments: string) {
+    async approveApplication(appId: number) {
       try {
-        await HQService.approveFranchiseApplication({ applicationId: appId, approve, comments });
+        await HQService.approveFranchiseApplication(appId);
         await this.fetchFranchiseApplications();
       } catch (error) {
-        console.error('Failed to approve application', error);
+        throw error;
       }
     }
   }

@@ -119,72 +119,79 @@ const handleApprove = (app: any, approve: boolean) => {
 
 const submitApproval = async () => {
     if (!currentApp.value) return;
-    await store.approveApplication(currentApp.value.id, currentApprovalType.value, approvalComments.value);
-    showApprovalDialog.value = false;
-    ElMessage.success('Application processed successfully');
+    try {
+        await store.approveApplication(currentApp.value.id);
+        showApprovalDialog.value = false;
+        ElMessage.success('Application processed successfully');
+    } catch (error) {
+        ElMessage.error('Failed to process application');
+    }
 };
 </script>
 
 <style scoped>
+.hq-dashboard {
+  padding: 20px;
+}
 .overview-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 20px;
 }
-
 .map-card {
-  height: 400px;
   margin-bottom: 20px;
 }
-
 .franchise-card {
   margin-bottom: 20px;
 }
-
 .map-placeholder {
   background: #f0f2f5;
-  height: 300px;
+  height: 400px;
   position: relative;
   overflow: hidden;
   display: flex;
 }
-
 .map-visual {
     flex: 1;
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg'); /* Placeholder */
-    background-size: cover;
-    background-position: center;
+    background-color: #e6e6e6;
+    background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+    background-size: 20px 20px;
     position: relative;
-    opacity: 0.3;
 }
-
 .store-list {
-    width: 250px;
+    width: 300px;
     background: white;
     overflow-y: auto;
     padding: 10px;
     border-left: 1px solid #eee;
+    list-style: none;
+    margin: 0;
 }
-
+.store-list li {
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+}
 .store-dot {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background: red;
+    width: 12px;
+    height: 12px;
+    background: #f56c6c;
     border-radius: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(245, 108, 108, 0.5);
+    cursor: pointer;
 }
-
 .status-dot {
     display: inline-block;
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    margin-right: 5px;
+    margin-right: 8px;
 }
 .status-dot.normal { background: #67C23A; }
 .status-dot.warning { background: #E6A23C; }
 .status-dot.closed { background: #F56C6C; }
-
 </style>

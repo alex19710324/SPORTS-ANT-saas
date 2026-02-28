@@ -12,6 +12,7 @@ import MarketingDashboard from '../views/Marketing/MarketingDashboard.vue';
 import FinanceDashboard from '../views/Finance/FinanceDashboard.vue';
 import I18nDashboard from '../views/I18n/I18nDashboard.vue';
 import CommunicationDashboard from '../views/Communication/CommunicationDashboard.vue';
+import MemberPortal from '../views/MemberPortal/MemberPortal.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,12 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: { layout: MainLayout },
+    },
+    {
+      path: '/member/portal',
+      name: 'member-portal',
+      component: MemberPortal,
       meta: { layout: MainLayout },
     },
     {

@@ -4,6 +4,31 @@
     
     <!-- M01: Business Overview -->
     <div class="kpi-grid" v-if="overview">
+      <!-- AI Brain Widget -->
+      <el-card shadow="hover" class="ai-card">
+        <template #header>
+            <div class="card-header">
+                <span>🤖 AI Assistant</span>
+                <el-tag type="warning" effect="dark" v-if="aiSuggestions.length > 0">{{ aiSuggestions.length }}</el-tag>
+            </div>
+        </template>
+        <div class="suggestion-list" v-if="aiSuggestions.length > 0">
+            <div v-for="s in aiSuggestions" :key="s.id" class="suggestion-item">
+                <div class="suggestion-title">
+                    <strong>{{ s.title }}</strong>
+                    <el-tag size="small" :type="getPriorityType(s.priority)">{{ s.priority }}</el-tag>
+                </div>
+                <p class="suggestion-content">{{ s.content }}</p>
+                <div class="suggestion-actions" v-if="s.actionableApi">
+                    <el-button type="primary" link size="small">Execute Action</el-button>
+                </div>
+            </div>
+        </div>
+        <div v-else class="empty-state">
+            No active suggestions. System is running optimally.
+        </div>
+      </el-card>
+
       <el-card shadow="hover">
         <template #header>{{ $t('manager.revenue') }}</template>
         <h3>¥{{ overview.todayRevenue }}</h3>
@@ -12,10 +37,9 @@
         <template #header>{{ $t('manager.visitors') }}</template>
         <h3>{{ overview.todayVisitors }}</h3>
       </el-card>
-      <el-card shadow="hover">
-        <template #header>{{ $t('manager.deviceRate') }}</template>
-        <h3 class="text-success">{{ overview.deviceOnlineRate }}%</h3>
-      </el-card>
+    </div>
+    
+    <div class="dashboard-split" v-if="overview">
       <el-card shadow="hover">
         <template #header>{{ $t('manager.koc') }}</template>
         <h3>¥{{ overview.kocContribution }}</h3>
@@ -69,9 +93,11 @@ import { ElMessage } from 'element-plus';
 const store = useWorkbenchStore();
 const overview = computed(() => store.managerOverview);
 const loading = computed(() => store.loading);
+const aiSuggestions = computed(() => store.aiSuggestions || []);
 
 onMounted(() => {
   store.fetchManagerOverview(1); // Default Store ID 1
+  store.fetchAiSuggestions();
 });
 
 const handleApprove = async (id: number) => {
@@ -82,9 +108,42 @@ const handleApprove = async (id: number) => {
         ElMessage.error('Failed to approve request');
     }
 };
+
+const getPriorityType = (priority: string) => {
+    switch (priority) {
+        case 'HIGH': return 'danger';
+        case 'MEDIUM': return 'warning';
+        case 'LOW': return 'info';
+        default: return 'info';
+    }
+};
 </script>
 
 <style scoped>
+.ai-card {
+    grid-column: span 4;
+    border-left: 4px solid #409eff;
+}
+.suggestion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.suggestion-item {
+    background: #f0f9eb;
+    padding: 10px;
+    border-radius: 4px;
+}
+.suggestion-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.suggestion-content {
+    margin: 0;
+    font-size: 0.9em;
+    color: #606266;
+}
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

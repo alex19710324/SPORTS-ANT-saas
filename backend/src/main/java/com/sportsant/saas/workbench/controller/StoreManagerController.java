@@ -1,10 +1,13 @@
 package com.sportsant.saas.workbench.controller;
 
+import com.sportsant.saas.ai.entity.AiSuggestion;
+import com.sportsant.saas.ai.service.AiBrainService;
 import com.sportsant.saas.workbench.service.StoreManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -14,6 +17,9 @@ public class StoreManagerController {
 
     @Autowired
     private StoreManagerService storeManagerService;
+
+    @Autowired
+    private AiBrainService aiBrainService;
 
     @GetMapping("/overview")
     @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('ADMIN')")
@@ -29,5 +35,11 @@ public class StoreManagerController {
         Long mockManagerId = 10L;
         storeManagerService.approveRequest(id, mockManagerId);
         return "Request approved successfully";
+    }
+
+    @GetMapping("/suggestions")
+    @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('ADMIN')")
+    public List<AiSuggestion> getAiSuggestions() {
+        return aiBrainService.getPendingSuggestions();
     }
 }

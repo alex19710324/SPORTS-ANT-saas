@@ -17,20 +17,20 @@ public class HQController {
     private HQService hqService;
 
     // --- P0: Global Overview ---
-    @GetMapping("/dashboard/overview")
+    @GetMapping("/overview")
     @PreAuthorize("hasRole('ADMIN') or hasRole('HQ_MANAGER')")
     public Map<String, Object> getGlobalOverview() {
         return hqService.getGlobalOverview();
     }
 
-    @GetMapping("/map/stores")
+    @GetMapping("/stores")
     @PreAuthorize("hasRole('ADMIN') or hasRole('HQ_MANAGER')")
     public Map<String, Object> getStoreMapData() {
         return Map.of("stores", hqService.getStoreMapData());
     }
 
     // --- P0: Franchise Management ---
-    @GetMapping("/franchise/applications")
+    @GetMapping("/applications")
     @PreAuthorize("hasRole('ADMIN') or hasRole('HQ_MANAGER')")
     public Map<String, Object> getFranchiseApplications() {
         return Map.of("applications", hqService.getFranchiseApplications());
@@ -41,12 +41,9 @@ public class HQController {
         return hqService.submitFranchiseApplication(app);
     }
 
-    @PostMapping("/franchise/approve")
+    @PostMapping("/applications/{id}/approve")
     @PreAuthorize("hasRole('ADMIN')")
-    public FranchiseApplication approveApplication(@RequestBody Map<String, Object> payload) {
-        Long appId = Long.valueOf(payload.get("applicationId").toString());
-        boolean approve = (boolean) payload.get("approve");
-        String comments = (String) payload.get("comments");
-        return hqService.approveFranchise(appId, approve, comments);
+    public FranchiseApplication approveApplication(@PathVariable Long id) {
+        return hqService.approveFranchise(id, true, "Approved via Dashboard");
     }
 }

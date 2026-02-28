@@ -7,9 +7,18 @@ export const useWorkbenchStore = defineStore('workbench', {
     frontDeskTasks: null as any,
     technicianTasks: null as any,
     securityTasks: null as any,
+    aiSuggestions: [] as any[],
     loading: false
   }),
   actions: {
+    async fetchAiSuggestions() {
+        try {
+            const response = await WorkbenchService.getAiSuggestions();
+            this.aiSuggestions = response.data;
+        } catch (error) {
+            console.error('Failed to fetch AI suggestions', error);
+        }
+    },
     async fetchManagerOverview(storeId: number) {
       this.loading = true;
       try {

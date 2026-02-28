@@ -55,5 +55,9 @@ export default {
   
   resolveIncident(id: number) {
     return apiClient.post(`/safety/incidents/${id}/resolve`);
+  },
+  
+  getAiSuggestions() {
+    return apiClient.get('/workbench/manager/suggestions');
   }
 };
