@@ -3,128 +3,95 @@
     <div class="header">
         <h2>{{ $t('hq.title') }}</h2>
         <div class="actions">
-            <el-button type="primary" @click="fetchData">Refresh Global Data</el-button>
+            <el-button type="primary" @click="fetchData">Refresh Dashboard</el-button>
         </div>
     </div>
     
-    <div class="overview-grid" v-if="overview">
+    <div class="overview-grid" v-if="dashboardData">
       <el-card shadow="hover">
-        <template #header>{{ $t('hq.revenue') }}</template>
-        <h3>¥{{ overview.totalRevenue }}</h3>
+        <template #header>Monthly Revenue</template>
+        <h3>¥{{ formatMoney(dashboardData.finance?.totalIncome || 0) }}</h3>
+        <small class="text-success">Net Profit: ¥{{ formatMoney(dashboardData.finance?.netProfit || 0) }}</small>
       </el-card>
       <el-card shadow="hover">
-        <template #header>Total Stores</template>
-        <h3>{{ overview.activeStores }}</h3>
+        <template #header>Members</template>
+        <h3>{{ dashboardData.members?.total || 0 }}</h3>
+        <small class="text-info">Active: {{ dashboardData.members?.active || 0 }}</small>
       </el-card>
       <el-card shadow="hover">
-        <template #header>Total Members</template>
-        <h3>{{ overview.totalMembers }}</h3>
+        <template #header>Operations Health</template>
+        <h3 :class="getOpsStatusColor(dashboardData.ops?.systemStatus)">{{ dashboardData.ops?.systemStatus || 'UNKNOWN' }}</h3>
+        <small>{{ dashboardData.ops?.pendingMaintenance || 0 }} Pending Tasks</small>
       </el-card>
       <el-card shadow="hover">
-        <template #header>Connected Devices</template>
-        <h3>{{ overview.totalDevices }}</h3>
+        <template #header>Active Campaigns</template>
+        <h3>{{ dashboardData.marketing?.activeCampaigns || 0 }}</h3>
       </el-card>
     </div>
 
     <div class="dashboard-split">
-        <el-card class="map-card">
-            <template #header>Global Store Map</template>
-            <div class="map-container">
-                <v-chart class="chart" :option="mapOption" autoresize />
-            </div>
+        <el-card class="live-feed-card">
+            <template #header>Live Events Feed</template>
+            <el-scrollbar height="400px">
+                <div v-for="(event, idx) in dashboardData.liveFeed" :key="idx" class="feed-item">
+                    <span class="feed-time">{{ event.time }}</span>
+                    <el-tag size="small" :type="event.type">{{ event.type }}</el-tag>
+                    <span class="feed-msg">{{ event.msg }}</span>
+                </div>
+            </el-scrollbar>
         </el-card>
 
-        <el-card class="leaderboard-card">
-            <template #header>Top Performing Stores</template>
-            <el-table :data="leaderboard" style="width: 100%">
-                <el-table-column type="index" width="50" />
-                <el-table-column prop="name" label="Store" />
-                <el-table-column prop="revenue" label="Revenue" align="right">
-                    <template #default="scope">¥{{ scope.row.revenue }}</template>
-                </el-table-column>
-                <el-table-column prop="score" label="Score" width="80">
-                    <template #default="scope">
-                        <el-tag :type="scope.row.score >= 90 ? 'success' : 'warning'">{{ scope.row.score }}</el-tag>
-                    </template>
-                </el-table-column>
-            </el-table>
+        <el-card class="status-card">
+            <template #header>Department Status</template>
+            <div class="dept-row">
+                <span>Inventory</span>
+                <el-tag :type="(dashboardData.inventory?.lowStockItems || 0) > 0 ? 'warning' : 'success'">
+                    {{ (dashboardData.inventory?.lowStockItems || 0) }} Low Stock
+                </el-tag>
+            </div>
+            <el-divider />
+            <div class="dept-row">
+                <span>Finance</span>
+                <el-tag type="success">Books Balanced</el-tag>
+            </div>
+            <el-divider />
+            <div class="dept-row">
+                <span>Marketing</span>
+                <el-tag type="primary">Running</el-tag>
+            </div>
         </el-card>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import { use } from 'echarts/core';
-import { CanvasRenderer } from 'echarts/renderers';
-import { ScatterChart, EffectScatterChart } from 'echarts/charts';
-import { GeoComponent, TooltipComponent, TitleComponent } from 'echarts/components';
-import VChart from 'vue-echarts';
+import { onMounted, ref } from 'vue';
 import apiClient from '../../services/api';
-
-// Register ECharts components
-use([CanvasRenderer, ScatterChart, EffectScatterChart, GeoComponent, TooltipComponent, TitleComponent]);
+import { ElMessage } from 'element-plus';
 
 const loading = ref(false);
-const overview = ref<any>({});
-const leaderboard = ref<any[]>([]);
-
-// Mock GeoJSON for China Map (simplified) or just use coordinates on a blank canvas for MVP
-// For MVP without downloading large map files, we simulate a "Coordinate System" or use a simple scatter plot
-const mapOption = computed(() => ({
-    backgroundColor: '#f3f3f3',
-    title: { text: 'Store Locations', left: 'center' },
-    tooltip: { trigger: 'item' },
-    geo: {
-        map: 'china', // Requires registering map data, skipping for MVP, using coordinate system instead
-        roam: true,
-        label: { show: false },
-        itemStyle: {
-            areaColor: '#323c48',
-            borderColor: '#111'
-        }
-    },
-    // Fallback: Simple Scatter if map not loaded
-    xAxis: { show: false, min: 70, max: 140 }, // Longitude range for China roughly
-    yAxis: { show: false, min: 15, max: 55 },  // Latitude range for China roughly
-    series: [
-        {
-            name: 'Stores',
-            type: 'effectScatter',
-            coordinateSystem: 'cartesian2d', // Using cartesian as mock map
-            data: [
-                [116.40, 39.90, 'Beijing Store'], // Beijing
-                [121.47, 31.23, 'Shanghai Store'], // Shanghai
-                [113.26, 23.12, 'Guangzhou Store'], // Guangzhou
-                [104.06, 30.67, 'Chengdu Store'], // Chengdu
-                [114.30, 30.59, 'Wuhan Store']   // Wuhan
-            ],
-            symbolSize: 20,
-            label: {
-                formatter: '{@[2]}',
-                position: 'right',
-                show: true
-            },
-            itemStyle: {
-                color: '#ddb926'
-            }
-        }
-    ]
-}));
+const dashboardData = ref<any>({});
 
 const fetchData = async () => {
     loading.value = true;
     try {
-        const kpiRes = await apiClient.get('/data/kpi');
-        overview.value = kpiRes.data;
-
-        const leadRes = await apiClient.get('/data/store-leaderboard');
-        leaderboard.value = leadRes.data;
+        const res = await apiClient.get('/hq/dashboard');
+        dashboardData.value = res.data;
     } catch (error) {
-        console.error("Failed to load HQ data");
+        ElMessage.error("Failed to load HQ data");
     } finally {
         loading.value = false;
     }
+};
+
+const formatMoney = (val: number) => {
+    return val ? val.toFixed(2) : '0.00';
+};
+
+const getOpsStatusColor = (status: string) => {
+    if (status === 'HEALTHY') return 'text-success';
+    if (status === 'WARNING') return 'text-warning';
+    return 'text-danger';
 };
 
 onMounted(() => {
@@ -153,14 +120,26 @@ onMounted(() => {
     grid-template-columns: 2fr 1fr;
     gap: 20px;
 }
-.map-container {
-    height: 500px;
-    background: #eef;
-    border-radius: 4px;
-    overflow: hidden;
+.feed-item {
+    padding: 10px;
+    border-bottom: 1px solid #f0f2f5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-.chart {
-    height: 100%;
-    width: 100%;
+.feed-time {
+    color: #909399;
+    font-size: 12px;
+    width: 50px;
 }
+.dept-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+.text-success { color: #67c23a; }
+.text-warning { color: #e6a23c; }
+.text-danger { color: #f56c6c; }
+.text-info { color: #909399; }
 </style>

@@ -1,14 +1,18 @@
 package com.sportsant.saas.marketing.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sportsant.saas.communication.service.CommunicationService;
 import com.sportsant.saas.marketing.entity.Campaign;
+import com.sportsant.saas.marketing.entity.Coupon;
 import com.sportsant.saas.marketing.repository.CampaignRepository;
+import com.sportsant.saas.marketing.repository.CouponRepository;
+import com.sportsant.saas.membership.entity.Member;
+import com.sportsant.saas.membership.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MarketingService {
@@ -16,48 +20,91 @@ public class MarketingService {
     @Autowired
     private CampaignRepository campaignRepository;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private CouponRepository couponRepository;
 
-    public Campaign createCampaign(Campaign campaign) {
-        if (campaign.getStatus() == null) {
-            campaign.setStatus("DRAFT");
-        }
-        return campaignRepository.save(campaign);
-    }
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private CommunicationService communicationService;
 
     public List<Campaign> getAllCampaigns() {
         return campaignRepository.findAll();
     }
 
-    public Campaign generateAiContent(Long campaignId) {
+    @Transactional
+    public Campaign createCampaign(Campaign campaign) {
+        campaign.setStatus("DRAFT");
+        return campaignRepository.save(campaign);
+    }
+
+    @Transactional
+    public Coupon createCoupon(Coupon coupon) {
+        return couponRepository.save(coupon);
+    }
+
+    @Transactional
+    public void launchCampaign(Long campaignId) {
         Campaign campaign = campaignRepository.findById(campaignId)
                 .orElseThrow(() -> new RuntimeException("Campaign not found"));
 
-        // Simulate AI Content Generation based on Campaign Type and Name
-        Map<String, String> content = new HashMap<>();
-        String type = campaign.getType();
-        String name = campaign.getName();
+        if (!"DRAFT".equals(campaign.getStatus())) {
+            throw new RuntimeException("Campaign is not in DRAFT status");
+        }
 
-        if ("GROUP_BUY".equals(type)) {
-            content.put("wechat_title", "🔥 Limited Time Group Buy: " + name + "!");
-            content.put("wechat_body", "Gather your friends and get amazing discounts! Only for " + name + ". Join now!");
-            content.put("poster_url", "https://via.placeholder.com/300x400?text=Group+Buy");
-        } else if ("FLASH_SALE".equals(type)) {
-            content.put("wechat_title", "⚡ Flash Sale Alert: " + name);
-            content.put("wechat_body", "Don't miss out! 50% OFF for the next 24 hours on " + name + ".");
-            content.put("poster_url", "https://via.placeholder.com/300x400?text=Flash+Sale");
+        List<Member> targets;
+        if ("ACTIVE_MEMBERS".equals(campaign.getTargetSegment())) {
+            targets = memberRepository.findByStatus("ACTIVE");
         } else {
-            content.put("wechat_title", "Special Offer: " + name);
-            content.put("wechat_body", "Check out our latest promotion for " + name + ".");
-            content.put("poster_url", "https://via.placeholder.com/300x400?text=Special+Offer");
+            // Simplified: Default to all for other segments in MVP
+            targets = memberRepository.findAll();
         }
 
-        try {
-            campaign.setAiGeneratedContent(objectMapper.writeValueAsString(content));
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Send Notifications
+        for (Member member : targets) {
+            communicationService.sendNotification(
+                member.getId(),
+                "Special Offer: " + campaign.getName(),
+                campaign.getDescription(),
+                "MARKETING"
+            );
         }
 
-        return campaignRepository.save(campaign);
+        campaign.setStatus("ACTIVE");
+        campaign.setSentCount(targets.size());
+        campaign.setStartDate(LocalDate.now());
+        campaignRepository.save(campaign);
+    }
+
+    @Transactional
+    public Coupon validateCoupon(String code) {
+        Coupon coupon = couponRepository.findByCode(code)
+                .orElseThrow(() -> new RuntimeException("Invalid Coupon Code"));
+
+        if (coupon.getExpiryDate() != null && coupon.getExpiryDate().isBefore(LocalDate.now())) {
+            throw new RuntimeException("Coupon Expired");
+        }
+
+        if (coupon.getUsageLimit() != null && coupon.getUsedCount() >= coupon.getUsageLimit()) {
+            throw new RuntimeException("Coupon Usage Limit Reached");
+        }
+
+        return coupon;
+    }
+
+    @Transactional
+    public void recordConversion(String code) {
+         Coupon coupon = couponRepository.findByCode(code).orElse(null);
+         if (coupon != null) {
+             coupon.setUsedCount(coupon.getUsedCount() + 1);
+             couponRepository.save(coupon);
+             
+             if (coupon.getCampaign() != null) {
+                 Campaign c = coupon.getCampaign();
+                 c.setConvertedCount(c.getConvertedCount() + 1);
+                 campaignRepository.save(c);
+             }
+         }
     }
 }

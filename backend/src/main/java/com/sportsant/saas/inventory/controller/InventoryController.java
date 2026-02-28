@@ -18,29 +18,23 @@ public class InventoryController {
     private InventoryService inventoryService;
 
     @GetMapping
-    @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('TECHNICIAN') or hasRole('FRONT_DESK') or hasRole('ADMIN')")
-    public List<InventoryItem> getInventory(@RequestParam Long storeId) {
-        return inventoryService.getStoreInventory(storeId);
-    }
-
-    @GetMapping("/low-stock")
-    @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('ADMIN')")
-    public List<InventoryItem> getLowStockItems(@RequestParam Long storeId) {
-        return inventoryService.getLowStockItems(storeId);
-    }
-
-    @PostMapping("/add")
-    @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('ADMIN')")
-    public InventoryItem addItem(@RequestBody InventoryItem item) {
-        return inventoryService.addItem(item);
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER') or hasRole('TECHNICIAN')")
+    public List<InventoryItem> getAllItems() {
+        return inventoryService.getAllItems();
     }
 
     @PostMapping("/adjust")
-    @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('TECHNICIAN') or hasRole('FRONT_DESK') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER')")
     public InventoryItem adjustStock(@RequestBody Map<String, Object> payload) {
-        Long storeId = Long.valueOf(payload.get("storeId").toString());
         String sku = (String) payload.get("sku");
-        int quantity = (int) payload.get("quantity");
-        return inventoryService.updateStock(storeId, sku, quantity);
+        int change = (Integer) payload.get("quantityChange");
+        String reason = (String) payload.get("reason");
+        return inventoryService.adjustStock(sku, change, reason);
+    }
+    
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public InventoryItem createItem(@RequestBody InventoryItem item) {
+        return inventoryService.createItem(item);
     }
 }

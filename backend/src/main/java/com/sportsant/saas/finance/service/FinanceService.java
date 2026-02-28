@@ -35,6 +35,27 @@ public class FinanceService {
         return transactionRepository.save(transaction);
     }
 
+    @Transactional
+    public void processPayment(Long userId, java.math.BigDecimal amount, String description) {
+        Transaction tx = new Transaction();
+        tx.setDescription(description);
+        tx.setType("INCOME");
+        tx.setCategory("SALES");
+        tx.setAmount(amount.doubleValue());
+        tx.setSource("POS");
+        tx.setReferenceId("USER-" + userId);
+        recordTransaction(tx);
+    }
+
+    public Double getTodayRevenue() {
+        LocalDate today = LocalDate.now();
+        List<Transaction> txs = getTransactions(today, today);
+        return txs.stream()
+                .filter(t -> "INCOME".equals(t.getType()))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+    }
+
     public Map<String, Object> getFinancialStatement(LocalDate start, LocalDate end) {
         List<Transaction> txs = getTransactions(start, end);
         

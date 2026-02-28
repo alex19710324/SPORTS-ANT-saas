@@ -12,11 +12,11 @@
         </el-card>
         <el-card shadow="hover">
             <template #header>Total Reach</template>
-            <h3>15,204</h3>
+            <h3>{{ totalReach }}</h3>
         </el-card>
         <el-card shadow="hover">
             <template #header>Conversion Rate</template>
-            <h3 class="text-success">3.2%</h3>
+            <h3 class="text-success">{{ conversionRate }}</h3>
         </el-card>
     </div>
 
@@ -24,19 +24,25 @@
         <template #header>Campaigns</template>
         <el-table :data="campaigns" style="width: 100%">
             <el-table-column prop="name" label="Name" />
-            <el-table-column prop="type" label="Type">
-                <template #default="scope">
-                    <el-tag>{{ scope.row.type }}</el-tag>
-                </template>
-            </el-table-column>
+            <el-table-column prop="targetSegment" label="Target" />
             <el-table-column prop="status" label="Status">
                 <template #default="scope">
                     <el-tag :type="getStatusType(scope.row.status)">{{ scope.row.status }}</el-tag>
                 </template>
             </el-table-column>
+            <el-table-column label="Performance">
+                <template #default="scope">
+                    <div v-if="scope.row.sentCount > 0">
+                        <small>Sent: {{ scope.row.sentCount }}</small><br/>
+                        <small>Conv: {{ scope.row.convertedCount }} ({{ ((scope.row.convertedCount/scope.row.sentCount)*100).toFixed(1) }}%)</small>
+                    </div>
+                    <span v-else>-</span>
+                </template>
+            </el-table-column>
             <el-table-column label="Actions" width="150">
                 <template #default="scope">
-                    <el-button size="small" @click="viewDetails(scope.row)">View</el-button>
+                    <el-button v-if="scope.row.status === 'DRAFT'" size="small" type="success" @click="launchCampaign(scope.row)">Launch</el-button>
+                    <el-button v-else size="small" @click="viewDetails(scope.row)">View</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -47,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import CampaignWizard from './CampaignWizard.vue';
 import apiClient from '../../services/api';
 import { ElMessage } from 'element-plus';
@@ -55,12 +61,30 @@ import { ElMessage } from 'element-plus';
 const campaigns = ref<any[]>([]);
 const showWizard = ref(false);
 
+const totalReach = computed(() => campaigns.value.reduce((sum, c) => sum + (c.sentCount || 0), 0));
+const conversionRate = computed(() => {
+    const totalSent = totalReach.value;
+    if (totalSent === 0) return '0.0%';
+    const totalConv = campaigns.value.reduce((sum, c) => sum + (c.convertedCount || 0), 0);
+    return ((totalConv / totalSent) * 100).toFixed(1) + '%';
+});
+
 const fetchCampaigns = async () => {
     try {
         const res = await apiClient.get('/marketing/campaigns');
         campaigns.value = res.data;
     } catch (error) {
         ElMessage.error('Failed to load campaigns');
+    }
+};
+
+const launchCampaign = async (campaign: any) => {
+    try {
+        await apiClient.post(`/marketing/campaigns/${campaign.id}/launch`);
+        ElMessage.success('Campaign Launched!');
+        fetchCampaigns();
+    } catch (e) {
+        ElMessage.error('Failed to launch');
     }
 };
 

@@ -3,46 +3,57 @@
     <div class="header">
         <h2>Financial Management</h2>
         <div class="actions">
-            <el-button type="primary" @click="fetchData">Refresh</el-button>
+            <el-date-picker 
+                v-model="dateRange" 
+                type="daterange" 
+                range-separator="To" 
+                start-placeholder="Start date" 
+                end-placeholder="End date"
+                @change="fetchData"
+            />
+            <el-button type="success" @click="fetchData">Generate Report</el-button>
         </div>
     </div>
 
     <div class="stats-cards">
         <el-card shadow="hover">
-            <template #header>Today's Revenue</template>
-            <h3 class="text-success">¥{{ todayRevenue }}</h3>
+            <template #header>Total Income</template>
+            <h3 class="text-success">¥{{ formatMoney(report.totalIncome) }}</h3>
         </el-card>
         <el-card shadow="hover">
-            <template #header>Store Balance</template>
-            <h3>¥{{ storeBalance }}</h3>
+            <template #header>Total Expense</template>
+            <h3 class="text-danger">¥{{ formatMoney(report.totalExpense) }}</h3>
         </el-card>
         <el-card shadow="hover">
-            <template #header>Pending Vouchers</template>
-            <h3 class="text-warning">5</h3>
+            <template #header>Net Profit</template>
+            <h3 :class="report.netProfit >= 0 ? 'text-success' : 'text-danger'">
+                ¥{{ formatMoney(report.netProfit) }}
+                <small>({{ report.margin.toFixed(1) }}%)</small>
+            </h3>
         </el-card>
     </div>
 
     <div class="transaction-section">
         <el-card>
-            <template #header>Recent Transactions</template>
+            <template #header>Transaction Audit</template>
             <el-table :data="transactions" style="width: 100%" stripe>
-                <el-table-column prop="createdAt" label="Time" width="180">
-                    <template #default="scope">{{ formatDate(scope.row.createdAt) }}</template>
+                <el-table-column prop="transactionDate" label="Date" width="180">
+                    <template #default="scope">{{ formatDate(scope.row.transactionDate) }}</template>
                 </el-table-column>
-                <el-table-column prop="type" label="Type">
+                <el-table-column prop="type" label="Type" width="100">
                     <template #default="scope">
-                        <el-tag :type="getTypeColor(scope.row.type)">{{ scope.row.type }}</el-tag>
+                        <el-tag :type="scope.row.type === 'INCOME' ? 'success' : 'danger'">{{ scope.row.type }}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="amount" label="Amount">
+                <el-table-column prop="category" label="Category" width="120" />
+                <el-table-column prop="description" label="Description" />
+                <el-table-column prop="amount" label="Amount" align="right">
                     <template #default="scope">
-                        <span :class="scope.row.amount > 0 ? 'text-success' : 'text-danger'">
-                            {{ scope.row.amount > 0 ? '+' : '' }}{{ scope.row.amount }}
+                        <span :class="scope.row.type === 'INCOME' ? 'text-success' : 'text-danger'">
+                            {{ scope.row.type === 'INCOME' ? '+' : '-' }}¥{{ formatMoney(scope.row.amount) }}
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="description" label="Description" />
-                <el-table-column prop="balanceAfter" label="Balance After" width="120" />
             </el-table>
         </el-card>
     </div>
@@ -55,35 +66,43 @@ import apiClient from '../../../services/api';
 import { ElMessage } from 'element-plus';
 import dayjs from 'dayjs';
 
-const todayRevenue = ref(0);
-const storeBalance = ref(0);
+const dateRange = ref([
+    dayjs().startOf('month').toDate(),
+    dayjs().endOf('month').toDate()
+]);
+
+const report = ref({
+    totalIncome: 0,
+    totalExpense: 0,
+    netProfit: 0,
+    margin: 0
+});
+
 const transactions = ref<any[]>([]);
 
 const fetchData = async () => {
-    try {
-        const revRes = await apiClient.get('/finance/revenue/today');
-        todayRevenue.value = revRes.data;
+    if (!dateRange.value) return;
+    
+    const start = dayjs(dateRange.value[0]).format('YYYY-MM-DD');
+    const end = dayjs(dateRange.value[1]).format('YYYY-MM-DD');
 
-        // Assuming Store Wallet ID = 1 for MVP
-        const transRes = await apiClient.get('/finance/transactions', { params: { walletId: 1 } });
+    try {
+        const reportRes = await apiClient.get('/finance/statement', { params: { start, end } });
+        report.value = reportRes.data;
+
+        const transRes = await apiClient.get('/finance/transactions', { params: { start, end } });
         transactions.value = transRes.data;
-        
-        if (transactions.value.length > 0) {
-            storeBalance.value = transactions.value[0].balanceAfter;
-        }
     } catch (error) {
         ElMessage.error('Failed to load finance data');
     }
 };
 
 const formatDate = (date: string) => {
-    return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+    return dayjs(date).format('YYYY-MM-DD HH:mm');
 };
 
-const getTypeColor = (type: string) => {
-    if (type === 'PAYMENT_RECEIVED') return 'success';
-    if (type === 'PAYMENT_SENT') return 'danger';
-    return 'info';
+const formatMoney = (val: number) => {
+    return val.toFixed(2);
 };
 
 onMounted(() => {
@@ -110,4 +129,5 @@ onMounted(() => {
 .text-success { color: #67c23a; }
 .text-danger { color: #f56c6c; }
 .text-warning { color: #e6a23c; }
+small { font-size: 0.6em; color: #909399; margin-left: 5px; }
 </style>

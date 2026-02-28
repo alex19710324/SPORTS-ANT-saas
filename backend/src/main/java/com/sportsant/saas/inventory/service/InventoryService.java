@@ -1,15 +1,13 @@
 package com.sportsant.saas.inventory.service;
 
-import com.sportsant.saas.ai.event.SystemEvent;
+import com.sportsant.saas.communication.service.CommunicationService;
 import com.sportsant.saas.inventory.entity.InventoryItem;
 import com.sportsant.saas.inventory.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class InventoryService {
@@ -18,46 +16,36 @@ public class InventoryService {
     private InventoryRepository inventoryRepository;
 
     @Autowired
-    private ApplicationEventPublisher eventPublisher;
+    private CommunicationService communicationService;
 
-    public List<InventoryItem> getStoreInventory(Long storeId) {
-        return inventoryRepository.findByStoreId(storeId);
+    public List<InventoryItem> getAllItems() {
+        return inventoryRepository.findAll();
     }
 
-    public InventoryItem updateStock(Long storeId, String sku, int quantityChange) {
-        InventoryItem item = inventoryRepository.findBySkuAndStoreId(sku, storeId)
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+    @Transactional
+    public InventoryItem adjustStock(String sku, int quantityChange, String reason) {
+        InventoryItem item = inventoryRepository.findBySku(sku)
+                .orElseThrow(() -> new RuntimeException("Item not found: " + sku));
 
-        int newQuantity = item.getQuantity() + quantityChange;
-        if (newQuantity < 0) {
+        int newQty = item.getQuantity() + quantityChange;
+        if (newQty < 0) {
             throw new RuntimeException("Insufficient stock");
         }
+        item.setQuantity(newQty);
 
-        item.setQuantity(newQuantity);
-        item.setLastUpdated(LocalDateTime.now());
-        InventoryItem saved = inventoryRepository.save(item);
-
-        // Check for Low Stock
-        if (saved.getQuantity() <= saved.getThreshold()) {
-            eventPublisher.publishEvent(new SystemEvent("INVENTORY_SERVICE", "LOW_STOCK_ALERT", Map.of(
-                "sku", saved.getSku(),
-                "name", saved.getName(),
-                "current", saved.getQuantity()
-            )));
+        // Low Stock Alert
+        if (newQty <= item.getReorderPoint()) {
+            communicationService.broadcast(
+                "LOW STOCK ALERT: " + item.getName(), 
+                "Current Qty: " + newQty + ". Reorder Point: " + item.getReorderPoint()
+            );
         }
 
-        return saved;
+        return inventoryRepository.save(item);
     }
 
-    public List<InventoryItem> getLowStockItems(Long storeId) {
-        List<InventoryItem> all = getStoreInventory(storeId);
-        return all.stream()
-                .filter(item -> item.getQuantity() <= item.getThreshold())
-                .toList();
-    }
-
-    public InventoryItem addItem(InventoryItem item) {
-        item.setLastUpdated(LocalDateTime.now());
+    @Transactional
+    public InventoryItem createItem(InventoryItem item) {
         return inventoryRepository.save(item);
     }
 }

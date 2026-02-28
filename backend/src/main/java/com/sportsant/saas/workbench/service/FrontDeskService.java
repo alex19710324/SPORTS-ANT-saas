@@ -37,6 +37,9 @@ public class FrontDeskService {
     @Autowired
     private PasswordEncoder encoder;
 
+    @Autowired
+    private com.sportsant.saas.inventory.service.InventoryService inventoryService;
+
     public Map<String, Object> getFrontDeskOverview() {
         // Mock data
         Map<String, Object> data = new HashMap<>();
@@ -58,7 +61,6 @@ public class FrontDeskService {
         if (userRepository.existsByUsername(phoneNumber)) {
             throw new RuntimeException("User with this phone number already exists.");
         }
-
         // 2. Create User
         String email = phoneNumber + "@member.local";
         if (userRepository.existsByEmail(email)) {
@@ -93,5 +95,38 @@ public class FrontDeskService {
         
         // Still trigger membership updates (points/growth)
         return membershipService.simulatePurchase(member.getUserId(), amount.intValue());
+    }
+
+    @Transactional
+    public Member processCartSale(String memberCode, java.util.List<Map<String, Object>> cartItems, String paymentMethod) {
+        Member member = membershipService.findMemberByCodeOrPhone(memberCode);
+        double totalAmount = 0;
+        StringBuilder desc = new StringBuilder("POS Sale: ");
+
+        for (Map<String, Object> item : cartItems) {
+            String sku = (String) item.get("sku");
+            int qty = (Integer) item.get("quantity");
+            
+            // Deduct Stock
+            com.sportsant.saas.inventory.entity.InventoryItem invItem = inventoryService.adjustStock(sku, -qty, "POS Sale");
+            
+            Double price = invItem.getSellPrice();
+            if (price == null) price = invItem.getCostPrice() * 1.5;
+            if (price == null) price = 0.0;
+            
+            double itemTotal = price * qty;
+            totalAmount += itemTotal;
+            desc.append(invItem.getName()).append(" x").append(qty).append(", ");
+        }
+
+        // Finance Record
+        financeService.processPayment(
+            member.getUserId(), 
+            BigDecimal.valueOf(totalAmount), 
+            desc.toString()
+        );
+        
+        // Membership Points
+        return membershipService.simulatePurchase(member.getUserId(), (int)totalAmount);
     }
 }

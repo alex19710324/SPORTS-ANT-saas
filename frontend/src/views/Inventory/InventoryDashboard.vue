@@ -33,9 +33,9 @@
                     <el-tag :type="getStockStatus(scope.row)">{{ scope.row.quantity }}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column prop="threshold" label="Threshold" width="100" />
-            <el-table-column prop="unitPrice" label="Unit Price">
-                <template #default="scope">¥{{ scope.row.unitPrice }}</template>
+            <el-table-column prop="reorderPoint" label="Reorder Point" width="120" />
+            <el-table-column prop="sellPrice" label="Sell Price">
+                <template #default="scope">¥{{ scope.row.sellPrice }}</template>
             </el-table-column>
             <el-table-column label="Actions" width="200">
                 <template #default="scope">
@@ -52,7 +52,7 @@
         <el-input-number v-model="restockAmount" :min="1" />
         <template #footer>
             <el-button @click="showRestockModal = false">Cancel</el-button>
-            <el-button type="primary" :loading="loading" @click="submitRestock">Confirm Order</el-button>
+            <el-button type="primary" :loading="loading" @click="submitRestock">Confirm Stock In</el-button>
         </template>
     </el-dialog>
   </div>
@@ -70,12 +70,13 @@ const selectedItem = ref<any>(null);
 const restockAmount = ref(10);
 const showAddModal = ref(false);
 
-const lowStockCount = computed(() => items.value.filter(i => i.quantity <= i.threshold).length);
-const totalValue = computed(() => items.value.reduce((sum, i) => sum + (i.quantity * i.unitPrice), 0).toFixed(2));
+const lowStockCount = computed(() => items.value.filter(i => i.quantity <= i.reorderPoint).length);
+// Mock total value calculation
+const totalValue = computed(() => items.value.reduce((sum, i) => sum + (i.quantity * (i.costPrice || 0)), 0).toFixed(2));
 
 const fetchInventory = async () => {
     try {
-        const res = await apiClient.get('/inventory', { params: { storeId: 1 } });
+        const res = await apiClient.get('/inventory');
         items.value = res.data;
     } catch (error) {
         ElMessage.error('Failed to load inventory');
@@ -83,30 +84,28 @@ const fetchInventory = async () => {
 };
 
 const fetchLowStock = async () => {
-    try {
-        const res = await apiClient.get('/inventory/low-stock', { params: { storeId: 1 } });
-        const lowItems = res.data;
+    // Client-side filter for MVP
+    const lowItems = items.value.filter(i => i.quantity <= i.reorderPoint);
+    if (lowItems.length > 0) {
         ElMessage.warning(`Found ${lowItems.length} low stock items!`);
-        // Highlight logic could go here
-    } catch (error) {
-        ElMessage.error('Failed to check low stock');
+    } else {
+        ElMessage.success('All stock levels healthy');
     }
 };
 
 const getStockStatus = (item: any) => {
     if (item.quantity <= 0) return 'danger';
-    if (item.quantity <= item.threshold) return 'warning';
+    if (item.quantity <= item.reorderPoint) return 'warning';
     return 'success';
 };
 
 const handleRestock = (item: any) => {
     selectedItem.value = item;
-    restockAmount.value = item.threshold * 2; // Suggest 2x threshold
+    restockAmount.value = 10;
     showRestockModal.value = true;
 };
 
 const handleAdjust = (item: any) => {
-    // Implement manual adjustment logic
     ElMessage.info('Manual adjustment feature coming soon');
 };
 
@@ -115,11 +114,11 @@ const submitRestock = async () => {
     loading.value = true;
     try {
         await apiClient.post('/inventory/adjust', {
-            storeId: 1,
             sku: selectedItem.value.sku,
-            quantity: restockAmount.value
+            quantityChange: restockAmount.value,
+            reason: 'MANUAL_RESTOCK'
         });
-        ElMessage.success('Restock successful');
+        ElMessage.success('Stock updated');
         showRestockModal.value = false;
         fetchInventory();
     } catch (error) {
