@@ -25,6 +25,14 @@ export default {
     return apiClient.get('/workbench/technician/overview');
   },
 
+  updateWorkOrderStatus(orderId: number, status: string) {
+    return apiClient.put(`/workbench/technician/work-orders/${orderId}/status`, { status });
+  },
+
+  approveRequest(requestId: number) {
+    return apiClient.put(`/workbench/manager/approvals/${requestId}/approve`, {});
+  },
+
   getSecurityTasks() {
     return apiClient.get('/workbench/security/tasks');
   }

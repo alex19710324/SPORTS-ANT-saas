@@ -6,10 +6,13 @@ import com.sportsant.saas.device.entity.Device;
 import com.sportsant.saas.device.entity.WorkOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class TechnicianService {
@@ -23,14 +26,14 @@ public class TechnicianService {
     public Map<String, Object> getTechnicianOverview(Long technicianId) {
         // Mock data for now, in real app filter by technicianId or storeId
         List<WorkOrder> pendingOrders = workOrderRepository.findAll().stream()
-                .filter(wo -> "PENDING".equals(wo.getStatus()) || "IN_PROGRESS".equals(wo.getStatus()))
-                .limit(5)
-                .toList();
+                .filter(wo -> "OPEN".equals(wo.getStatus()) || "IN_PROGRESS".equals(wo.getStatus()))
+                .limit(10)
+                .collect(Collectors.toList());
         
         List<Device> offlineDevices = deviceRepository.findAll().stream()
                 .filter(d -> "OFFLINE".equals(d.getStatus()))
-                .limit(5)
-                .toList();
+                .limit(10)
+                .collect(Collectors.toList());
 
         Map<String, Object> data = new HashMap<>();
         data.put("pendingOrders", pendingOrders);
@@ -39,5 +42,23 @@ public class TechnicianService {
         data.put("todayInspectionsTotal", 15);
         
         return data;
+    }
+
+    @Transactional
+    public WorkOrder updateWorkOrderStatus(Long orderId, String newStatus, Long technicianId) {
+        WorkOrder order = workOrderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Work Order not found"));
+        
+        if ("IN_PROGRESS".equals(newStatus)) {
+            order.setAssignedTo(technicianId);
+            order.setStatus("IN_PROGRESS");
+        } else if ("CLOSED".equals(newStatus)) {
+            order.setStatus("CLOSED");
+            order.setClosedAt(LocalDateTime.now());
+        } else {
+             throw new RuntimeException("Invalid status transition: " + newStatus);
+        }
+        
+        return workOrderRepository.save(order);
     }
 }

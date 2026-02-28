@@ -40,8 +40,8 @@
                 <el-table-column prop="applicant" label="Applicant" width="100" />
                 <el-table-column prop="summary" label="Summary" />
                 <el-table-column label="Action" width="80">
-                    <template #default>
-                        <el-button link type="primary" size="small">Review</el-button>
+                    <template #default="scope">
+                        <el-button link type="primary" size="small" @click="handleApprove(scope.row.id)">Approve</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -64,6 +64,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useWorkbenchStore } from '../../../stores/workbench.store';
+import { ElMessage } from 'element-plus';
 
 const store = useWorkbenchStore();
 const overview = computed(() => store.managerOverview);
@@ -72,6 +73,15 @@ const loading = computed(() => store.loading);
 onMounted(() => {
   store.fetchManagerOverview(1); // Default Store ID 1
 });
+
+const handleApprove = async (id: number) => {
+    try {
+        await store.approveRequest(id);
+        ElMessage.success('Request approved successfully');
+    } catch (error) {
+        ElMessage.error('Failed to approve request');
+    }
+};
 </script>
 
 <style scoped>

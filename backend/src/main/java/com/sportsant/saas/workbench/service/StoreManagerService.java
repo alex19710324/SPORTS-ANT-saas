@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,10 +23,40 @@ public class StoreManagerService {
         data.put("todayRevenue", new BigDecimal("12500.50"));
         data.put("todayVisitors", 320);
         data.put("deviceOnlineRate", 98.5); // Percentage
-        data.put("pendingApprovals", 5);
         data.put("alertCount", 2);
         data.put("kocContribution", new BigDecimal("4500.00")); // Revenue from KOCs
         
+        // Mock pending approvals
+        List<Map<String, Object>> approvals = new ArrayList<>();
+        Map<String, Object> approval1 = new HashMap<>();
+        approval1.put("id", 1L);
+        approval1.put("type", "Refund");
+        approval1.put("applicant", "John Doe");
+        approval1.put("summary", "Refund for Order #1234");
+        approvals.add(approval1);
+
+        Map<String, Object> approval2 = new HashMap<>();
+        approval2.put("id", 2L);
+        approval2.put("type", "Leave");
+        approval2.put("applicant", "Alice Smith");
+        approval2.put("summary", "Sick leave for 2 days");
+        approvals.add(approval2);
+        
+        data.put("pendingApprovals", approvals);
+        
+        // Mock cost breakdown
+        Map<String, BigDecimal> costs = new HashMap<>();
+        costs.put("Staff", new BigDecimal("5000"));
+        costs.put("Utilities", new BigDecimal("1200"));
+        costs.put("Maintenance", new BigDecimal("800"));
+        data.put("costBreakdown", costs);
+
         return data;
+    }
+
+    public void approveRequest(Long approvalId, Long managerId) {
+        // Logic to approve request (update database)
+        System.out.println("Manager " + managerId + " approved request " + approvalId);
+        // In real implementation: find approval entity, check status, update status, save.
     }
 }

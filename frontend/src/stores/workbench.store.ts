@@ -64,6 +64,22 @@ export const useWorkbenchStore = defineStore('workbench', {
         this.loading = false;
       }
     },
+    async updateWorkOrderStatus(orderId: number, status: string) {
+        try {
+            await WorkbenchService.updateWorkOrderStatus(orderId, status);
+            await this.fetchTechnicianTasks(); // Refresh
+        } catch (error) {
+            throw error;
+        }
+    },
+    async approveRequest(requestId: number) {
+        try {
+            await WorkbenchService.approveRequest(requestId);
+            await this.fetchManagerOverview(1); // Refresh
+        } catch (error) {
+            throw error;
+        }
+    },
     async fetchSecurityTasks() {
       this.loading = true;
       try {

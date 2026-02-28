@@ -38,9 +38,10 @@
                         <el-tag :type="scope.row.priority === 'HIGH' ? 'danger' : 'warning'" size="small">{{ scope.row.priority }}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="Action" width="80">
-                    <template #default>
-                        <el-button link type="primary" size="small">Start</el-button>
+                <el-table-column label="Action" width="120">
+                    <template #default="scope">
+                        <el-button v-if="scope.row.status === 'OPEN'" link type="primary" size="small" @click="updateStatus(scope.row.id, 'IN_PROGRESS')">Start</el-button>
+                        <el-button v-if="scope.row.status === 'IN_PROGRESS'" link type="success" size="small" @click="updateStatus(scope.row.id, 'CLOSED')">Complete</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -69,6 +70,7 @@
 import { computed, onMounted } from 'vue';
 import { useWorkbenchStore } from '../../../stores/workbench.store';
 import DeviceMonitor from './DeviceMonitor.vue';
+import { ElMessage } from 'element-plus';
 
 const store = useWorkbenchStore();
 const tasks = computed(() => store.technicianTasks);
@@ -77,6 +79,15 @@ const loading = computed(() => store.loading);
 onMounted(() => {
   store.fetchTechnicianTasks();
 });
+
+const updateStatus = async (orderId: number, status: string) => {
+    try {
+        await store.updateWorkOrderStatus(orderId, status);
+        ElMessage.success('Status updated successfully');
+    } catch (error) {
+        ElMessage.error('Failed to update status');
+    }
+};
 </script>
 
 <style scoped>

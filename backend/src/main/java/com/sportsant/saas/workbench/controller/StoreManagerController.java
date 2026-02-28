@@ -22,4 +22,12 @@ public class StoreManagerController {
         Long mockStoreId = 1L; 
         return storeManagerService.getStoreOverview(mockStoreId);
     }
+
+    @PutMapping("/approvals/{id}/approve")
+    @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('ADMIN')")
+    public String approveRequest(@PathVariable Long id) {
+        Long mockManagerId = 10L;
+        storeManagerService.approveRequest(id, mockManagerId);
+        return "Request approved successfully";
+    }
 }
