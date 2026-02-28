@@ -36,6 +36,11 @@ public class User {
   @Column(name = "tenant_id")
   private Long tenantId;
 
+  private String status; // ACTIVE, INACTIVE
+
+  @Column(name = "created_at", updatable = false)
+  private java.time.LocalDateTime createdAt;
+
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "user_roles",
       joinColumns = @JoinColumn(name = "user_id"),
@@ -43,6 +48,12 @@ public class User {
   private Set<Role> roles = new HashSet<>();
 
   public User() {}
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = java.time.LocalDateTime.now();
+    if (status == null) status = "ACTIVE";
+  }
 
   public User(String username, String email, String password) {
     this.username = username;
@@ -61,6 +72,10 @@ public class User {
   public void setPassword(String password) { this.password = password; }
   public Long getTenantId() { return tenantId; }
   public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
+  public String getStatus() { return status; }
+  public void setStatus(String status) { this.status = status; }
+  public java.time.LocalDateTime getCreatedAt() { return createdAt; }
+  public void setCreatedAt(java.time.LocalDateTime createdAt) { this.createdAt = createdAt; }
   public Set<Role> getRoles() { return roles; }
   public void setRoles(Set<Role> roles) { this.roles = roles; }
 }
