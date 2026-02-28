@@ -54,8 +54,8 @@ Ensure you have the following installed on your local machine:
 
 Clone the repository:
 ```bash
-git clone https://github.com/your-org/sports-ant-saas.git
-cd sports-ant-saas
+git clone https://github.com/alex19710324/SPORTS-ANT-saas.git
+cd SPORTS-ANT-saas
 ```
 
 ### Backend Setup
