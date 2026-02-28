@@ -131,12 +131,13 @@ public class AuthController {
 
     // Send Welcome Notification
     try {
-        Notification welcomeMsg = new Notification();
-        welcomeMsg.setRecipient(user.getEmail());
-        welcomeMsg.setChannel("EMAIL");
-        welcomeMsg.setSubject("Welcome to Sports Ant SaaS!");
-        welcomeMsg.setContent("Dear " + user.getUsername() + ",\n\nThank you for registering with us. We are excited to have you on board!\n\nBest Regards,\nSports Ant Team");
-        notificationService.sendNotification(welcomeMsg);
+        notificationService.sendToUser(
+            user,
+            "Welcome to Sports Ant SaaS!",
+            "Dear " + user.getUsername() + ", thank you for registering with us. We are excited to have you on board!",
+            "SUCCESS",
+            "/profile"
+        );
     } catch (Exception e) {
         System.err.println("Failed to send welcome notification: " + e.getMessage());
     }

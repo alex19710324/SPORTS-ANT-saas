@@ -1,6 +1,11 @@
 <template>
   <div class="hq-dashboard" v-loading="loading">
-    <h2>{{ $t('hq.title') }}</h2>
+    <div class="header">
+        <h2>{{ $t('hq.title') }}</h2>
+        <div class="actions">
+            <el-button type="primary" @click="fetchData">Refresh Global Data</el-button>
+        </div>
+    </div>
     
     <div class="overview-grid" v-if="overview">
       <el-card shadow="hover">
@@ -8,130 +13,134 @@
         <h3>¥{{ overview.totalRevenue }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>{{ $t('hq.visitors') }}</template>
-        <h3>{{ overview.totalVisitors }}</h3>
+        <template #header>Total Stores</template>
+        <h3>{{ overview.activeStores }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>{{ $t('hq.stores') }}</template>
-        <h3>{{ overview.storeCount }}</h3>
+        <template #header>Total Members</template>
+        <h3>{{ overview.totalMembers }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>{{ $t('hq.koc') }}</template>
-        <h3>{{ overview.activeKoc }}</h3>
+        <template #header>Connected Devices</template>
+        <h3>{{ overview.totalDevices }}</h3>
       </el-card>
     </div>
 
-    <el-card class="map-card">
-      <template #header>{{ $t('hq.map') }}</template>
-      <div class="map-placeholder">
-        <!-- In real app, integrate Baidu Map or Google Maps here -->
-        <div class="map-visual">
-             <div class="store-dot" v-for="store in storeMapData" :key="store.id" 
-                  :style="{ left: (store.longitude + 180) / 3.6 + '%', top: (90 - store.latitude) / 1.8 + '%' }"
-                  :title="store.name">
-             </div>
-        </div>
-        <ul class="store-list">
-          <li v-for="store in storeMapData" :key="store.id">
-            <span class="status-dot" :class="store.status.toLowerCase()"></span>
-            {{ store.name }} - {{ store.city }} (Rev: ¥{{ store.todayRevenue }})
-          </li>
-        </ul>
-      </div>
-    </el-card>
-
-    <el-card class="franchise-card">
-      <template #header>{{ $t('hq.franchise') }}</template>
-      <el-table :data="franchiseApplications" style="width: 100%">
-        <el-table-column prop="applicantName" :label="$t('hq.applicant')" />
-        <el-table-column prop="proposedCity" :label="$t('hq.city')" />
-        <el-table-column prop="contactInfo" :label="$t('hq.contact')" />
-        <el-table-column prop="status" :label="$t('hq.status')">
-             <template #default="scope">
-                <el-tag :type="getStatusType(scope.row.status)">{{ scope.row.status }}</el-tag>
-             </template>
-        </el-table-column>
-        <el-table-column label="Action" width="200">
-          <template #default="scope">
-            <div v-if="scope.row.status === 'PENDING'">
-                <el-button size="small" type="success" @click="handleApprove(scope.row, true)">{{ $t('hq.approve') }}</el-button>
-                <el-button size="small" type="danger" @click="handleApprove(scope.row, false)">{{ $t('hq.reject') }}</el-button>
+    <div class="dashboard-split">
+        <el-card class="map-card">
+            <template #header>Global Store Map</template>
+            <div class="map-container">
+                <v-chart class="chart" :option="mapOption" autoresize />
             </div>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+        </el-card>
 
-    <!-- Approval Dialog -->
-    <el-dialog v-model="showApprovalDialog" title="Application Review">
-        <el-form>
-            <el-form-item label="Decision">
-                <el-tag :type="currentApprovalType ? 'success' : 'danger'">
-                    {{ currentApprovalType ? 'Approve' : 'Reject' }}
-                </el-tag>
-            </el-form-item>
-            <el-form-item label="Comments">
-                <el-input type="textarea" v-model="approvalComments"></el-input>
-            </el-form-item>
-        </el-form>
-        <template #footer>
-            <el-button @click="showApprovalDialog = false">Cancel</el-button>
-            <el-button type="primary" @click="submitApproval">Confirm</el-button>
-        </template>
-    </el-dialog>
+        <el-card class="leaderboard-card">
+            <template #header>Top Performing Stores</template>
+            <el-table :data="leaderboard" style="width: 100%">
+                <el-table-column type="index" width="50" />
+                <el-table-column prop="name" label="Store" />
+                <el-table-column prop="revenue" label="Revenue" align="right">
+                    <template #default="scope">¥{{ scope.row.revenue }}</template>
+                </el-table-column>
+                <el-table-column prop="score" label="Score" width="80">
+                    <template #default="scope">
+                        <el-tag :type="scope.row.score >= 90 ? 'success' : 'warning'">{{ scope.row.score }}</el-tag>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { useHQStore } from '../../stores/hq.store';
-import { ElMessage } from 'element-plus';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { ScatterChart, EffectScatterChart } from 'echarts/charts';
+import { GeoComponent, TooltipComponent, TitleComponent } from 'echarts/components';
+import VChart from 'vue-echarts';
+import apiClient from '../../services/api';
 
-const store = useHQStore();
-const overview = computed(() => store.overview);
-const storeMapData = computed(() => store.storeMapData);
-const franchiseApplications = computed(() => store.franchiseApplications);
-const loading = computed(() => store.loading);
+// Register ECharts components
+use([CanvasRenderer, ScatterChart, EffectScatterChart, GeoComponent, TooltipComponent, TitleComponent]);
 
-const showApprovalDialog = ref(false);
-const currentApp = ref<any>(null);
-const currentApprovalType = ref(true);
-const approvalComments = ref('');
+const loading = ref(false);
+const overview = ref<any>({});
+const leaderboard = ref<any[]>([]);
 
-onMounted(() => {
-  store.fetchGlobalOverview();
-  store.fetchStoreMapData();
-  store.fetchFranchiseApplications();
-});
+// Mock GeoJSON for China Map (simplified) or just use coordinates on a blank canvas for MVP
+// For MVP without downloading large map files, we simulate a "Coordinate System" or use a simple scatter plot
+const mapOption = computed(() => ({
+    backgroundColor: '#f3f3f3',
+    title: { text: 'Store Locations', left: 'center' },
+    tooltip: { trigger: 'item' },
+    geo: {
+        map: 'china', // Requires registering map data, skipping for MVP, using coordinate system instead
+        roam: true,
+        label: { show: false },
+        itemStyle: {
+            areaColor: '#323c48',
+            borderColor: '#111'
+        }
+    },
+    // Fallback: Simple Scatter if map not loaded
+    xAxis: { show: false, min: 70, max: 140 }, // Longitude range for China roughly
+    yAxis: { show: false, min: 15, max: 55 },  // Latitude range for China roughly
+    series: [
+        {
+            name: 'Stores',
+            type: 'effectScatter',
+            coordinateSystem: 'cartesian2d', // Using cartesian as mock map
+            data: [
+                [116.40, 39.90, 'Beijing Store'], // Beijing
+                [121.47, 31.23, 'Shanghai Store'], // Shanghai
+                [113.26, 23.12, 'Guangzhou Store'], // Guangzhou
+                [104.06, 30.67, 'Chengdu Store'], // Chengdu
+                [114.30, 30.59, 'Wuhan Store']   // Wuhan
+            ],
+            symbolSize: 20,
+            label: {
+                formatter: '{@[2]}',
+                position: 'right',
+                show: true
+            },
+            itemStyle: {
+                color: '#ddb926'
+            }
+        }
+    ]
+}));
 
-const getStatusType = (status: string) => {
-    if (status === 'APPROVED') return 'success';
-    if (status === 'REJECTED') return 'danger';
-    return 'warning';
-};
-
-const handleApprove = (app: any, approve: boolean) => {
-    currentApp.value = app;
-    currentApprovalType.value = approve;
-    approvalComments.value = approve ? 'Approved. Welcome to SPORTS ANT!' : 'Application rejected due to incomplete documents.';
-    showApprovalDialog.value = true;
-};
-
-const submitApproval = async () => {
-    if (!currentApp.value) return;
+const fetchData = async () => {
+    loading.value = true;
     try {
-        await store.approveApplication(currentApp.value.id);
-        showApprovalDialog.value = false;
-        ElMessage.success('Application processed successfully');
+        const kpiRes = await apiClient.get('/data/kpi');
+        overview.value = kpiRes.data;
+
+        const leadRes = await apiClient.get('/data/store-leaderboard');
+        leaderboard.value = leadRes.data;
     } catch (error) {
-        ElMessage.error('Failed to process application');
+        console.error("Failed to load HQ data");
+    } finally {
+        loading.value = false;
     }
 };
+
+onMounted(() => {
+    fetchData();
+});
 </script>
 
 <style scoped>
 .hq-dashboard {
   padding: 20px;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 .overview-grid {
   display: grid;
@@ -139,59 +148,19 @@ const submitApproval = async () => {
   gap: 20px;
   margin-bottom: 20px;
 }
-.map-card {
-  margin-bottom: 20px;
+.dashboard-split {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
 }
-.franchise-card {
-  margin-bottom: 20px;
+.map-container {
+    height: 500px;
+    background: #eef;
+    border-radius: 4px;
+    overflow: hidden;
 }
-.map-placeholder {
-  background: #f0f2f5;
-  height: 400px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
+.chart {
+    height: 100%;
+    width: 100%;
 }
-.map-visual {
-    flex: 1;
-    background-color: #e6e6e6;
-    background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
-    background-size: 20px 20px;
-    position: relative;
-}
-.store-list {
-    width: 300px;
-    background: white;
-    overflow-y: auto;
-    padding: 10px;
-    border-left: 1px solid #eee;
-    list-style: none;
-    margin: 0;
-}
-.store-list li {
-    padding: 10px;
-    border-bottom: 1px solid #f0f0f0;
-    display: flex;
-    align-items: center;
-}
-.store-dot {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background: #f56c6c;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(245, 108, 108, 0.5);
-    cursor: pointer;
-}
-.status-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: 8px;
-}
-.status-dot.normal { background: #67C23A; }
-.status-dot.warning { background: #E6A23C; }
-.status-dot.closed { background: #F56C6C; }
 </style>

@@ -1,57 +1,64 @@
 package com.sportsant.saas.communication.service;
 
-import com.sportsant.saas.ai.service.AiAware;
 import com.sportsant.saas.communication.entity.Notification;
 import com.sportsant.saas.communication.repository.NotificationRepository;
+import com.sportsant.saas.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Service
-public class NotificationService implements AiAware {
+public class NotificationService {
 
     @Autowired
     private NotificationRepository notificationRepository;
 
-    private final Random random = new Random();
-
-    public Notification sendNotification(Notification notification) {
-        // Save first as PENDING
-        notificationRepository.save(notification);
-
-        // Mock Sending Process
-        boolean success = simulateSending(notification.getChannel());
-        
-        if (success) {
-            notification.setStatus("SENT");
-            notification.setSentAt(LocalDateTime.now());
-        } else {
-            notification.setStatus("FAILED");
-            notification.setErrorMessage("Gateway timeout or invalid recipient");
-        }
-        
-        return notificationRepository.save(notification);
+    public void sendToUser(User user, String title, String message, String type, String link) {
+        Notification n = new Notification();
+        n.setRecipient(user);
+        n.setTitle(title);
+        n.setMessage(message);
+        n.setType(type);
+        n.setLink(link);
+        n.setCreatedAt(LocalDateTime.now());
+        n.setRead(false);
+        notificationRepository.save(n);
     }
 
-    private boolean simulateSending(String channel) {
-        // Simulate network delay
-        try { Thread.sleep(200); } catch (InterruptedException ignored) {}
-        
-        System.out.println("Sending via " + channel + "...");
-        
-        // 90% success rate
-        return random.nextInt(10) > 0;
+    public void sendToRole(String role, String title, String message, String type, String link) {
+        Notification n = new Notification();
+        n.setRoleTarget(role);
+        n.setTitle(title);
+        n.setMessage(message);
+        n.setType(type);
+        n.setLink(link);
+        n.setCreatedAt(LocalDateTime.now());
+        n.setRead(false);
+        notificationRepository.save(n);
     }
 
-    public List<Notification> getAllNotifications() {
-        return notificationRepository.findAll();
+    public List<Notification> getUserNotifications(User user) {
+        // Simple aggregation: User specific + Role based + Global
+        List<Notification> all = new ArrayList<>();
+        all.addAll(notificationRepository.findByRecipientIdOrderByCreatedAtDesc(user.getId()));
+        
+        user.getRoles().forEach(role -> {
+            all.addAll(notificationRepository.findByRoleTargetOrderByCreatedAtDesc(role.getName().name()));
+        });
+        
+        // In real app, we need to track "read status" for role-based/global notifications per user
+        // For MVP, we just return them
+        
+        return all;
     }
-
-    @Override
-    public void onAiSuggestion(String suggestionType, Object payload) {
-        // AI Suggestion: "Resend failed notifications"
+    
+    public void markAsRead(Long id) {
+        notificationRepository.findById(id).ifPresent(n -> {
+            n.setRead(true);
+            notificationRepository.save(n);
+        });
     }
 }

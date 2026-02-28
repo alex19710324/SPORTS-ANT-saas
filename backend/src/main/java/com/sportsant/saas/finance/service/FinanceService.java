@@ -98,33 +98,21 @@ public class FinanceService implements AiAware {
         return voucherRepository.save(voucher);
     }
 
+    public List<TransactionRecord> getWalletTransactions(Long walletId) {
+        return transactionRepository.findByWalletIdOrderByCreatedAtDesc(walletId);
+    }
+
     public List<Voucher> getAllVouchers() {
         return voucherRepository.findAll();
     }
 
     public Map<String, Object> calculateTax(String country, BigDecimal amount) {
-        // Mock Tax Calculation
-        Map<String, Object> result = new HashMap<>();
-        if ("CN".equals(country)) {
-            result.put("taxRate", 0.13);
-            result.put("taxAmount", amount.multiply(new BigDecimal("0.13")));
-        } else {
-            result.put("taxRate", 0.0);
-            result.put("taxAmount", BigDecimal.ZERO);
-        }
-        return result;
+        return accountingEngine.calculateTax(country, amount);
     }
 
     public Map<String, Object> predictCashFlow() {
-        // Mock AI Prediction
-        return Map.of(
-            "forecast", List.of(
-                Map.of("date", "2025-03-03", "balance", 100000),
-                Map.of("date", "2025-03-04", "balance", 95000),
-                Map.of("date", "2025-03-05", "balance", 105000)
-            ),
-            "confidence", 0.95
-        );
+        // AI Logic placeholder
+        return new HashMap<>();
     }
 
     @Override

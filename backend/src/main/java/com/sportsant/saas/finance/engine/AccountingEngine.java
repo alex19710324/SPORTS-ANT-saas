@@ -4,6 +4,8 @@ import com.sportsant.saas.finance.entity.Voucher;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Mock Accounting Engine.
@@ -11,6 +13,18 @@ import java.math.BigDecimal;
  */
 @Component
 public class AccountingEngine {
+
+    public Map<String, Object> calculateTax(String country, BigDecimal amount) {
+        Map<String, Object> result = new HashMap<>();
+        if ("CN".equals(country)) {
+            result.put("taxRate", 0.13);
+            result.put("taxAmount", amount.multiply(new BigDecimal("0.13")));
+        } else {
+            result.put("taxRate", 0.0);
+            result.put("taxAmount", BigDecimal.ZERO);
+        }
+        return result;
+    }
 
     public Voucher generateVoucher(String sourceType, Long sourceId, BigDecimal amount) {
         Voucher voucher = new Voucher();

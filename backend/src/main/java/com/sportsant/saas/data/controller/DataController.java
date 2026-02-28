@@ -1,6 +1,6 @@
 package com.sportsant.saas.data.controller;
 
-import com.sportsant.saas.data.service.DataService;
+import com.sportsant.saas.data.service.DataAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,21 +14,23 @@ import java.util.Map;
 public class DataController {
 
     @Autowired
-    private DataService dataService;
+    private DataAnalysisService dataAnalysisService;
 
-    // --- P0: Real-time Analytics ---
-    @GetMapping("/rt/{metric}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('DATA_ANALYST')")
-    public Map<String, Object> getRealTimeMetric(@PathVariable String metric) {
-        return dataService.getRealTimeMetrics(metric);
+    @GetMapping("/kpi")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('HQ')")
+    public Map<String, Object> getGlobalKPIs() {
+        return dataAnalysisService.getGlobalKPIs();
     }
 
-    // --- P1: Tag Service ---
-    @PostMapping("/tags/query")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> queryTags(@RequestBody Map<String, Object> payload) {
-        List<String> tags = (List<String>) payload.get("tags");
-        return dataService.queryTags(tags);
+    @GetMapping("/revenue-trend")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('HQ')")
+    public Map<String, Object> getRevenueTrend() {
+        return dataAnalysisService.getRevenueTrend();
+    }
+
+    @GetMapping("/store-leaderboard")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('HQ')")
+    public List<Map<String, Object>> getStoreLeaderboard() {
+        return dataAnalysisService.getStoreLeaderboard();
     }
 }

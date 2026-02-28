@@ -9,7 +9,7 @@ import SecurityDashboard from '../views/Workbench/Security/SecurityDashboard.vue
 import HQDashboard from '../views/HQ/HQDashboard.vue';
 import DataDashboard from '../views/Data/DataDashboard.vue';
 import MarketingDashboard from '../views/Marketing/MarketingDashboard.vue';
-import FinanceDashboard from '../views/Finance/FinanceDashboard.vue';
+import FinanceDashboard from '../views/Workbench/Finance/FinanceDashboard.vue';
 import I18nDashboard from '../views/I18n/I18nDashboard.vue';
 import CommunicationDashboard from '../views/Communication/CommunicationDashboard.vue';
 import ReportDashboard from '../views/Report/ReportDashboard.vue';

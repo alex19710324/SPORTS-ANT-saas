@@ -65,14 +65,19 @@ public class HQService implements AiAware {
                 storeRepository.save(newStore);
             }
             
-            // Notify Applicant
+            // Notify Applicant (For MVP, we use sendToUser if they have an account, or mock external notification)
             try {
-                Notification msg = new Notification();
-                msg.setRecipient(app.getContactInfo()); // Assuming contactInfo is Email or Phone
-                msg.setChannel("EMAIL"); // Default to EMAIL for now
-                msg.setSubject("Franchise Application Update");
-                msg.setContent("Dear " + app.getApplicantName() + ",\n\nYour application status has been updated to: " + app.getStatus() + ".\n\nComments: " + comments);
-                notificationService.sendNotification(msg);
+                // Assuming contactInfo is email and we don't have a User object yet for external applicants
+                // In a real system, we'd use an EmailService here. 
+                // For this MVP's NotificationService which requires a User entity or Role:
+                // We will just log it or send to a system admin about the approval
+                notificationService.sendToRole(
+                    "ROLE_ADMIN",
+                    "Franchise Application Processed",
+                    "Application for " + app.getApplicantName() + " in " + app.getProposedCity() + " has been " + (approve ? "APPROVED" : "REJECTED"),
+                    approve ? "SUCCESS" : "WARNING",
+                    "/hq/franchise"
+                );
             } catch (Exception e) {
                 System.err.println("Failed to notify applicant: " + e.getMessage());
             }

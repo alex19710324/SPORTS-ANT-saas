@@ -18,6 +18,9 @@ public class AiPerceptionService {
     @Autowired
     private AiBrainService aiBrainService;
 
+    @Autowired
+    private com.sportsant.saas.communication.service.NotificationService notificationService;
+
     // --- 1. Generic Event Listener (The Brain's Ears) ---
     @EventListener
     public void onSystemEvent(SystemEvent event) {
@@ -28,12 +31,21 @@ public class AiPerceptionService {
             String type = (String) event.getPayload().get("type");
             String location = (String) event.getPayload().get("location");
             
+            // 1. Suggestion for Manager
             aiBrainService.proposeSuggestion(
                 "Emergency Alert: " + type + " at " + location,
                 "A safety incident has been reported. Suggest activating emergency protocols and notifying nearby staff.",
                 "CRITICAL",
                 "HIGH",
                 "/api/safety/emergency/activate"
+            );
+            
+            // 2. Direct Notification to Security
+            notificationService.sendToRole("ROLE_SECURITY", 
+                "Emergency: " + type, 
+                "Location: " + location + ". Immediate response required!", 
+                "ERROR", 
+                "/workbench/security"
             );
         }
 
@@ -43,12 +55,21 @@ public class AiPerceptionService {
             String name = (String) event.getPayload().get("name");
             Integer current = (Integer) event.getPayload().get("current");
             
+            // 1. Suggestion for Manager
             aiBrainService.proposeSuggestion(
                 "Low Stock Alert: " + name,
                 "Item " + name + " (SKU: " + sku + ") is running low (" + current + " remaining). Suggest reordering immediately.",
                 "INVENTORY",
                 "HIGH",
                 "/api/inventory/reorder/" + sku
+            );
+            
+            // 2. Direct Notification to Store Manager
+            notificationService.sendToRole("ROLE_STORE_MANAGER",
+                "Low Stock: " + name,
+                "Only " + current + " remaining. Please reorder.",
+                "WARNING",
+                "/inventory"
             );
         }
 

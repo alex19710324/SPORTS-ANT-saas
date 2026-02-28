@@ -59,5 +59,9 @@ export default {
   
   getAiSuggestions() {
     return apiClient.get('/workbench/manager/suggestions');
+  },
+  
+  getNotifications() {
+    return apiClient.get('/notifications');
   }
 };

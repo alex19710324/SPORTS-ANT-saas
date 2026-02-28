@@ -91,8 +91,11 @@ export const useWorkbenchStore = defineStore('workbench', {
     },
     async getUnreadMessageCount() {
         try {
-            const res = await WorkbenchService.getUnreadCount();
-            return res.data;
+            // Mock: For MVP, just return the number of unread notifications from the new API
+            // Or assume the UI component polls and manages its own count if not centralized
+            // Let's assume the API returns a count or we fetch all and count
+            const res = await WorkbenchService.getNotifications();
+            return res.data.filter((n: any) => !n.read).length;
         } catch (error) {
             return 0;
         }

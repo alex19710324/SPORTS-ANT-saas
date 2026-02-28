@@ -40,16 +40,24 @@
     <!-- New Sale Modal -->
     <el-dialog v-model="showSaleModal" :title="$t('frontdesk.newSale')">
         <el-form :model="saleForm" label-width="100px">
-            <el-form-item label="Member" required>
+            <el-form-item label="Member Code" required>
                 <el-input v-model="saleForm.code" placeholder="Scan Member Code / Phone"></el-input>
             </el-form-item>
-            <el-form-item label="Amount" required>
+            <el-form-item label="Amount (CNY)" required>
                 <el-input-number v-model="saleForm.amount" :min="0" :precision="2" :step="10"></el-input-number>
+            </el-form-item>
+            <el-form-item label="Payment Method">
+                <el-select v-model="saleForm.method" placeholder="Select Method">
+                    <el-option label="Wallet Balance" value="WALLET" />
+                    <el-option label="WeChat Pay" value="WECHAT" />
+                    <el-option label="Alipay" value="ALIPAY" />
+                    <el-option label="Cash" value="CASH" />
+                </el-select>
             </el-form-item>
         </el-form>
         <template #footer>
             <el-button @click="showSaleModal = false">Cancel</el-button>
-            <el-button type="success" :loading="saleLoading" @click="performSale">Confirm Sale</el-button>
+            <el-button type="success" :loading="saleLoading" @click="performSale">Confirm Payment</el-button>
         </template>
     </el-dialog>
 
@@ -98,7 +106,8 @@ const showSaleModal = ref(false);
 const saleLoading = ref(false);
 const saleForm = reactive({
     code: '',
-    amount: 0
+    amount: 0,
+    method: 'WALLET'
 });
 
 onMounted(() => {
