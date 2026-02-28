@@ -25,22 +25,27 @@
       </div>
 
       <div class="benefits-section">
-        <h4>Member Benefits</h4>
+        <h4>{{ $t('membership.benefits') }}</h4>
         <div class="benefits-list">
           <el-tag v-for="(value, key) in benefits" :key="key" class="benefit-tag">
             {{ key }}: {{ value }}
           </el-tag>
-          <el-tag v-if="Object.keys(benefits).length === 0" type="info">No specific benefits</el-tag>
+          <el-tag v-if="Object.keys(benefits).length === 0" type="info">{{ $t('membership.noBenefits') }}</el-tag>
         </div>
       </div>
       
       <div class="ai-insights" v-if="member.tags">
-         <h4>AI Insights</h4>
+         <h4>{{ $t('membership.aiInsights') }}</h4>
          <div class="tags">
              <el-tag v-for="tag in member.tags.split(',')" :key="tag" type="warning" effect="dark">
                  {{ tag }}
              </el-tag>
          </div>
+      </div>
+
+      <div class="actions">
+        <el-button type="primary" size="small" @click="handleCheckIn" :loading="loading">{{ $t('membership.checkin') }}</el-button>
+        <el-button type="success" size="small" @click="handlePurchase" :loading="loading">{{ $t('membership.simulate') }} (¥100)</el-button>
       </div>
     </div>
     <div v-else class="no-data">
@@ -52,8 +57,11 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useMembershipStore } from '../stores/membership.store';
+import { ElMessage } from 'element-plus';
+import { useI18n } from 'vue-i18n';
 
 const store = useMembershipStore();
+const { t } = useI18n();
 
 onMounted(() => {
   store.fetchMyMembership();
@@ -61,6 +69,16 @@ onMounted(() => {
 
 const member = computed(() => store.member);
 const loading = computed(() => store.loading);
+
+const handleCheckIn = async () => {
+    await store.dailyCheckIn();
+    ElMessage.success(t('membership.checkinSuccess'));
+};
+
+const handlePurchase = async () => {
+    await store.simulatePurchase(100);
+    ElMessage.success(t('membership.simulateSuccess', { growth: 150 }));
+};
 
 const nextLevelGrowth = computed(() => {
     // Simple logic: assume next level is current + 1. In real app, fetch all levels.
@@ -148,6 +166,12 @@ const benefits = computed(() => {
     margin-top: 15px;
     padding-top: 10px;
     border-top: 1px dashed rgba(255,255,255,0.3);
+}
+
+.actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
 }
 
 /* Level Colors */

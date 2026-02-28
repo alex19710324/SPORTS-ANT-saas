@@ -1,28 +1,28 @@
 <template>
   <div class="hq-dashboard" v-loading="loading">
-    <h2>Global Headquarters</h2>
+    <h2>{{ $t('hq.title') }}</h2>
     
     <div class="overview-grid" v-if="overview">
       <el-card shadow="hover">
-        <template #header>Total Revenue</template>
+        <template #header>{{ $t('hq.revenue') }}</template>
         <h3>¥{{ overview.totalRevenue }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>Total Visitors</template>
+        <template #header>{{ $t('hq.visitors') }}</template>
         <h3>{{ overview.totalVisitors }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>Active Stores</template>
+        <template #header>{{ $t('hq.stores') }}</template>
         <h3>{{ overview.storeCount }}</h3>
       </el-card>
       <el-card shadow="hover">
-        <template #header>Active KOCs</template>
+        <template #header>{{ $t('hq.koc') }}</template>
         <h3>{{ overview.activeKoc }}</h3>
       </el-card>
     </div>
 
     <el-card class="map-card">
-      <template #header>Global Store Map</template>
+      <template #header>{{ $t('hq.map') }}</template>
       <div class="map-placeholder">
         <!-- In real app, integrate Baidu Map or Google Maps here -->
         <div class="map-visual">
@@ -41,12 +41,12 @@
     </el-card>
 
     <el-card class="franchise-card">
-      <template #header>Franchise Applications</template>
+      <template #header>{{ $t('hq.franchise') }}</template>
       <el-table :data="franchiseApplications" style="width: 100%">
-        <el-table-column prop="applicantName" label="Applicant" />
-        <el-table-column prop="proposedCity" label="City" />
-        <el-table-column prop="contactInfo" label="Contact" />
-        <el-table-column prop="status" label="Status">
+        <el-table-column prop="applicantName" :label="$t('hq.applicant')" />
+        <el-table-column prop="proposedCity" :label="$t('hq.city')" />
+        <el-table-column prop="contactInfo" :label="$t('hq.contact')" />
+        <el-table-column prop="status" :label="$t('hq.status')">
              <template #default="scope">
                 <el-tag :type="getStatusType(scope.row.status)">{{ scope.row.status }}</el-tag>
              </template>
@@ -54,8 +54,8 @@
         <el-table-column label="Action" width="200">
           <template #default="scope">
             <div v-if="scope.row.status === 'PENDING'">
-                <el-button size="small" type="success" @click="handleApprove(scope.row, true)">Approve</el-button>
-                <el-button size="small" type="danger" @click="handleApprove(scope.row, false)">Reject</el-button>
+                <el-button size="small" type="success" @click="handleApprove(scope.row, true)">{{ $t('hq.approve') }}</el-button>
+                <el-button size="small" type="danger" @click="handleApprove(scope.row, false)">{{ $t('hq.reject') }}</el-button>
             </div>
           </template>
         </el-table-column>

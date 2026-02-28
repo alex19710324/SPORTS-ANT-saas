@@ -1,4 +1,17 @@
 {
+  "membership": {
+    "title": "Membership Card",
+    "level": "Level",
+    "growth": "Current Growth",
+    "nextLevel": "Next Level",
+    "benefits": "Benefits",
+    "noBenefits": "No benefits yet",
+    "aiInsights": "AI Insights",
+    "checkin": "Daily Check-in",
+    "simulate": "Simulate Purchase",
+    "checkinSuccess": "Check-in Success! Growth +10",
+    "simulateSuccess": "Purchase Simulated! Growth +{growth}"
+  },
   "login": {
     "title": "SPORTS ANT SaaS Login",
     "username": "Username",
@@ -66,6 +79,21 @@
     "equipment": "Fire Equipment",
     "reportIncident": "Report Incident",
     "checkEquipment": "Check Equipment"
+  },
+  "hq": {
+    "title": "Global HQ Center",
+    "revenue": "Total Revenue",
+    "visitors": "Total Visitors",
+    "stores": "Active Stores",
+    "koc": "Active KOCs",
+    "map": "Global Store Map",
+    "franchise": "Franchise Applications",
+    "applicant": "Applicant",
+    "city": "Proposed City",
+    "contact": "Contact Info",
+    "status": "Status",
+    "approve": "Approve",
+    "reject": "Reject"
   },
   "common": {
     "loading": "Loading...",

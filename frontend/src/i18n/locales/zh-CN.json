@@ -1,4 +1,17 @@
 {
+  "membership": {
+    "title": "会员卡",
+    "level": "等级",
+    "growth": "当前成长值",
+    "nextLevel": "下一级",
+    "benefits": "会员权益",
+    "noBenefits": "暂无权益",
+    "aiInsights": "AI 洞察",
+    "checkin": "每日签到",
+    "simulate": "模拟消费",
+    "checkinSuccess": "签到成功！成长值 +10",
+    "simulateSuccess": "模拟消费成功！成长值 +{growth}"
+  },
   "login": {
     "title": "SPORTS ANT SaaS 登录",
     "username": "用户名",
@@ -66,6 +79,21 @@
     "equipment": "消防设施",
     "reportIncident": "上报事件",
     "checkEquipment": "检查设施"
+  },
+  "hq": {
+    "title": "总部管控中心",
+    "revenue": "总营收",
+    "visitors": "总客流",
+    "stores": "活跃门店",
+    "koc": "活跃KOC",
+    "map": "全球门店地图",
+    "franchise": "加盟申请审批",
+    "applicant": "申请人",
+    "city": "意向城市",
+    "contact": "联系方式",
+    "status": "状态",
+    "approve": "通过",
+    "reject": "拒绝"
   },
   "common": {
     "loading": "加载中...",

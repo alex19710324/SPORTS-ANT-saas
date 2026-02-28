@@ -41,6 +41,22 @@ public class MembershipService implements AiAware {
     }
 
     @Transactional
+    public Member dailyCheckIn(Long userId) {
+        // Daily Check-in gives 10 Growth
+        addGrowth(userId, 10, "Daily Check-in");
+        return getMember(userId);
+    }
+
+    @Transactional
+    public Member simulatePurchase(Long userId, Integer amount) {
+        // Purchase gives growth = amount * 1.5 (Mock ratio)
+        if (amount == null || amount <= 0) amount = 100;
+        int growth = (int) (amount * 1.5);
+        addGrowth(userId, growth, "Purchase Reward");
+        return getMember(userId);
+    }
+
+    @Transactional
     public void addGrowth(Long userId, Integer amount, String source) {
         Member member = getMember(userId);
         member.setGrowthValue(member.getGrowthValue() + amount);

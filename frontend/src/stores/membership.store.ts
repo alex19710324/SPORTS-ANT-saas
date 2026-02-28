@@ -17,6 +17,22 @@ export const useMembershipStore = defineStore('membership', {
       } finally {
         this.loading = false;
       }
+    },
+    async dailyCheckIn() {
+      try {
+        const response = await MembershipService.dailyCheckIn();
+        this.member = response.data; // Update local state
+      } catch (error) {
+        console.error('Check-in failed', error);
+      }
+    },
+    async simulatePurchase(amount: number) {
+      try {
+        const response = await MembershipService.simulatePurchase(amount);
+        this.member = response.data; // Update local state
+      } catch (error) {
+        console.error('Purchase simulation failed', error);
+      }
     }
   }
 });

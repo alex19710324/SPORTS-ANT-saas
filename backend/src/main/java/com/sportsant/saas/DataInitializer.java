@@ -7,6 +7,8 @@ import com.sportsant.saas.ai.service.FeatureStoreService;
 import com.sportsant.saas.entity.ERole;
 import com.sportsant.saas.entity.Role;
 import com.sportsant.saas.entity.User;
+import com.sportsant.saas.franchise.entity.FranchiseApplication;
+import com.sportsant.saas.franchise.repository.FranchiseApplicationRepository;
 import com.sportsant.saas.language.entity.LanguagePackage;
 import com.sportsant.saas.language.repository.LanguagePackageRepository;
 import com.sportsant.saas.store.entity.Store;
@@ -33,7 +35,8 @@ public class DataInitializer {
                                     FeatureStoreService featureStoreService,
                                     MemberLevelRepository memberLevelRepository,
                                     StoreRepository storeRepository,
-                                    LanguagePackageRepository languagePackageRepository) {
+                                    LanguagePackageRepository languagePackageRepository,
+                                    FranchiseApplicationRepository franchiseApplicationRepository) {
         return args -> {
             // ... (Existing Init Logic) ...
             // 1. Initialize Roles if not exist
@@ -120,6 +123,33 @@ public class DataInitializer {
                 storeRepository.save(s2);
                 storeRepository.save(s3);
                 System.out.println(">>> Initialized Mock Stores (3 Stores)");
+            }
+
+            // 5.1 Initialize Franchise Applications (Mock)
+            if (franchiseApplicationRepository.count() == 0) {
+                FranchiseApplication app1 = new FranchiseApplication();
+                app1.setApplicantName("David Smith");
+                app1.setContactInfo("david@example.com");
+                app1.setProposedCity("London");
+                app1.setStatus("PENDING");
+                
+                FranchiseApplication app2 = new FranchiseApplication();
+                app2.setApplicantName("Maria Garcia");
+                app2.setContactInfo("maria@example.com");
+                app2.setProposedCity("Madrid");
+                app2.setStatus("APPROVED");
+                app2.setComments("Excellent location proposal.");
+
+                FranchiseApplication app3 = new FranchiseApplication();
+                app3.setApplicantName("Ahmed Khan");
+                app3.setContactInfo("ahmed@example.com");
+                app3.setProposedCity("Dubai");
+                app3.setStatus("PENDING");
+                
+                franchiseApplicationRepository.save(app1);
+                franchiseApplicationRepository.save(app2);
+                franchiseApplicationRepository.save(app3);
+                System.out.println(">>> Initialized Mock Franchise Applications (3 Apps)");
             }
 
             // 6. Initialize Language Packages (P0)
