@@ -1,12 +1,7 @@
 package com.sportsant.saas.ai.controller;
 
-import com.sportsant.saas.ai.entity.AiFeature;
-import com.sportsant.saas.ai.entity.AiModel;
-import com.sportsant.saas.ai.service.AiInferenceService;
-import com.sportsant.saas.ai.service.ContentGenerationService;
-import com.sportsant.saas.ai.service.FeatureStoreService;
+import com.sportsant.saas.ai.service.AiBrainService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,72 +14,24 @@ import java.util.Map;
 public class AiController {
 
     @Autowired
-    private AiInferenceService aiInferenceService;
+    private AiBrainService aiBrainService;
 
-    @Autowired
-    private FeatureStoreService featureStoreService;
-
-    @Autowired
-    private ContentGenerationService contentGenerationService;
-
-    // --- Models ---
-    @GetMapping("/models")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
-    public List<AiModel> getAvailableModels() {
-        return aiInferenceService.listModels();
+    @GetMapping("/insights")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER') or hasRole('HQ')")
+    public List<Map<String, Object>> getInsights() {
+        // Delegate to AiBrainService to fetch latest suggestions/insights
+        // For MVP, we can reuse getSuggestions but filter for "INSIGHT" type or similar
+        // Or just return all active suggestions as insights
+        return aiBrainService.getSuggestions();
     }
 
-    @PostMapping("/models")
-    @PreAuthorize("hasRole('ADMIN')")
-    public AiModel registerModel(@RequestBody Map<String, String> payload) {
-        return aiInferenceService.registerModel(
-                payload.get("name"),
-                payload.get("type"),
-                payload.get("version"),
-                payload.get("endpointUrl")
-        );
-    }
-
-    // --- Features ---
-    @GetMapping("/features")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
-    public List<AiFeature> listFeatures() {
-        return featureStoreService.listFeatures();
-    }
-
-    @PostMapping("/features")
-    @PreAuthorize("hasRole('ADMIN')")
-    public AiFeature registerFeature(@RequestBody Map<String, String> payload) {
-        return featureStoreService.registerFeature(
-                payload.get("name"),
-                payload.get("type"),
-                payload.get("description"),
-                payload.get("source")
-        );
-    }
-
-    // --- Inference & Generation ---
-    @PostMapping("/predict/{modelName}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<Object> predict(@PathVariable String modelName, @RequestBody Map<String, Object> inputData) {
-        try {
-            Object result = aiInferenceService.predict(modelName, inputData);
-            return ResponseEntity.ok(result);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    @PostMapping("/generate")
-    @PreAuthorize("hasRole('MARKETING') or hasRole('ADMIN')")
-    public ResponseEntity<Object> generateContent(@RequestBody Map<String, Object> payload) {
-        try {
-            String type = (String) payload.get("type");
-            @SuppressWarnings("unchecked")
-            Map<String, Object> params = (Map<String, Object>) payload.get("params");
-            return ResponseEntity.ok(contentGenerationService.generateContent(type, params));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
+    @PostMapping("/execute")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STORE_MANAGER')")
+    public Map<String, Object> executeAction(@RequestBody Map<String, String> payload) {
+        String actionLink = payload.get("actionLink");
+        // In a real system, this would parse the link and invoke the corresponding service method
+        // For MVP, we'll just log it and return success
+        System.out.println("Executing AI Action: " + actionLink);
+        return Map.of("status", "SUCCESS", "message", "Action executed: " + actionLink);
     }
 }

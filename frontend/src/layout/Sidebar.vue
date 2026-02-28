@@ -20,7 +20,7 @@
         <template #title>{{ $t('home.modules.applications.title') || 'Home' }}</template>
       </el-menu-item>
       
-      <el-sub-menu index="/hq">
+      <el-sub-menu index="/hq" v-if="hasRole(['ADMIN', 'HQ'])">
         <template #title>
           <el-icon><office-building /></el-icon>
           <span>{{ $t('home.modules.hq.title') }}</span>
@@ -28,34 +28,49 @@
         <el-menu-item index="/hq/dashboard">{{ $t('home.modules.hq.desc') }}</el-menu-item>
       </el-sub-menu>
 
-      <el-menu-item index="/workbench/manager">
+      <el-menu-item index="/workbench/manager" v-if="hasRole(['ADMIN', 'STORE_MANAGER'])">
         <el-icon><setting /></el-icon>
         <template #title>{{ $t('home.modules.manager.title') }}</template>
       </el-menu-item>
       
-      <el-menu-item index="/workbench/frontdesk">
+      <el-menu-item index="/workbench/frontdesk" v-if="hasRole(['ADMIN', 'FRONT_DESK', 'STORE_MANAGER'])">
         <el-icon><service /></el-icon>
         <template #title>{{ $t('home.modules.frontdesk.title') }}</template>
       </el-menu-item>
 
-      <el-menu-item index="/workbench/technician">
+      <el-menu-item index="/workbench/technician" v-if="hasRole(['ADMIN', 'TECHNICIAN', 'STORE_MANAGER'])">
         <el-icon><tools /></el-icon>
         <template #title>{{ $t('home.modules.technician.title') }}</template>
       </el-menu-item>
 
-      <el-menu-item index="/data/dashboard">
+      <el-menu-item index="/data/dashboard" v-if="hasRole(['ADMIN', 'HQ', 'STORE_MANAGER'])">
         <el-icon><data-line /></el-icon>
         <template #title>{{ $t('home.modules.data.title') }}</template>
       </el-menu-item>
 
-      <el-menu-item index="/marketing/dashboard">
+      <el-menu-item index="/marketing/dashboard" v-if="hasRole(['ADMIN', 'MARKETING', 'STORE_MANAGER'])">
         <el-icon><promotion /></el-icon>
         <template #title>{{ $t('home.modules.marketing.title') }}</template>
       </el-menu-item>
 
-      <el-menu-item index="/finance/dashboard">
+      <el-menu-item index="/finance/dashboard" v-if="hasRole(['ADMIN', 'FINANCE', 'STORE_MANAGER'])">
         <el-icon><money /></el-icon>
         <template #title>{{ $t('home.modules.finance.title') }}</template>
+      </el-menu-item>
+
+      <el-menu-item index="/inventory" v-if="hasRole(['ADMIN', 'STORE_MANAGER', 'TECHNICIAN'])">
+        <el-icon><box /></el-icon>
+        <template #title>Inventory</template>
+      </el-menu-item>
+
+      <el-menu-item index="/hr" v-if="hasRole(['ADMIN', 'HR', 'STORE_MANAGER'])">
+        <el-icon><user-filled /></el-icon>
+        <template #title>HR</template>
+      </el-menu-item>
+
+      <el-menu-item index="/report" v-if="hasRole(['ADMIN', 'STORE_MANAGER', 'HQ'])">
+        <el-icon><document /></el-icon>
+        <template #title>Reports</template>
       </el-menu-item>
 
       <el-menu-item index="/communication/dashboard">
@@ -69,6 +84,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from '../stores/auth.store';
 import {
   HomeFilled as Home,
   OfficeBuilding,
@@ -78,11 +94,15 @@ import {
   DataLine,
   Promotion,
   Money,
-  ChatDotRound
+  ChatDotRound,
+  Box,
+  UserFilled,
+  Document
 } from '@element-plus/icons-vue';
 
 const isCollapsed = ref(false);
 const route = useRoute();
+const authStore = useAuthStore();
 
 const activeMenu = computed(() => route.path);
 
@@ -91,6 +111,18 @@ const handleOpen = (key: string, keyPath: string[]) => {
 };
 const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
+};
+
+const hasRole = (roles: string[]) => {
+    // If no user or no roles, assume guest (only public pages)
+    // For MVP, if authStore.user is null, hide everything except Home?
+    // Actually, MainLayout is protected, so user must be logged in.
+    if (!authStore.user || !authStore.user.roles) return false;
+    
+    // Check if user has ANY of the required roles
+    // Mock: user.roles is array of strings like ['ROLE_ADMIN']
+    const userRoles = authStore.user.roles;
+    return roles.some(role => userRoles.includes('ROLE_' + role) || userRoles.includes(role));
 };
 </script>
 

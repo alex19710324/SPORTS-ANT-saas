@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
+import ForbiddenView from '../views/Forbidden.vue';
 import MainLayout from '../layout/MainLayout.vue';
 import ManagerDashboard from '../views/Workbench/Manager/ManagerDashboard.vue';
 import FrontDeskDashboard from '../views/Workbench/FrontDesk/FrontDeskDashboard.vue';
@@ -30,19 +31,19 @@ const router = createRouter({
       path: '/inventory',
       name: 'inventory-dashboard',
       component: InventoryDashboard,
-      meta: { layout: MainLayout },
+      meta: { layout: MainLayout, roles: ['ADMIN', 'STORE_MANAGER', 'TECHNICIAN'] },
     },
     {
       path: '/hr',
       name: 'hr-dashboard',
       component: HRDashboard,
-      meta: { layout: MainLayout },
+      meta: { layout: MainLayout, roles: ['ADMIN', 'HR', 'STORE_MANAGER'] },
     },
     {
       path: '/report',
       name: 'report-dashboard',
       component: ReportDashboard,
-      meta: { layout: MainLayout },
+      meta: { layout: MainLayout, roles: ['ADMIN', 'STORE_MANAGER', 'HQ'] },
     },
     {
       path: '/member/portal',
@@ -54,12 +55,17 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
-      // No layout meta needed, defaults to div in App.vue
+    },
+    {
+      path: '/403',
+      name: 'forbidden',
+      component: ForbiddenView,
     },
     // HQ Routes
     {
       path: '/hq',
       component: MainLayout,
+      meta: { roles: ['ADMIN', 'HQ'] },
       children: [
         {
           path: '',
@@ -70,13 +76,13 @@ const router = createRouter({
           name: 'hq-dashboard',
           component: HQDashboard,
         },
-        // Add more HQ sub-routes
       ],
     },
     // Data Routes
     {
       path: '/data',
       component: MainLayout,
+      meta: { roles: ['ADMIN', 'HQ', 'STORE_MANAGER'] },
       children: [
         {
           path: '',
@@ -93,6 +99,7 @@ const router = createRouter({
     {
       path: '/marketing',
       component: MainLayout,
+      meta: { roles: ['ADMIN', 'MARKETING', 'STORE_MANAGER'] },
       children: [
         {
           path: '',
@@ -109,6 +116,7 @@ const router = createRouter({
     {
       path: '/finance',
       component: MainLayout,
+      meta: { roles: ['ADMIN', 'FINANCE', 'STORE_MANAGER'] },
       children: [
         {
           path: '',
@@ -162,21 +170,25 @@ const router = createRouter({
           path: 'manager',
           name: 'manager-workbench',
           component: ManagerDashboard,
+          meta: { roles: ['ADMIN', 'STORE_MANAGER'] },
         },
         {
           path: 'frontdesk',
           name: 'frontdesk-workbench',
           component: FrontDeskDashboard,
+          meta: { roles: ['ADMIN', 'FRONT_DESK', 'STORE_MANAGER'] },
         },
         {
           path: 'technician',
           name: 'technician-workbench',
           component: TechnicianDashboard,
+          meta: { roles: ['ADMIN', 'TECHNICIAN', 'STORE_MANAGER'] },
         },
         {
           path: 'security',
           name: 'security-workbench',
           component: SecurityDashboard,
+          meta: { roles: ['ADMIN', 'SECURITY', 'STORE_MANAGER'] },
         },
       ],
     },
@@ -190,15 +202,34 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _from, next) => {
-  const publicPages = ['/login', '/register']; // Removed '/home'
+  const publicPages = ['/login', '/register', '/403'];
   const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem('user');
-
-  if (authRequired && !loggedIn) {
+  const userStr = localStorage.getItem('user');
+  
+  if (authRequired && !userStr) {
     next('/login');
-  } else {
-    next();
+    return;
   }
+
+  if (userStr) {
+      const user = JSON.parse(userStr);
+      const userRoles = user.roles || [];
+      
+      // Check RBAC
+      if (to.meta.roles) {
+          const requiredRoles = to.meta.roles as string[];
+          const hasPermission = requiredRoles.some(role => 
+              userRoles.includes('ROLE_' + role) || userRoles.includes(role)
+          );
+          
+          if (!hasPermission) {
+              next('/403');
+              return;
+          }
+      }
+  }
+
+  next();
 });
 
 export default router;

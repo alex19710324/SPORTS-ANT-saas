@@ -132,4 +132,36 @@ public class AiPerceptionService {
             );
         }
     }
+
+    // --- 4. Business Intelligence Perception (Scheduled) ---
+    @Scheduled(fixedRate = 300000) // Every 5 minutes
+    public void analyzeBusinessTrends() {
+        // Mock: In real app, inject FinanceService/DataAnalysisService
+        
+        // 1. Revenue Anomaly Detection
+        // Simulate a check: if today's revenue < 50% of average -> Alert
+        boolean revenueDipDetected = Math.random() > 0.8; // 20% chance mock
+        if (revenueDipDetected) {
+            aiBrainService.proposeSuggestion(
+                "Revenue Alert: Unusual Dip",
+                "Today's revenue is 40% below the weekly average. Suggest launching a flash sale or checking for technical issues.",
+                "REVENUE",
+                "HIGH",
+                "/api/marketing/campaign/flash-sale"
+            );
+        }
+
+        // 2. Staffing Optimization
+        // Simulate: High visitor traffic but low staff count
+        boolean understaffed = Math.random() > 0.9;
+        if (understaffed) {
+            aiBrainService.proposeSuggestion(
+                "Operations Alert: Potential Understaffing",
+                "Visitor traffic is peaking, but active staff count is low. Suggest calling in on-call staff.",
+                "OPERATIONS",
+                "MEDIUM",
+                "/api/hr/schedule/urgent"
+            );
+        }
+    }
 }

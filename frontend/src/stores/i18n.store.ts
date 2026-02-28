@@ -20,6 +20,10 @@ export const useI18nStore = defineStore('i18n', {
         this.loading = false;
       }
     },
+
+    setLanguage(lang: string) {
+        this.loadLanguagePack(lang);
+    },
     
     t(key: string) {
       return this.languagePack[key] || key;

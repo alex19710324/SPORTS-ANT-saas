@@ -16,8 +16,10 @@
           <p>{{ suggestion.content }}</p>
         </div>
         <div class="actions">
-          <el-button type="success" size="small" @click="handleAction(suggestion, true)">Accept</el-button>
-          <el-button type="danger" size="small" @click="handleAction(suggestion, false)">Reject</el-button>
+          <el-button type="success" size="small" @click="handleAction(suggestion, true)">
+            {{ suggestion.actionLink ? 'Execute' : 'Acknowledge' }}
+          </el-button>
+          <el-button type="danger" size="small" @click="handleAction(suggestion, false)">Dismiss</el-button>
         </div>
       </el-card>
     </el-scrollbar>
@@ -27,6 +29,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useAiStore } from '../../stores/ai.store';
+import apiClient from '../../services/api';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const aiStore = useAiStore();
@@ -34,6 +37,8 @@ const suggestions = computed(() => aiStore.suggestions);
 
 onMounted(() => {
   aiStore.fetchSuggestions();
+  // Poll for new insights every 30s
+  setInterval(() => aiStore.fetchSuggestions(), 30000);
 });
 
 const getPriorityType = (priority: string) => {
@@ -48,15 +53,23 @@ const getPriorityType = (priority: string) => {
 const handleAction = async (suggestion: any, accepted: boolean) => {
   try {
     if (accepted) {
-        await ElMessageBox.confirm('Are you sure you want to execute this AI suggestion?', 'AI Confirmation', {
-            confirmButtonText: 'Yes, Execute',
-            cancelButtonText: 'Cancel',
-            type: 'warning'
-        });
+        if (suggestion.actionLink) {
+            await ElMessageBox.confirm(`Do you want AI to execute: ${suggestion.title}?`, 'AI Execution', {
+                confirmButtonText: 'Execute',
+                cancelButtonText: 'Cancel',
+                type: 'warning'
+            });
+            
+            // Execute Action
+            await apiClient.post('/ai/execute', { actionLink: suggestion.actionLink });
+            ElMessage.success('Action executed successfully');
+        } else {
+            ElMessage.success('Suggestion acknowledged');
+        }
     }
     
-    await aiStore.handleSuggestion(suggestion.id, accepted, accepted ? 'User approved' : 'User rejected');
-    ElMessage.success(accepted ? 'Suggestion accepted & executing...' : 'Suggestion rejected.');
+    // Mark as handled in backend
+    await aiStore.handleSuggestion(suggestion.id, accepted, accepted ? 'Executed' : 'Dismissed');
   } catch (e) {
       // Cancelled
   }

@@ -3,143 +3,130 @@
     <div class="header">
         <h2>Inventory Management</h2>
         <div class="actions">
-            <el-button type="primary" @click="showAddItemDialog = true">Add New Item</el-button>
+            <el-button type="warning" @click="fetchLowStock">Check Low Stock</el-button>
+            <el-button type="primary" @click="showAddModal = true">Add Item</el-button>
         </div>
     </div>
 
-    <div class="stats-cards">
+    <div class="stats-row">
         <el-card shadow="hover">
             <template #header>Total Items</template>
-            <h3>{{ inventory.length }}</h3>
+            <h3>{{ items.length }}</h3>
         </el-card>
         <el-card shadow="hover">
             <template #header>Low Stock Alerts</template>
             <h3 class="text-danger">{{ lowStockCount }}</h3>
         </el-card>
+        <el-card shadow="hover">
+            <template #header>Total Value</template>
+            <h3>¥{{ totalValue }}</h3>
+        </el-card>
     </div>
 
-    <el-card class="inventory-list">
-        <el-table :data="inventory" style="width: 100%" stripe>
+    <el-card>
+        <el-table :data="items" style="width: 100%" stripe>
             <el-table-column prop="sku" label="SKU" width="120" />
-            <el-table-column prop="name" label="Name" />
-            <el-table-column prop="category" label="Category" width="120">
+            <el-table-column prop="name" label="Item Name" />
+            <el-table-column prop="category" label="Category" />
+            <el-table-column prop="quantity" label="Stock" sortable>
                 <template #default="scope">
-                    <el-tag :type="getCategoryType(scope.row.category)">{{ scope.row.category }}</el-tag>
+                    <el-tag :type="getStockStatus(scope.row)">{{ scope.row.quantity }}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column prop="quantity" label="Quantity">
-                <template #default="scope">
-                    <span :class="{ 'text-danger': scope.row.quantity <= scope.row.threshold }">
-                        {{ scope.row.quantity }}
-                    </span>
-                </template>
-            </el-table-column>
+            <el-table-column prop="threshold" label="Threshold" width="100" />
             <el-table-column prop="unitPrice" label="Unit Price">
                 <template #default="scope">¥{{ scope.row.unitPrice }}</template>
             </el-table-column>
             <el-table-column label="Actions" width="200">
                 <template #default="scope">
-                    <el-button size="small" @click="handleStock(scope.row, 1)">+1</el-button>
-                    <el-button size="small" type="danger" @click="handleStock(scope.row, -1)">-1</el-button>
+                    <el-button size="small" type="primary" @click="handleRestock(scope.row)">Restock</el-button>
+                    <el-button size="small" @click="handleAdjust(scope.row)">Adjust</el-button>
                 </template>
             </el-table-column>
         </el-table>
     </el-card>
 
-    <!-- Add Item Dialog -->
-    <el-dialog v-model="showAddItemDialog" title="Add New Item">
-        <el-form :model="newItem" label-width="100px">
-            <el-form-item label="Name">
-                <el-input v-model="newItem.name" />
-            </el-form-item>
-            <el-form-item label="SKU">
-                <el-input v-model="newItem.sku" />
-            </el-form-item>
-            <el-form-item label="Category">
-                <el-select v-model="newItem.category">
-                    <el-option label="Retail" value="RETAIL" />
-                    <el-option label="Spare Part" value="SPARE_PART" />
-                    <el-option label="Asset" value="ASSET" />
-                </el-select>
-            </el-form-item>
-            <el-form-item label="Quantity">
-                <el-input-number v-model="newItem.quantity" :min="0" />
-            </el-form-item>
-            <el-form-item label="Threshold">
-                <el-input-number v-model="newItem.threshold" :min="0" />
-            </el-form-item>
-            <el-form-item label="Unit Price">
-                <el-input-number v-model="newItem.unitPrice" :min="0" :precision="2" />
-            </el-form-item>
-        </el-form>
+    <!-- Restock Modal -->
+    <el-dialog v-model="showRestockModal" title="Restock Item">
+        <p>Restocking: <strong>{{ selectedItem?.name }}</strong></p>
+        <el-input-number v-model="restockAmount" :min="1" />
         <template #footer>
-            <el-button @click="showAddItemDialog = false">Cancel</el-button>
-            <el-button type="primary" @click="submitNewItem">Create</el-button>
+            <el-button @click="showRestockModal = false">Cancel</el-button>
+            <el-button type="primary" :loading="loading" @click="submitRestock">Confirm Order</el-button>
         </template>
     </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import apiClient from '../../services/api';
 import { ElMessage } from 'element-plus';
 
-const inventory = ref<any[]>([]);
-const showAddItemDialog = ref(false);
+const items = ref<any[]>([]);
+const loading = ref(false);
+const showRestockModal = ref(false);
+const selectedItem = ref<any>(null);
+const restockAmount = ref(10);
+const showAddModal = ref(false);
 
-const newItem = ref({
-    store: { id: 1 }, // Mock Store ID
-    name: '',
-    sku: '',
-    category: 'RETAIL',
-    quantity: 0,
-    threshold: 5,
-    unitPrice: 0.0
-});
-
-const lowStockCount = computed(() => {
-    return inventory.value.filter(item => item.quantity <= item.threshold).length;
-});
+const lowStockCount = computed(() => items.value.filter(i => i.quantity <= i.threshold).length);
+const totalValue = computed(() => items.value.reduce((sum, i) => sum + (i.quantity * i.unitPrice), 0).toFixed(2));
 
 const fetchInventory = async () => {
     try {
         const res = await apiClient.get('/inventory', { params: { storeId: 1 } });
-        inventory.value = res.data;
+        items.value = res.data;
     } catch (error) {
         ElMessage.error('Failed to load inventory');
     }
 };
 
-const handleStock = async (item: any, change: number) => {
+const fetchLowStock = async () => {
+    try {
+        const res = await apiClient.get('/inventory/low-stock', { params: { storeId: 1 } });
+        const lowItems = res.data;
+        ElMessage.warning(`Found ${lowItems.length} low stock items!`);
+        // Highlight logic could go here
+    } catch (error) {
+        ElMessage.error('Failed to check low stock');
+    }
+};
+
+const getStockStatus = (item: any) => {
+    if (item.quantity <= 0) return 'danger';
+    if (item.quantity <= item.threshold) return 'warning';
+    return 'success';
+};
+
+const handleRestock = (item: any) => {
+    selectedItem.value = item;
+    restockAmount.value = item.threshold * 2; // Suggest 2x threshold
+    showRestockModal.value = true;
+};
+
+const handleAdjust = (item: any) => {
+    // Implement manual adjustment logic
+    ElMessage.info('Manual adjustment feature coming soon');
+};
+
+const submitRestock = async () => {
+    if (!selectedItem.value) return;
+    loading.value = true;
     try {
         await apiClient.post('/inventory/adjust', {
             storeId: 1,
-            sku: item.sku,
-            quantity: change
+            sku: selectedItem.value.sku,
+            quantity: restockAmount.value
         });
-        item.quantity += change;
-        ElMessage.success('Stock updated');
-    } catch (error) {
-        ElMessage.error('Failed to update stock');
-    }
-};
-
-const submitNewItem = async () => {
-    try {
-        await apiClient.post('/inventory/add', newItem.value);
-        ElMessage.success('Item added successfully');
-        showAddItemDialog.value = false;
+        ElMessage.success('Restock successful');
+        showRestockModal.value = false;
         fetchInventory();
     } catch (error) {
-        ElMessage.error('Failed to add item');
+        ElMessage.error('Restock failed');
+    } finally {
+        loading.value = false;
     }
-};
-
-const getCategoryType = (cat: string) => {
-    if (cat === 'RETAIL') return 'success';
-    if (cat === 'SPARE_PART') return 'warning';
-    return 'info';
 };
 
 onMounted(() => {
@@ -157,14 +144,11 @@ onMounted(() => {
     align-items: center;
     margin-bottom: 20px;
 }
-.stats-cards {
+.stats-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     margin-bottom: 20px;
 }
-.text-danger {
-    color: #f56c6c;
-    font-weight: bold;
-}
+.text-danger { color: #f56c6c; }
 </style>

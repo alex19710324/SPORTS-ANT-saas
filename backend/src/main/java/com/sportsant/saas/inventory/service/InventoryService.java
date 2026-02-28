@@ -49,6 +49,13 @@ public class InventoryService {
         return saved;
     }
 
+    public List<InventoryItem> getLowStockItems(Long storeId) {
+        List<InventoryItem> all = getStoreInventory(storeId);
+        return all.stream()
+                .filter(item -> item.getQuantity() <= item.getThreshold())
+                .toList();
+    }
+
     public InventoryItem addItem(InventoryItem item) {
         item.setLastUpdated(LocalDateTime.now());
         return inventoryRepository.save(item);

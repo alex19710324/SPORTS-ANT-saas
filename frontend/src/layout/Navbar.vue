@@ -8,6 +8,21 @@
     </div>
     
     <div class="navbar-right">
+      <el-dropdown trigger="click" @command="handleLangChange">
+        <span class="lang-dropdown">
+          <el-icon><collection /></el-icon>
+          <span class="lang-text">{{ currentLangLabel }}</span>
+          <el-icon class="el-icon--right"><arrow-down /></el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="zh-CN">中文 (简体)</el-dropdown-item>
+            <el-dropdown-item command="en-US">English</el-dropdown-item>
+            <el-dropdown-item command="ja-JP">日本語</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+
       <div class="message-badge" @click="showMessageCenter = true">
           <el-badge :value="unreadCount" :hidden="unreadCount === 0" class="item">
               <el-icon :size="20"><Message /></el-icon>
@@ -24,6 +39,7 @@
           <el-dropdown-menu>
             <el-dropdown-item command="profile">Profile</el-dropdown-item>
             <el-dropdown-item command="settings">Settings</el-dropdown-item>
+            <el-dropdown-item command="tour">Help Tour</el-dropdown-item>
             <el-dropdown-item divided command="logout">Logout</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -41,13 +57,16 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth.store';
-import { ArrowDown, Message } from '@element-plus/icons-vue';
+import { ArrowDown, Message, Collection } from '@element-plus/icons-vue';
 import { useWorkbenchStore } from '../stores/workbench.store';
 import MessageCenter from '../components/communication/MessageCenter.vue';
+import { useI18nStore } from '../stores/i18n.store';
+import TourService from '../services/tour.service';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const workbenchStore = useWorkbenchStore();
+const i18nStore = useI18nStore();
 
 const hasLogo = true; // Set to true if logo exists
 const userAvatar = ''; // URL to user avatar
@@ -61,6 +80,15 @@ const username = computed(() => {
 
 const userInitials = computed(() => {
   return username.value.substring(0, 2).toUpperCase();
+});
+
+const currentLangLabel = computed(() => {
+    switch (i18nStore.currentLang) {
+        case 'zh-CN': return '中文';
+        case 'en-US': return 'EN';
+        case 'ja-JP': return '日本語';
+        default: return i18nStore.currentLang;
+    }
 });
 
 onMounted(async () => {
@@ -77,12 +105,18 @@ const checkUnread = async () => {
     }
 };
 
+const handleLangChange = (lang: string) => {
+    i18nStore.setLanguage(lang);
+};
+
 const handleCommand = (command: string) => {
   if (command === 'logout') {
     authStore.logout();
     router.push('/login');
   } else if (command === 'profile') {
     // Navigate to profile
+  } else if (command === 'tour') {
+    TourService.startTour();
   }
 };
 </script>

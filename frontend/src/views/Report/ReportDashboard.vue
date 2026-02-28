@@ -1,105 +1,88 @@
 <template>
   <div class="report-dashboard">
     <div class="header">
-        <h2>Data Analytics & Reporting</h2>
-        <div class="filters">
-            <el-select v-model="period" placeholder="Select Period" @change="fetchData">
-                <el-option label="Weekly" value="WEEKLY" />
-                <el-option label="Monthly" value="MONTHLY" />
+        <h2>Report Center</h2>
+        <div class="actions">
+            <el-select v-model="reportType" placeholder="Select Report Type" style="width: 200px; margin-right: 10px">
+                <el-option label="Financial Report" value="FINANCE" />
+                <el-option label="Inventory Report" value="INVENTORY" />
+                <el-option label="Operations Report" value="OPERATIONS" />
             </el-select>
-            <el-button type="primary" @click="exportReport">Export PDF</el-button>
+            <el-date-picker
+                v-model="dateRange"
+                type="daterange"
+                range-separator="To"
+                start-placeholder="Start date"
+                end-placeholder="End date"
+                style="margin-right: 10px"
+            />
+            <el-button type="primary" :loading="loading" @click="generateReport">Generate & Export</el-button>
         </div>
     </div>
 
-    <div class="charts-grid">
-        <el-card shadow="hover" class="chart-card">
-            <template #header>Revenue Trend</template>
-            <div class="chart-container">
-                <Line v-if="revenueData" :data="revenueData" :options="chartOptions" />
-            </div>
-        </el-card>
-
-        <el-card shadow="hover" class="chart-card">
-            <template #header>Visitor Peak Hours</template>
-            <div class="chart-container">
-                <Bar v-if="visitorData" :data="visitorData" :options="chartOptions" />
-            </div>
+    <div class="preview-section" v-if="previewData.length > 0">
+        <el-card>
+            <template #header>Preview: {{ reportType }} Report</template>
+            <el-table :data="previewData" style="width: 100%" height="500" border>
+                <el-table-column v-for="col in columns" :key="col" :prop="col" :label="formatHeader(col)" />
+            </el-table>
         </el-card>
     </div>
+    
+    <el-empty v-else description="Select criteria and click Generate to view report" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
-import { Line, Bar } from 'vue-chartjs';
+import { ref } from 'vue';
 import apiClient from '../../services/api';
 import { ElMessage } from 'element-plus';
+import * as XLSX from 'xlsx';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+const reportType = ref('FINANCE');
+const dateRange = ref([]);
+const loading = ref(false);
+const previewData = ref<any[]>([]);
+const columns = ref<string[]>([]);
 
-const period = ref('WEEKLY');
-const revenueData = ref<any>(null);
-const visitorData = ref<any>(null);
-
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false
-};
-
-const fetchData = async () => {
+const generateReport = async () => {
+    loading.value = true;
     try {
-        const revRes = await apiClient.get('/reports/revenue', { params: { period: period.value } });
-        revenueData.value = {
-            labels: revRes.data.labels,
-            datasets: [{
-                label: 'Revenue (CNY)',
-                backgroundColor: '#f87979',
-                borderColor: '#f87979',
-                data: revRes.data.data
-            }]
-        };
+        let endpoint = '';
+        if (reportType.value === 'FINANCE') endpoint = '/finance/transactions';
+        else if (reportType.value === 'INVENTORY') endpoint = '/inventory';
+        else endpoint = '/data/store-leaderboard'; // Mock for Operations
 
-        const visRes = await apiClient.get('/reports/visitors');
-        visitorData.value = {
-            labels: visRes.data.labels,
-            datasets: [{
-                label: 'Visitors',
-                backgroundColor: '#409eff',
-                data: visRes.data.data
-            }]
-        };
+        const res = await apiClient.get(endpoint, { 
+            params: { storeId: 1, limit: 1000 } // Fetch ample data for report
+        });
+        
+        previewData.value = Array.isArray(res.data) ? res.data : [res.data];
+        
+        if (previewData.value.length > 0) {
+            columns.value = Object.keys(previewData.value[0]);
+            exportToExcel(previewData.value, `${reportType.value}_Report_${new Date().toISOString().slice(0,10)}`);
+        } else {
+            ElMessage.info('No data found for the selected criteria');
+        }
     } catch (error) {
-        ElMessage.error('Failed to load report data');
+        ElMessage.error('Failed to generate report');
+    } finally {
+        loading.value = false;
     }
 };
 
-const exportReport = () => {
-    ElMessage.success('Report exported to PDF (Mock)');
+const exportToExcel = (data: any[], filename: string) => {
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Report");
+    XLSX.writeFile(wb, `${filename}.xlsx`);
+    ElMessage.success('Report downloaded successfully');
 };
 
-onMounted(() => {
-    fetchData();
-});
+const formatHeader = (key: string) => {
+    return key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+};
 </script>
 
 <style scoped>
@@ -111,17 +94,5 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-}
-.filters {
-    display: flex;
-    gap: 10px;
-}
-.charts-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-.chart-container {
-    height: 300px;
 }
 </style>

@@ -23,6 +23,12 @@ public class InventoryController {
         return inventoryService.getStoreInventory(storeId);
     }
 
+    @GetMapping("/low-stock")
+    @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('ADMIN')")
+    public List<InventoryItem> getLowStockItems(@RequestParam Long storeId) {
+        return inventoryService.getLowStockItems(storeId);
+    }
+
     @PostMapping("/add")
     @PreAuthorize("hasRole('STORE_MANAGER') or hasRole('ADMIN')")
     public InventoryItem addItem(@RequestBody InventoryItem item) {
