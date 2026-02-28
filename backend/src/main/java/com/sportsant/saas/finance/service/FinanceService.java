@@ -3,11 +3,14 @@ package com.sportsant.saas.finance.service;
 import com.sportsant.saas.ai.service.AiAware;
 import com.sportsant.saas.finance.engine.AccountingEngine;
 import com.sportsant.saas.finance.entity.Voucher;
+import com.sportsant.saas.finance.entity.TransactionRecord;
+import com.sportsant.saas.finance.repository.TransactionRepository;
 import com.sportsant.saas.finance.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +22,33 @@ public class FinanceService implements AiAware {
     private VoucherRepository voucherRepository;
 
     @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
     private AccountingEngine accountingEngine;
+
+    public void recordPayment(BigDecimal amount, String memberCode, String desc) {
+        TransactionRecord record = new TransactionRecord();
+        record.setWalletId(1L); // Store Wallet ID
+        record.setType("PAYMENT");
+        record.setAmount(amount);
+        record.setBalanceAfter(BigDecimal.ZERO); // In real system, fetch wallet balance + amount
+        record.setReferenceId(memberCode);
+        record.setDescription(desc);
+        transactionRepository.save(record);
+    }
+    
+    public BigDecimal getTodayRevenue() {
+        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+        BigDecimal revenue = transactionRepository.sumRevenueSince(startOfDay);
+        return revenue != null ? revenue : BigDecimal.ZERO;
+    }
+
+    public Long getTodayVisitors() {
+        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+        Long visitors = transactionRepository.countVisitorsSince(startOfDay);
+        return visitors != null ? visitors : 0L;
+    }
 
     public Voucher createVoucherFromEvent(String sourceType, Long sourceId, BigDecimal amount) {
         Voucher voucher = accountingEngine.generateVoucher(sourceType, sourceId, amount);

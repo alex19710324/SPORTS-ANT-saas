@@ -3,6 +3,7 @@ package com.sportsant.saas.workbench.service;
 import com.sportsant.saas.entity.ERole;
 import com.sportsant.saas.entity.Role;
 import com.sportsant.saas.entity.User;
+import com.sportsant.saas.finance.service.FinanceService;
 import com.sportsant.saas.membership.entity.Member;
 import com.sportsant.saas.membership.service.MembershipService;
 import com.sportsant.saas.repository.RoleRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,6 +24,9 @@ public class FrontDeskService {
 
     @Autowired
     private MembershipService membershipService;
+
+    @Autowired
+    private FinanceService financeService;
 
     @Autowired
     private UserRepository userRepository;
@@ -36,7 +41,7 @@ public class FrontDeskService {
         // Mock data
         Map<String, Object> data = new HashMap<>();
         data.put("todayTarget", 5000.00);
-        data.put("currentSales", 1250.00);
+        data.put("currentSales", financeService.getTodayRevenue()); // Real data
         data.put("pendingCheckins", 3);
         data.put("pendingVerifications", 2);
         return data;
@@ -75,8 +80,13 @@ public class FrontDeskService {
         return membershipService.createMember(user.getId(), name, phoneNumber);
     }
 
+    @Transactional
     public Member processSale(String memberCode, Double amount) {
         Member member = membershipService.findMemberByCodeOrPhone(memberCode);
+        
+        // Record Financial Transaction
+        financeService.recordPayment(BigDecimal.valueOf(amount), memberCode, "Sale to " + member.getName());
+        
         return membershipService.simulatePurchase(member.getUserId(), amount.intValue());
     }
 }
