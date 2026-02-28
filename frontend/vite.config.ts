@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
+      '@': resolve(__dirname, 'src'),
+      '@sportsant/utils': resolve(__dirname, '../packages/utils/src/index.ts')
     }
   },
   build: {

@@ -3,7 +3,7 @@ import { API_BASE_URL, TIMEOUT } from './constants';
 import { AppError } from './errors';
 
 // Create Axios Instance
-const apiClient: AxiosInstance = axios.create({
+export const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: TIMEOUT,
   headers: {

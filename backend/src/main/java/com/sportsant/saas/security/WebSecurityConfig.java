@@ -58,6 +58,10 @@ public class WebSecurityConfig {
               .requestMatchers("/api/test/**").permitAll()
               .requestMatchers("/api/language/**").permitAll() // Allow language APIs
               .requestMatchers("/").permitAll() // Allow root path for welcome page
+              // Basic Permission Checks (Example)
+              .requestMatchers("/api/hq/**").hasAnyRole("ADMIN", "HQ_MANAGER")
+              .requestMatchers("/api/store/**").hasAnyRole("ADMIN", "STORE_MANAGER")
+              .requestMatchers("/api/finance/**").hasAnyRole("ADMIN", "FINANCE")
               .anyRequest().authenticated()
         );
     

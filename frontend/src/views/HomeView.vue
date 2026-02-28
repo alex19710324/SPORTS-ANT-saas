@@ -2,7 +2,6 @@
   <div class="home-container">
     <div class="header">
       <h1>{{ $t('home.welcome') }}</h1>
-      <el-button type="danger" @click="handleLogout">{{ $t('home.logout') }}</el-button>
     </div>
 
     <!-- Navigation Modules -->
@@ -71,11 +70,6 @@ const modules = [
   { title: 'home.modules.finance.title', desc: 'home.modules.finance.desc', path: '/finance', icon: Money, color: '#E6A23C' },
   { title: 'home.modules.communication.title', desc: 'home.modules.communication.desc', path: '/communication', icon: ChatDotRound, color: '#409EFF' },
 ];
-
-const handleLogout = () => {
-  authStore.logout();
-  router.push('/login');
-};
 </script>
 
 <style scoped>

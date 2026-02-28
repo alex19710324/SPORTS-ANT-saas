@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
+import MainLayout from '../layout/MainLayout.vue';
 import ManagerDashboard from '../views/Workbench/Manager/ManagerDashboard.vue';
 import FrontDeskDashboard from '../views/Workbench/FrontDesk/FrontDeskDashboard.vue';
 import TechnicianDashboard from '../views/Workbench/Technician/TechnicianDashboard.vue';
@@ -19,69 +20,144 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: { layout: MainLayout },
     },
     {
       path: '/login',
       name: 'login',
       component: LoginView,
+      meta: { layout: 'blank' }, // No layout for login
     },
     // HQ Routes
     {
       path: '/hq',
-      name: 'hq-dashboard',
-      component: HQDashboard,
+      component: MainLayout,
+      children: [
+        {
+          path: '',
+          redirect: 'dashboard',
+        },
+        {
+          path: 'dashboard',
+          name: 'hq-dashboard',
+          component: HQDashboard,
+        },
+        // Add more HQ sub-routes
+      ],
     },
     // Data Routes
     {
       path: '/data',
-      name: 'data-dashboard',
-      component: DataDashboard,
+      component: MainLayout,
+      children: [
+        {
+          path: '',
+          redirect: 'dashboard',
+        },
+        {
+          path: 'dashboard',
+          name: 'data-dashboard',
+          component: DataDashboard,
+        },
+      ],
     },
     // Marketing Routes
     {
       path: '/marketing',
-      name: 'marketing-dashboard',
-      component: MarketingDashboard,
+      component: MainLayout,
+      children: [
+        {
+          path: '',
+          redirect: 'dashboard',
+        },
+        {
+          path: 'dashboard',
+          name: 'marketing-dashboard',
+          component: MarketingDashboard,
+        },
+      ],
     },
     // Finance Routes
     {
       path: '/finance',
-      name: 'finance-dashboard',
-      component: FinanceDashboard,
+      component: MainLayout,
+      children: [
+        {
+          path: '',
+          redirect: 'dashboard',
+        },
+        {
+          path: 'dashboard',
+          name: 'finance-dashboard',
+          component: FinanceDashboard,
+        },
+      ],
     },
     // I18n Routes
     {
       path: '/i18n',
-      name: 'i18n-dashboard',
-      component: I18nDashboard,
+      component: MainLayout,
+      children: [
+        {
+          path: '',
+          redirect: 'dashboard',
+        },
+        {
+          path: 'dashboard',
+          name: 'i18n-dashboard',
+          component: I18nDashboard,
+        },
+      ],
     },
     // Communication Routes
     {
       path: '/communication',
-      name: 'communication-dashboard',
-      component: CommunicationDashboard,
+      component: MainLayout,
+      children: [
+        {
+          path: '',
+          redirect: 'dashboard',
+        },
+        {
+          path: 'dashboard',
+          name: 'communication-dashboard',
+          component: CommunicationDashboard,
+        },
+      ],
     },
     // Workbench Routes
     {
-      path: '/workbench/manager',
-      name: 'manager-workbench',
-      component: ManagerDashboard,
+      path: '/workbench',
+      component: MainLayout,
+      children: [
+        {
+          path: 'manager',
+          name: 'manager-workbench',
+          component: ManagerDashboard,
+        },
+        {
+          path: 'frontdesk',
+          name: 'frontdesk-workbench',
+          component: FrontDeskDashboard,
+        },
+        {
+          path: 'technician',
+          name: 'technician-workbench',
+          component: TechnicianDashboard,
+        },
+        {
+          path: 'security',
+          name: 'security-workbench',
+          component: SecurityDashboard,
+        },
+      ],
     },
+    // 404 Route
     {
-      path: '/workbench/frontdesk',
-      name: 'frontdesk-workbench',
-      component: FrontDeskDashboard,
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFound.vue'),
     },
-    {
-      path: '/workbench/technician',
-      name: 'technician-workbench',
-      component: TechnicianDashboard,
-    },
-    {
-      path: '/workbench/security',
-      name: 'security-workbench',
-      component: SecurityDashboard,
-    }
   ],
 });
 

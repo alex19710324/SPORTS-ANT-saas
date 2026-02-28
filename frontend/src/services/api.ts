@@ -1,14 +1,8 @@
-import axios from 'axios';
+import { apiClient, AuthError } from '@sportsant/utils';
 
-const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
+// Re-configure interceptors to match frontend specific logic (like redirection)
 apiClient.interceptors.request.use(
-  (config) => {
+  (config: any) => {
     const userStr = localStorage.getItem('user');
     if (userStr) {
         const user = JSON.parse(userStr);
@@ -17,19 +11,13 @@ apiClient.interceptors.request.use(
         }
     }
     return config;
-  },
-  (error) => {
-    return Promise.reject(error);
   }
 );
 
 apiClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    // Check if the error is a 401 Unauthorized and not already on the login page
-    if (error.response && error.response.status === 401 && window.location.pathname !== '/login') {
+  (response: any) => response,
+  (error: any) => {
+    if (error.status === 401 && window.location.pathname !== '/login') {
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
