@@ -79,6 +79,7 @@ const handleLogin = async () => {
       try {
         await authStore.login(loginForm);
         ElMessage.success('Login successful');
+        loading.value = false;
         router.push('/');
       } catch (error: any) {
         message.value =
@@ -92,8 +93,9 @@ const handleLogin = async () => {
 };
 
 const resetForm = () => {
-  if (!formRef.value) return;
-  formRef.value.resetFields();
+  if (formRef.value) {
+    formRef.value.resetFields();
+  }
 };
 
 const switchLang = async (lang: string) => {

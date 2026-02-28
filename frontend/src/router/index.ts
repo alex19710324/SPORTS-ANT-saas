@@ -26,7 +26,7 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
-      meta: { layout: 'blank' }, // No layout for login
+      // No layout meta needed, defaults to div in App.vue
     },
     // HQ Routes
     {
