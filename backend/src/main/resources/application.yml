@@ -22,10 +22,26 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    # database-platform: org.hibernate.dialect.MySQL8Dialect # For MySQL
     hibernate:
-      ddl-auto: update # Automatically update schema
+      ddl-auto: update
     show-sql: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:sports_ant_db}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
 
 logging:
   level:
@@ -47,4 +63,14 @@ management:
     health:
       show-details: always
     metrics:
-      enabled: true
+      access: read_only
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    tryItOutEnabled: true
+    operationsSorter: method
+    tagsSorter: alpha

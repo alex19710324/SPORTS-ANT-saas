@@ -1,6 +1,6 @@
 package com.sportsant.saas.workbench.controller;
 
-import com.sportsant.saas.device.entity.WorkOrder;
+import com.sportsant.saas.device.entity.DeviceWorkOrder;
 import com.sportsant.saas.workbench.service.TechnicianService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +27,7 @@ public class TechnicianController {
     @PutMapping("/work-orders/{id}/status")
     @PreAuthorize("hasRole('TECHNICIAN') or hasRole('ADMIN')")
     @SuppressWarnings("unchecked")
-    public WorkOrder updateWorkOrderStatus(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
+    public DeviceWorkOrder updateWorkOrderStatus(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
         String newStatus = (String) payload.get("status");
         Long mockTechId = 101L; // In real app, get from SecurityContext
         List<Map<String, Object>> partsUsed = (List<Map<String, Object>>) payload.get("partsUsed");

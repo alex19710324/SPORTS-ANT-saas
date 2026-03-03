@@ -1,9 +1,11 @@
 package com.sportsant.saas.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "公共接口", description = "首页欢迎信息")
 public class HomeController {
 
     @GetMapping("/")

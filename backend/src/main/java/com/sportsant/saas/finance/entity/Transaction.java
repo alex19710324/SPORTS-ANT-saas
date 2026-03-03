@@ -24,9 +24,20 @@ public class Transaction {
 
     private LocalDateTime transactionDate;
 
-    private String source; // ORDER, BOOKING, SYSTEM, MANUAL
+    private String source; // ORDER, BOOKING, SYSTEM, MANUAL, OPEN_PLATFORM
 
-    private String referenceId; // e.g. Order ID
+    private String referenceId; // e.g. Order ID, Merchant AppKey
+
+    private Long tenantId; // Associated Tenant ID for SaaS/Open Platform transactions
+
+    private String currency; // CNY, USD, EUR
+    private Double exchangeRate; // To Base Currency (CNY)
+
+    @PrePersist
+    protected void onCreate() {
+        if (currency == null) currency = "CNY";
+        if (exchangeRate == null) exchangeRate = 1.0;
+    }
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -45,4 +56,10 @@ public class Transaction {
     public void setSource(String source) { this.source = source; }
     public String getReferenceId() { return referenceId; }
     public void setReferenceId(String referenceId) { this.referenceId = referenceId; }
+    public Long getTenantId() { return tenantId; }
+    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
+    public String getCurrency() { return currency; }
+    public void setCurrency(String currency) { this.currency = currency; }
+    public Double getExchangeRate() { return exchangeRate; }
+    public void setExchangeRate(Double exchangeRate) { this.exchangeRate = exchangeRate; }
 }

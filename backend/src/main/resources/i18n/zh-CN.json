@@ -1,0 +1,658 @@
+{
+  "membership": {
+    "title": "会员卡",
+    "level": "等级",
+    "growth": "当前成长值",
+    "nextLevel": "下一级",
+    "benefits": "会员权益",
+    "noBenefits": "暂无权益",
+    "aiInsights": "AI 洞察",
+    "checkin": "每日签到",
+    "simulate": "模拟消费",
+    "checkinSuccess": "签到成功！成长值 +10",
+    "simulateSuccess": "模拟消费成功！成长值 +{growth}"
+  },
+  "login": {
+    "title": "SPORTS ANT SaaS 登录",
+    "username": "用户名",
+    "password": "密码",
+    "submit": "登录",
+    "reset": "重置",
+    "placeholder": {
+      "username": "请输入用户名",
+      "password": "请输入密码"
+    },
+    "msg": {
+      "username_required": "请输入用户名",
+      "password_required": "请输入密码",
+      "success": "登录成功"
+    }
+  },
+  "sidebar": {
+    "groups": {
+      "workspace": "核心工作台",
+      "operations": "业务运营",
+      "resources": "资源管理",
+      "analytics": "数据决策",
+      "personal": "个人中心",
+      "system": "系统设置"
+    }
+  },
+  "home": {
+    "welcome": "欢迎来到 SPORTS ANT SaaS",
+    "logout": "退出登录",
+    "applications": "应用中心",
+    "header": {
+      "home": "首页",
+      "profile": "个人中心",
+      "settings": "系统设置",
+      "logout": "退出登录"
+    },
+    "modules": {
+      "hq": {
+        "title": "总部中心",
+        "desc": "加盟与全球管理",
+        "dashboard": "总部仪表盘"
+      },
+      "manager": {
+        "title": "店长工作台",
+        "desc": "日常运营与员工管理"
+      },
+      "frontdesk": {
+        "title": "前台收银",
+        "desc": "签到与POS"
+      },
+      "technician": {
+        "title": "技术员",
+        "desc": "设备监控与维修"
+      },
+      "data": {
+        "title": "数据中心",
+        "desc": "分析与报表"
+      },
+      "marketing": {
+        "title": "营销中心",
+        "desc": "活动与会员",
+        "dashboard": "仪表盘",
+        "campaigns": "营销活动"
+      },
+      "finance": {
+        "title": "财务中心",
+        "desc": "发票与薪资"
+      },
+      "communication": {
+        "title": "通讯中心",
+        "desc": "消息与通知",
+        "dashboard": "仪表盘",
+        "notifications": "我的通知",
+        "broadcast": {
+          "title": "群发消息",
+          "tag": "营销",
+          "form": {
+            "title": "标题",
+            "titlePlaceholder": "例如：夏季大促！",
+            "message": "内容",
+            "messagePlaceholder": "在此输入消息内容...",
+            "send": "发送给所有会员",
+            "sending": "发送中..."
+          },
+          "history": {
+            "title": "最近群发记录",
+            "colTitle": "标题",
+            "colMessage": "内容",
+            "colType": "类型",
+            "colTime": "时间"
+          },
+          "success": "群发发送成功！",
+          "fail": "发送失败",
+          "validation": "请填写标题和内容"
+        },
+        "notificationList": {
+          "markAllRead": "全部标记为已读",
+          "empty": "暂无通知",
+          "loadFail": "加载通知失败"
+        },
+        "messageCenter": {
+          "empty": "暂无新通知",
+          "viewDetails": "查看详情",
+          "markRead": "标记已读",
+          "fetchFail": "获取通知失败",
+          "markReadFail": "标记已读失败"
+        },
+        "types": {
+          "MARKETING": "营销",
+          "SYSTEM": "系统",
+          "ALERT": "警告",
+          "INFO": "通知"
+        }
+      },
+      "member": {
+        "portal": {
+          "title": "我的仪表盘",
+          "balance": "余额",
+          "topUp": "充值",
+          "schedule": "我的课程表",
+          "noClass": "暂无课程",
+          "rewards": "积分商城",
+          "points": "积分",
+          "redeem": "兑换",
+          "redeemSuccess": "兑换成功！",
+          "redeemFail": "兑换失败",
+          "history": "交易记录",
+          "date": "日期",
+          "type": "类型",
+          "amount": "金额",
+          "topUpTitle": "钱包充值",
+          "cancel": "取消",
+          "pay": "微信支付",
+          "topUpSuccess": "充值成功！",
+          "confirmed": "已确认"
+        }
+      },
+      "points": {
+        "dashboard": {
+          "title": "我的积分",
+          "balance": "当前积分",
+          "history": "积分明细",
+          "time": "时间",
+          "type": "类型",
+          "reason": "来源",
+          "points": "变动",
+          "rules": "赚取规则",
+          "earnFixed": "每次可赚取 {points} 积分",
+          "earnRatio": "每消费1元可赚取 {ratio} 积分",
+          "dailyLimit": "每日上限: {limit}",
+          "types": {
+            "EARN": "获取",
+            "SPEND": "支出",
+            "TOP_UP": "充值",
+            "PAYMENT_SENT": "支付"
+          }
+        }
+      },
+      "security": {
+        "title": "安监机修",
+        "desc": "安全巡检与维护"
+      },
+      "bi": {
+        "title": "BI 仪表盘",
+        "desc": "商业智能"
+      },
+      "crm": {
+        "title": "CRM 与线索",
+        "desc": "客户关系管理"
+      },
+      "cs": {
+        "title": "客服工作台",
+        "desc": "客户服务"
+      },
+      "mall": {
+        "title": "积分商城",
+        "desc": "兑换中心"
+      },
+      "risk": {
+        "title": "风控中心",
+        "desc": "风险管理"
+      },
+      "social": {
+        "title": "社媒矩阵",
+        "desc": "社交媒体运营"
+      },
+      "system": {
+        "title": "系统工具",
+        "desc": "系统管理",
+        "audit": "审计日志",
+        "notification": "通知管理",
+        "scheduler": "任务调度",
+        "lcms": "多语言(LCMS)",
+        "export": "数据导出中心"
+      },
+      "workflow": {
+        "title": "工作流",
+        "desc": "任务管理"
+      },
+      "finance_workbench": {
+        "title": "财务工作台",
+        "desc": "日常财务"
+      },
+      "applications": {
+        "title": "应用首页"
+      },
+      "member_portal": {
+        "title": "我的门户"
+      },
+      "booking": {
+        "title": "场地预订"
+      },
+      "inventory": {
+        "title": "库存管理"
+      },
+      "iot": {
+        "title": "智能场馆"
+      },
+      "hr": {
+        "title": "人事与排班",
+        "dashboard": "人事仪表盘",
+        "schedule": "智能排班"
+      },
+      "report": {
+        "title": "报表中心"
+      },
+      "monitor": {
+        "title": "系统监控"
+      }
+    }
+  },
+  "saas_admin": {
+    "title": "SaaS管理",
+    "desc": "租户管理",
+    "dashboard": "超级管理员仪表盘",
+    "onboard": "新增租户",
+    "total_tenants": "总租户数",
+    "active_subs": "活跃订阅",
+    "mrr": "月度经常性收入(MRR)",
+    "table": {
+      "id": "ID",
+      "name": "商户名称",
+      "domain": "域名",
+      "plan": "套餐",
+      "status": "状态",
+      "actions": "操作",
+      "suspend": "停用",
+      "activate": "激活"
+    },
+    "modal": {
+      "title": "新增租户",
+      "name": "商户名称",
+      "domain": "域名",
+      "plan": "订阅套餐",
+      "cancel": "取消",
+      "create": "创建"
+    },
+    "tabs": {
+      "tenants": "租户列表",
+      "financials": "财务对账"
+    },
+    "plans": {
+      "free": "免费试用",
+      "pro": "专业版 (¥999/月)",
+      "enterprise": "企业版 (¥2999/月)"
+    },
+    "config": {
+      "title": "商户配置",
+      "appKey": "AppKey",
+      "rate": "费率 (%)",
+      "cycle": "结算周期 (天)",
+      "permissions": "API权限"
+    },
+    "sandbox": {
+      "title": "API 沙箱",
+      "target_appkey": "目标 AppKey",
+      "select_tenant": "选择租户",
+      "endpoint": "接口地址",
+      "payload": "请求体",
+      "send": "发送请求",
+      "response": "响应结果"
+    },
+    "financials": {
+      "empty": "商户财务流水将显示在此处（闭环数据）"
+    },
+    "permissions": {
+      "mp01": "商户入驻",
+      "mp03": "积分互通",
+      "mp04": "券互通"
+    },
+    "msg": {
+      "load_fail": "加载租户失败",
+      "create_success": "创建租户成功",
+      "create_fail": "创建租户失败",
+      "appkey_success": "AppKey 生成成功",
+      "appkey_fail": "生成 AppKey 失败",
+      "config_saved": "配置已保存",
+      "config_fail": "保存配置失败",
+      "status_update": "租户已{status}",
+      "status_fail": "更新状态失败",
+      "select_appkey": "请选择一个 AppKey"
+    }
+  },
+  "iot": {
+    "title": "数字孪生：场馆状态",
+    "occupied": "占用",
+    "empty": "空闲",
+    "lightOn": "开灯",
+    "people": "人",
+    "override": "手动控制"
+  },
+  "inventory": {
+    "title": "库存管理",
+    "checkLowStock": "检查低库存",
+    "addItem": "添加商品",
+    "totalItems": "商品总数",
+    "lowStockAlerts": "低库存预警",
+    "totalValue": "总货值",
+    "sku": "SKU",
+    "itemName": "商品名称",
+    "category": "分类",
+    "stock": "库存",
+    "reorderPoint": "补货点",
+    "sellPrice": "售价",
+    "restock": "补货",
+    "adjust": "调整",
+    "foundLowStock": "发现 {count} 个低库存商品！",
+    "healthy": "库存状态良好",
+    "restockTitle": "商品补货",
+    "confirmStockIn": "确认入库"
+  },
+  "export": {
+    "title": "数据导出中心",
+    "newTask": "新建导出任务",
+    "taskId": "任务ID",
+    "taskName": "任务名称",
+    "dataType": "数据类型",
+    "status": "状态",
+    "createdAt": "创建时间",
+    "action": "操作",
+    "download": "下载",
+    "types": {
+      "member": "会员数据",
+      "order": "订单数据",
+      "finance": "财务数据"
+    },
+    "dialog": {
+      "title": "创建导出任务",
+      "name": "任务名称",
+      "type": "数据类型",
+      "cancel": "取消",
+      "confirm": "导出"
+    }
+  },
+  "booking": {
+    "title": "场地预订",
+    "myBookings": "我的预订",
+    "bookNow": "立即预订",
+    "price": "价格",
+    "resource": "资源",
+    "time": "时间",
+    "qr": "通行二维码",
+    "status": "状态",
+    "success": "预订成功",
+    "failed": "预订失败"
+  },
+  "technician": {
+    "title": "技术员工作台",
+    "workOrders": "待处理工单",
+    "faultyDevices": "故障设备",
+    "offlineDevices": "离线设备",
+    "inspection": "巡检进度",
+    "scanQr": "扫描设备二维码",
+    "reportFault": "上报故障",
+    "preventive": "预防性维护",
+    "maintenance": "预防性维护",
+    "pending": "待处理",
+    "in_progress": "进行中",
+    "completed": "已完成",
+    "device": "设备",
+    "issue": "问题描述",
+    "priority": "优先级",
+    "high": "高",
+    "medium": "中",
+    "low": "低",
+    "actions": "操作",
+    "start": "开始维修",
+    "complete": "完成维修",
+    "done": "已完成",
+    "notes": "维修记录",
+    "cost": "人工/零件成本",
+    "parts": "备件消耗",
+    "submit": "提交工单"
+  },
+  "manager": {
+    "title": "店长工作台",
+    "revenue": "今日营收",
+    "visitors": "今日客流",
+    "redemptions": "核销数",
+    "blindbox": "盲盒销售",
+    "koc": "KOC贡献",
+    "deviceRate": "设备在线率",
+    "alerts": "预警数",
+    "approvals": "待办审批",
+    "cost": "成本构成",
+    "aiAssistant": "AI 智能助手",
+    "emptyState": "暂无建议，系统运行良好。",
+    "execute": "执行操作",
+    "viewReport": "查看报表",
+    "type": "类型",
+    "applicant": "申请人",
+    "summary": "摘要",
+    "action": "操作",
+    "approve": "批准",
+    "approveSuccess": "审批通过",
+    "approveFail": "审批失败"
+  },
+  "frontdesk": {
+    "title": "前台收银",
+    "target": "今日目标",
+    "sales": "当前销售",
+    "checkins": "待签到",
+    "verifications": "待核销",
+    "quickCheckin": "快速签到",
+    "newSale": "新销售",
+    "memberReg": "会员注册",
+    "pos": "收银台",
+    "checkin": "快速签到",
+    "scan": "扫描手环/会员卡",
+    "cart": "当前购物车",
+    "total": "总计",
+    "checkout": "结账",
+    "empty": "购物车为空",
+    "search": "搜索商品...",
+    "add": "加入",
+    "ticket": "入场券"
+  },
+  "security": {
+    "title": "安监机修工作台",
+    "inspections": "今日巡检",
+    "incidents": "突发事件",
+    "equipment": "消防设施",
+    "reportIncident": "上报事件",
+    "checkEquipment": "检查设施",
+    "activeIncidents": "活跃事件",
+    "reportTitle": "上报安全事件",
+    "fieldTitle": "标题",
+    "type": "类型",
+    "severity": "严重程度",
+    "location": "位置",
+    "status": "状态",
+    "description": "描述",
+    "actions": "操作",
+    "resolve": "解决",
+    "report": "上报",
+    "types": {
+      "injury": "人员受伤",
+      "equipment_failure": "设备故障",
+      "security": "安保问题",
+      "other": "其他"
+    },
+    "severities": {
+      "low": "低",
+      "medium": "中",
+      "high": "高",
+      "critical": "严重"
+    },
+    "resolvePrompt": "解决说明:",
+    "resolveTitle": "解决事件",
+    "resolveSuccess": "事件已解决",
+    "reportSuccess": "上报成功"
+  },
+  "crm": {
+    "title": "销售漏斗",
+    "addLead": "新增线索",
+    "columns": {
+      "new": "新线索",
+      "contacted": "已联系",
+      "qualified": "有潜力",
+      "converted": "已转化"
+    },
+    "name": "姓名",
+    "phone": "电话",
+    "source": "来源",
+    "details": "详情",
+    "convert": "转化",
+    "confirmConvert": "确认将 {name} 转化为正式会员？",
+    "convertSuccess": "转化成功",
+    "addSuccess": "添加成功",
+    "dialog": {
+      "title": "新增线索",
+      "cancel": "取消",
+      "add": "添加"
+    }
+  },
+  "hq": {
+    "title": "总部管控中心",
+    "financialHealth": "本月财务健康度",
+    "healthy": "健康",
+    "revenue": "营收",
+    "cogs": "成本(COGS)",
+    "payroll": "薪资",
+    "marketing": "营销支出",
+    "repairs": "维修费用",
+    "loss": "库存损耗",
+    "tax": "预估税费",
+    "liability": "预收负债",
+    "netProfit": "净利润",
+    "aiBrain": "AI 战略大脑",
+    "actionRequired": "需关注",
+    "allGood": "运行良好",
+    "execute": "执行策略",
+    "optimal": "系统运行在最佳参数范围内",
+    "opsHealth": "运营健康度",
+    "pendingTasks": "待处理任务",
+    "activeCampaigns": "活跃营销活动",
+    "liveFeed": "实时动态",
+    "deptStatus": "部门状态",
+    "inventory": "库存",
+    "lowStock": "项库存不足",
+    "finance": "财务",
+    "balanced": "账目平衡",
+    "running": "运行中"
+  },
+  "finance": {
+    "title": "财务与会计",
+    "forecast": "AI 现金流预测",
+    "confidence": "置信度",
+    "calculator": "快速税务计算器",
+    "amount": "金额",
+    "country": "国家",
+    "calc": "计算",
+    "taxRate": "税率",
+    "taxAmount": "税额",
+    "vouchers": "会计凭证",
+    "voucherNo": "凭证号",
+    "type": "类型",
+    "debit": "借方",
+    "credit": "贷方",
+    "postedAt": "入账时间"
+  },
+  "marketing": {
+    "title": "营销与增长",
+    "create": "创建活动",
+    "active": "活跃活动",
+    "reach": "总触达",
+    "conversion": "转化率",
+    "list": "活动列表",
+    "name": "名称",
+    "target": "目标人群",
+    "status": "状态",
+    "performance": "表现",
+    "sent": "已发送",
+    "converted": "转化",
+    "actions": "操作",
+    "launch": "发布",
+    "view": "查看",
+    "launchSuccess": "活动已发布！",
+    "launchFail": "发布失败",
+    "viewMsg": "活动 {name} 详情即将上线"
+  },
+  "data_analytics": {
+    "title": "数据智能",
+    "revenue": "总营收",
+    "stores": "活跃门店",
+    "members": "总会员数",
+    "devices": "连接设备",
+    "growth": "新增会员 (近7天)",
+    "composition": "营收构成",
+    "peak": "高峰时段 (占用率)"
+  },
+  "system": {
+    "title": "系统管理",
+    "audit": {
+      "title": "审计日志",
+      "user": "操作用户",
+      "action": "动作",
+      "resource": "资源",
+      "ip": "IP地址",
+      "time": "时间",
+      "status": "状态",
+      "success": "成功",
+      "fail": "失败"
+    },
+    "notification": {
+      "title": "通知中心",
+      "templates": "模板管理",
+      "logs": "发送日志",
+      "create": "创建模板",
+      "code": "代码",
+      "name": "名称",
+      "channel": "渠道",
+      "enabled": "启用",
+      "disabled": "禁用",
+      "test": "测试发送",
+      "recipient": "接收人",
+      "time": "发送时间",
+      "sms": "短信",
+      "email": "邮件"
+    },
+    "job": {
+      "title": "任务调度",
+      "name": "任务名称",
+      "cron": "Cron表达式",
+      "lastRun": "上次运行",
+      "nextRun": "下次运行",
+      "status": "状态",
+      "trigger": "立即触发",
+      "pause": "暂停",
+      "resume": "恢复",
+      "running": "运行中",
+      "paused": "已暂停"
+    },
+    "lcms": {
+      "title": "多语言管理 (LCMS)",
+      "header": "LCMS - 多语言内容管理",
+      "select_project": "选择项目",
+      "key": "键名",
+      "key_name": "键名",
+      "desc": "描述",
+      "zh": "中文",
+      "zh_cn": "中文 (zh_CN)",
+      "en": "英文",
+      "en_us": "英文 (en_US)",
+      "save": "保存",
+      "add": "新增词条",
+      "delete": "删除",
+      "trans_placeholder": "翻译",
+      "dialog_title": "新增翻译键",
+      "cancel": "取消",
+      "create": "创建",
+      "msg": {
+        "key_created": "键已创建",
+        "create_fail": "创建失败",
+        "saved": "已保存",
+        "save_fail": "保存失败"
+      }
+    }
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "发生错误"
+  }
+}

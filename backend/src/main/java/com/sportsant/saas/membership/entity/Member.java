@@ -21,9 +21,20 @@ public class Member {
 
     @Column(unique = true)
     private String phoneNumber;
+    
+    @Column(unique = true)
+    private String idCard; // For Real Name Auth
+
+    private String locale; // en-US, zh-CN, etc.
+    
+    private String timezone; // e.g. Asia/Shanghai
+
+    private String email;
+    
+    private LocalDateTime joinDate;
 
     @ManyToOne
-    @JoinColumn(name = "level_id", nullable = false)
+    @JoinColumn(name = "level_id", nullable = true) // Changed to nullable for lead conversion
     private MemberLevel currentLevel;
 
     @Column(nullable = false)
@@ -32,7 +43,12 @@ public class Member {
     @Column(nullable = false)
     private Integer points; // 积分
 
+    @Column(nullable = false)
+    private Double balance = 0.0; // 储值余额
+
     private LocalDateTime expireDate; // 会员有效期
+
+    private LocalDateTime lastVisitDate;
 
     // AI Labels
     private String tags; // "HIGH_VALUE,CHURN_RISK"
@@ -46,11 +62,22 @@ public class Member {
     protected void onCreate() {
         if (growthValue == null) growthValue = 0;
         if (points == null) points = 0;
+        if (balance == null) balance = 0.0;
         if (status == null) status = "ACTIVE";
+        if (joinDate == null) joinDate = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        lastVisitDate = LocalDateTime.now();
     }
-
+    
     // Getters and Setters
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public LocalDateTime getJoinDate() { return joinDate; }
+    public void setJoinDate(LocalDateTime joinDate) { this.joinDate = joinDate; }
+    public LocalDateTime getLastVisitDate() { return lastVisitDate; }
+    public void setLastVisitDate(LocalDateTime lastVisitDate) { this.lastVisitDate = lastVisitDate; }
+    public Double getBalance() { return balance; }
+    public void setBalance(Double balance) { this.balance = balance; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
@@ -82,4 +109,10 @@ public class Member {
     public void setMemberCode(String memberCode) { this.memberCode = memberCode; }
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public String getIdCard() { return idCard; }
+    public void setIdCard(String idCard) { this.idCard = idCard; }
+    public String getLocale() { return locale; }
+    public void setLocale(String locale) { this.locale = locale; }
+    public String getTimezone() { return timezone; }
+    public void setTimezone(String timezone) { this.timezone = timezone; }
 }

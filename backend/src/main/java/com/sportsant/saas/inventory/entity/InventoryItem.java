@@ -1,6 +1,8 @@
 package com.sportsant.saas.inventory.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "inventory_items")
@@ -9,48 +11,59 @@ public class InventoryItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String sku; // e.g. "DRINK-COKE-330"
+    @Column(nullable = false, unique = true)
+    private String sku;
 
-    private Long storeId; // Nullable for global items, or specific to a store
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
-    private String category; // MERCHANDISE, SPARE_PART, ASSET
-
-    @Column(nullable = false)
-    private Integer quantity;
-
-    @Column(nullable = false)
-    private Integer reorderPoint; // Alert when qty < this
-
-    private Double costPrice;
     
-    private Double sellPrice; // For POS items
+    private String category; // Gift, Merchandise, Consumable
 
-    private String supplier;
+    private Integer quantity; // Current Stock
+
+    private Integer safetyStock; // Warning Threshold
+
+    private BigDecimal costPrice;
+    
+    private BigDecimal sellPrice; // Cash Price (optional)
+    
+    private Integer redeemPoints; // Points Price (for gifts)
+
+    @Column(nullable = false)
+    private String unit; // pcs, box, kg
+
+    private String location; // Shelf A1
+
+    private LocalDateTime lastRestockDate;
+
+    @PrePersist
+    protected void onCreate() {
+        if (quantity == null) quantity = 0;
+        if (safetyStock == null) safetyStock = 10;
+    }
 
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getSku() { return sku; }
     public void setSku(String sku) { this.sku = sku; }
-    public Long getStoreId() { return storeId; }
-    public void setStoreId(Long storeId) { this.storeId = storeId; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
-    public Integer getReorderPoint() { return reorderPoint; }
-    public void setReorderPoint(Integer reorderPoint) { this.reorderPoint = reorderPoint; }
-    public Double getCostPrice() { return costPrice; }
-    public void setCostPrice(Double costPrice) { this.costPrice = costPrice; }
-    public Double getSellPrice() { return sellPrice; }
-    public void setSellPrice(Double sellPrice) { this.sellPrice = sellPrice; }
-    public String getSupplier() { return supplier; }
-    public void setSupplier(String supplier) { this.supplier = supplier; }
+    public Integer getSafetyStock() { return safetyStock; }
+    public void setSafetyStock(Integer safetyStock) { this.safetyStock = safetyStock; }
+    public BigDecimal getCostPrice() { return costPrice; }
+    public void setCostPrice(BigDecimal costPrice) { this.costPrice = costPrice; }
+    public BigDecimal getSellPrice() { return sellPrice; }
+    public void setSellPrice(BigDecimal sellPrice) { this.sellPrice = sellPrice; }
+    public Integer getRedeemPoints() { return redeemPoints; }
+    public void setRedeemPoints(Integer redeemPoints) { this.redeemPoints = redeemPoints; }
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+    public LocalDateTime getLastRestockDate() { return lastRestockDate; }
+    public void setLastRestockDate(LocalDateTime lastRestockDate) { this.lastRestockDate = lastRestockDate; }
 }

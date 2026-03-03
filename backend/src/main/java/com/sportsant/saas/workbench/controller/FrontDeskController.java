@@ -2,6 +2,7 @@ package com.sportsant.saas.workbench.controller;
 
 import com.sportsant.saas.membership.entity.Member;
 import com.sportsant.saas.workbench.service.FrontDeskService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/workbench/frontdesk")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "前台工作台", description = "快速签到、注册、充值、收银")
 public class FrontDeskController {
 
     @Autowired
@@ -31,13 +33,16 @@ public class FrontDeskController {
 
     @PostMapping("/register")
     @PreAuthorize("hasRole('RECEPTIONIST') or hasRole('ADMIN')")
-    public Member register(@RequestBody Map<String, String> payload) {
-        String name = payload.get("name");
-        String phone = payload.get("phone");
+    public Member register(@RequestBody Map<String, Object> payload) {
+        String name = (String) payload.get("name");
+        String phone = (String) payload.get("phone");
+        String locale = (String) payload.getOrDefault("locale", "en-US");
+        String idCard = (String) payload.get("idCard");
+        
         if (name == null || phone == null) {
             throw new RuntimeException("Name and Phone are required");
         }
-        return frontDeskService.registerMember(name, phone);
+        return frontDeskService.registerMember(name, phone, locale, idCard);
     }
 
     @PostMapping("/sale")

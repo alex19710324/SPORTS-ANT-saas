@@ -1,6 +1,10 @@
 package com.sportsant.saas.membership.service;
 
 import com.sportsant.saas.ai.service.AiAware;
+import com.sportsant.saas.common.context.UserContext;
+import com.sportsant.saas.globalization.entity.InternationalizationProfile;
+import com.sportsant.saas.globalization.repository.InternationalizationProfileRepository;
+import com.sportsant.saas.globalization.service.ComplianceValidator;
 import com.sportsant.saas.membership.entity.Member;
 import com.sportsant.saas.membership.entity.MemberLevel;
 import com.sportsant.saas.membership.repository.MemberLevelRepository;
@@ -25,6 +29,12 @@ public class MembershipService implements AiAware {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
+    @Autowired
+    private ComplianceValidator complianceValidator;
+
+    @Autowired
+    private InternationalizationProfileRepository profileRepository;
+
     public Member getMember(Long userId) {
         return memberRepository.findByUserId(userId)
                 .orElseGet(() -> initializeMember(userId));
@@ -33,6 +43,21 @@ public class MembershipService implements AiAware {
     private Member initializeMember(Long userId) {
         Member member = new Member();
         member.setUserId(userId);
+        
+        // Auto-detect context for new member initialization
+        String currentLocale = UserContext.getLocale();
+        member.setLocale(currentLocale);
+        
+        // Try to get timezone from profile
+        if (currentLocale != null) {
+            profileRepository.findByLocale(currentLocale).ifPresent(p -> {
+                if (p.getTimezone() != null) member.setTimezone(p.getTimezone());
+            });
+        }
+        if (member.getTimezone() == null) {
+            member.setTimezone("UTC");
+        }
+        
         // Default to level 1
         MemberLevel level1 = memberLevelRepository.findByLevelOrder(1)
                 .orElseThrow(() -> new RuntimeException("Level 1 not configured"));
@@ -47,7 +72,23 @@ public class MembershipService implements AiAware {
     }
 
     @Transactional
-    public Member createMember(Long userId, String name, String phoneNumber) {
+    public Member createMember(Long userId, String name, String phoneNumber, String idCard, String locale) {
+        // 1. Compliance Validation (Forced Check)
+        if (locale == null) locale = "en-US";
+        
+        if (phoneNumber != null) {
+            ComplianceValidator.ValidationResult phoneRes = complianceValidator.validatePhone(locale, phoneNumber);
+            if (!phoneRes.valid) {
+                throw new RuntimeException("Compliance Error: Invalid phone number for " + locale + ": " + phoneRes.message);
+            }
+        }
+        if (idCard != null) {
+            ComplianceValidator.ValidationResult idRes = complianceValidator.validateIdCard(locale, idCard);
+            if (!idRes.valid) {
+                throw new RuntimeException("Compliance Error: Invalid ID Card for " + locale + ": " + idRes.message);
+            }
+        }
+
         if (memberRepository.findByPhoneNumber(phoneNumber).isPresent()) {
             throw new RuntimeException("Phone number already registered as member: " + phoneNumber);
         }
@@ -56,6 +97,18 @@ public class MembershipService implements AiAware {
         member.setUserId(userId);
         member.setName(name);
         member.setPhoneNumber(phoneNumber);
+        member.setIdCard(idCard);
+        member.setLocale(locale);
+        
+        // Auto-set Timezone from Profile
+        String finalLocale = locale;
+        InternationalizationProfile profile = profileRepository.findByLocale(finalLocale)
+                .orElse(null);
+        if (profile != null && profile.getTimezone() != null) {
+            member.setTimezone(profile.getTimezone());
+        } else {
+            member.setTimezone("UTC"); // Fallback
+        }
         
         // Generate unique member code (simple random for now)
         String code = "M" + System.currentTimeMillis() % 1000000;
@@ -73,7 +126,53 @@ public class MembershipService implements AiAware {
     public Member dailyCheckIn(Long userId) {
         // Daily Check-in gives 10 Growth
         addGrowth(userId, 10, "Daily Check-in");
-        return getMember(userId);
+        
+        Member member = getMember(userId);
+        member.setLastVisitDate(java.time.LocalDateTime.now());
+        memberRepository.save(member);
+        
+        return member;
+    }
+
+    @Transactional
+    public void topUpBalance(Long memberId, java.math.BigDecimal amount) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        
+        if (amount == null || amount.compareTo(java.math.BigDecimal.ZERO) <= 0) return;
+        
+        member.setBalance(member.getBalance() + amount.doubleValue());
+        
+        // Add Top-Up Growth
+        addGrowth(member.getUserId(), amount.intValue(), "Top-Up Reward");
+        
+        memberRepository.save(member);
+    }
+
+    @Transactional
+    public void topUp(Long userId, Double amount) {
+        Member member = getMember(userId);
+        if (amount == null || amount <= 0) return;
+        
+        member.setBalance(member.getBalance() + amount);
+        
+        // Add Top-Up Growth (Ratio could be different, e.g. 1:1)
+        addGrowth(userId, amount.intValue(), "Top-Up Reward");
+        
+        memberRepository.save(member);
+    }
+
+    @Transactional
+    public void deductBalance(Long userId, Double amount) {
+        Member member = getMember(userId);
+        if (amount == null || amount <= 0) return;
+        
+        if (member.getBalance() < amount) {
+            throw new RuntimeException("Insufficient Balance");
+        }
+        
+        member.setBalance(member.getBalance() - amount);
+        memberRepository.save(member);
     }
 
     @Transactional

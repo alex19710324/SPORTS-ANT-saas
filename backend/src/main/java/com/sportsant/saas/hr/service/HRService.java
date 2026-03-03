@@ -2,6 +2,7 @@ package com.sportsant.saas.hr.service;
 
 import com.sportsant.saas.entity.ERole;
 import com.sportsant.saas.entity.User;
+import com.sportsant.saas.finance.service.FinanceService;
 import com.sportsant.saas.hr.entity.Employee;
 import com.sportsant.saas.hr.entity.Schedule;
 import com.sportsant.saas.hr.repository.EmployeeRepository;
@@ -9,6 +10,7 @@ import com.sportsant.saas.hr.repository.ScheduleRepository;
 import com.sportsant.saas.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -25,6 +27,9 @@ public class HRService {
 
     @Autowired
     private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private FinanceService financeService;
 
     public List<Map<String, Object>> getStaffList() {
         return getStaffListMap(null);
@@ -76,6 +81,7 @@ public class HRService {
         return staffList;
     }
 
+    @Transactional
     public Map<String, Object> calculatePayroll() {
         // Mock Payroll Calculation
         List<Map<String, Object>> staffList = getStaffList();
@@ -99,9 +105,20 @@ public class HRService {
             detail.put("total", base.add(bonus));
             details.add(detail);
         }
+        
+        BigDecimal grandTotal = totalBaseSalary.add(totalBonus);
+
+        // Create Finance Voucher (Payroll Accrual)
+        financeService.createVoucher(
+            "PAYROLL", 
+            0L, // System generated (or create a PayrollRun entity later)
+            grandTotal, 
+            "Monthly Payroll Accrual for " + staffList.size() + " employees", 
+            "CN"
+        );
 
         Map<String, Object> result = new HashMap<>();
-        result.put("totalPayroll", totalBaseSalary.add(totalBonus));
+        result.put("totalPayroll", grandTotal);
         result.put("breakdown", details);
         return result;
     }

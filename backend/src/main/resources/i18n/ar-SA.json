@@ -1,0 +1,589 @@
+{
+  "membership": {
+    "title": "بطاقة العضوية",
+    "level": "المستوى",
+    "growth": "النمو الحالي",
+    "nextLevel": "المستوى التالي",
+    "benefits": "المزايا",
+    "noBenefits": "لا توجد مزايا بعد",
+    "aiInsights": "رؤى الذكاء الاصطناعي",
+    "checkin": "تسجيل الدخول اليومي",
+    "simulate": "محاكاة الشراء",
+    "checkinSuccess": "تم تسجيل الدخول بنجاح! النمو +10",
+    "simulateSuccess": "تمت محاكاة الشراء! النمو +{growth}"
+  },
+  "login": {
+    "title": "تسجيل الدخول إلى SPORTS ANT SaaS",
+    "username": "اسم المستخدم",
+    "password": "كلمة المرور",
+    "submit": "تسجيل الدخول",
+    "reset": "إعادة تعيين",
+    "placeholder": {
+      "username": "أدخل اسم المستخدم",
+      "password": "أدخل كلمة المرور"
+    },
+    "msg": {
+      "username_required": "الرجاء إدخال اسم المستخدم",
+      "password_required": "الرجاء إدخال كلمة المرور",
+      "success": "تم تسجيل الدخول بنجاح"
+    }
+  },
+  "sidebar": {
+    "groups": {
+      "workspace": "مساحة العمل",
+      "operations": "العمليات",
+      "resources": "الموارد",
+      "analytics": "التحليلات",
+      "personal": "شخصي",
+      "system": "النظام"
+    }
+  },
+  "home": {
+    "welcome": "مرحبًا بك في SPORTS ANT SaaS",
+    "logout": "تسجيل الخروج",
+    "applications": "التطبيقات",
+    "header": {
+      "home": "الرئيسية",
+      "profile": "الملف الشخصي",
+      "settings": "الإعدادات",
+      "logout": "تسجيل الخروج"
+    },
+    "modules": {
+      "hq": { "title": "مركز المقر الرئيسي", "desc": "الامتياز والإدارة العالمية", "dashboard": "لوحة تحكم المقر الرئيسي" },
+      "manager": { "title": "مدير المتجر", "desc": "العمليات اليومية والموظفين" },
+      "frontdesk": { "title": "الاستقبال", "desc": "تسجيل الدخول ونقاط البيع" },
+      "technician": { "title": "فني", "desc": "المراقبة والإصلاح" },
+      "data": { "title": "مركز البيانات", "desc": "التحليلات والتقارير" },
+      "marketing": { "title": "التسويق", "desc": "الحملات والأعضاء", "dashboard": "لوحة التحكم", "campaigns": "الحملات" },
+      "finance": { "title": "المالية", "desc": "الفواتير وكشوف المرتبات" },
+      "communication": {
+        "title": "الاتصالات",
+        "desc": "الرسائل والإشعارات",
+        "dashboard": "لوحة التحكم",
+        "notifications": "إشعاراتي",
+        "broadcast": {
+          "title": "رسالة بث",
+          "tag": "تسويق",
+          "form": {
+            "title": "العنوان",
+            "titlePlaceholder": "مثال: تخفيضات الصيف!",
+            "message": "الرسالة",
+            "messagePlaceholder": "أدخل رسالتك هنا...",
+            "send": "إرسال إلى جميع الأعضاء",
+            "sending": "جاري الإرسال..."
+          },
+          "history": {
+            "title": "عمليات البث الأخيرة",
+            "colTitle": "العنوان",
+            "colMessage": "الرسالة",
+            "colType": "النوع",
+            "colTime": "الوقت"
+          },
+          "success": "تم إرسال البث بنجاح!",
+          "fail": "فشل الإرسال",
+          "validation": "الرجاء ملء العنوان والرسالة"
+        },
+        "notificationList": {
+          "markAllRead": "تحديد الكل كمقروء",
+          "empty": "لا توجد إشعارات",
+          "loadFail": "فشل التحميل"
+        },
+        "messageCenter": {
+          "empty": "لا توجد إشعارات جديدة",
+          "viewDetails": "عرض التفاصيل",
+          "markRead": "تحديد كمقروء",
+          "fetchFail": "فشل الجلب",
+          "markReadFail": "فشل التحديد كمقروء"
+        },
+        "types": {
+          "MARKETING": "تسويق",
+          "SYSTEM": "نظام",
+          "ALERT": "تنبيه",
+          "INFO": "معلومات"
+        }
+      },
+      "member": {
+        "portal": {
+          "title": "لوحة التحكم الخاصة بي",
+          "balance": "الرصيد",
+          "topUp": "شحن الرصيد",
+          "schedule": "جدولي",
+          "noClass": "لا توجد فصول قادمة",
+          "rewards": "متجر المكافآت",
+          "points": "النقاط",
+          "redeem": "استبدال",
+          "redeemSuccess": "تم الاستبدال بنجاح!",
+          "redeemFail": "فشل الاستبدال",
+          "history": "سجل المعاملات",
+          "date": "التاريخ",
+          "type": "النوع",
+          "amount": "المبلغ",
+          "topUpTitle": "شحن المحفظة",
+          "cancel": "إلغاء",
+          "pay": "الدفع عبر WeChat",
+          "topUpSuccess": "تم الشحن بنجاح!",
+          "confirmed": "تم التأكيد"
+        }
+      },
+      "points": {
+        "dashboard": {
+          "title": "نقاطي",
+          "balance": "الرصيد الحالي",
+          "history": "سجل النقاط",
+          "time": "الوقت",
+          "type": "النوع",
+          "reason": "السبب",
+          "points": "النقاط",
+          "rules": "قواعد الكسب",
+          "earnFixed": "اكسب {points} نقطة لكل إجراء",
+          "earnRatio": "اكسب {ratio} نقطة لكل يوان يتم إنفاقه",
+          "dailyLimit": "الحد اليومي: {limit}",
+          "types": {
+            "EARN": "كسب",
+            "SPEND": "إنفاق",
+            "TOP_UP": "شحن",
+            "PAYMENT_SENT": "دفع"
+          }
+        }
+      },
+      "security": { "title": "الأمن والصيانة", "desc": "السلامة والتفتيش" },
+      "bi": { "title": "لوحة تحكم ذكاء الأعمال", "desc": "ذكاء الأعمال" },
+      "crm": { "title": "إدارة علاقات العملاء والعملاء المحتملين", "desc": "علاقات العملاء" },
+      "cs": { "title": "منصة خدمة العملاء", "desc": "خدمة العملاء" },
+      "mall": { "title": "متجر النقاط", "desc": "مركز الاستبدال" },
+      "risk": { "title": "مراقبة المخاطر", "desc": "إدارة المخاطر" },
+      "social": { "title": "المصفوفة الاجتماعية", "desc": "وسائل التواصل الاجتماعي" },
+      "system": { 
+        "title": "أدوات النظام", 
+        "desc": "الإدارة",
+        "audit": "سجلات التدقيق",
+        "notification": "الإشعارات",
+        "scheduler": "الجدولة",
+        "lcms": "نظام إدارة المحتوى التعليمي (الترجمات)",
+        "export": "مركز التصدير"
+      },
+      "workflow": { "title": "سير العمل", "desc": "إدارة المهام" },
+      "finance_workbench": { "title": "منصة المالية", "desc": "المالية اليومية" },
+      "applications": { "title": "الرئيسية" },
+      "member_portal": { "title": "بوابتي" },
+      "booking": { "title": "حجز ملعب" },
+      "inventory": { "title": "المخزون" },
+      "iot": { "title": "المكان الذكي" },
+      "hr": { "title": "الموارد البشرية والموظفين", "dashboard": "لوحة التحكم", "schedule": "الجدول الذكي" },
+      "report": { "title": "التقارير" },
+      "monitor": { "title": "مراقبة النظام" }
+    }
+  },
+  "saas_admin": { 
+    "title": "إدارة SaaS", 
+    "desc": "إدارة المستأجرين",
+    "dashboard": "لوحة تحكم المشرف العام",
+    "onboard": "مستأجر جديد",
+    "total_tenants": "إجمالي المستأجرين",
+    "active_subs": "الاشتراكات النشطة",
+    "mrr": "الإيرادات الشهرية المتكررة",
+    "table": {
+      "id": "المعرف",
+      "name": "اسم الامتياز",
+      "domain": "النطاق",
+      "plan": "الخطة",
+      "status": "الحالة",
+      "actions": "الإجراءات",
+      "suspend": "تعليق",
+      "activate": "تفعيل"
+    },
+    "modal": {
+      "title": "إضافة مستأجر جديد",
+      "name": "اسم الامتياز",
+      "domain": "النطاق",
+      "plan": "خطة الاشتراك",
+      "cancel": "إلغاء",
+      "create": "إنشاء"
+    },
+    "tabs": {
+      "tenants": "المستأجرين",
+      "financials": "البيانات المالية"
+    },
+    "plans": {
+      "free": "تجربة مجانية",
+      "pro": "احترافي (¥999/شهر)",
+      "enterprise": "مؤسسة (¥2999/شهر)"
+    },
+    "config": {
+      "title": "تكوين المستأجر",
+      "appKey": "مفتاح التطبيق",
+      "rate": "المعدل (%)",
+      "cycle": "دورة التسوية (أيام)",
+      "permissions": "أذونات واجهة برمجة التطبيقات"
+    },
+    "sandbox": {
+      "title": "صندوق حماية واجهة برمجة التطبيقات",
+      "target_appkey": "مفتاح التطبيق المستهدف",
+      "select_tenant": "اختر مستأجرًا",
+      "endpoint": "نقطة النهاية",
+      "payload": "الحمولة",
+      "send": "إرسال الطلب",
+      "response": "الاستجابة"
+    },
+    "financials": {
+      "empty": "ستظهر المعاملات المالية للتاجر هنا (بيانات الحلقة المغلقة)"
+    },
+    "permissions": {
+      "mp01": "تأهيل التاجر",
+      "mp03": "إمكانية التشغيل البيني للنقاط",
+      "mp04": "إمكانية التشغيل البيني للقسائم"
+    },
+    "msg": {
+      "load_fail": "فشل تحميل المستأجرين",
+      "create_success": "تم إنشاء المستأجر بنجاح",
+      "create_fail": "فشل إنشاء المستأجر",
+      "appkey_success": "تم إنشاء مفتاح التطبيق بنجاح",
+      "appkey_fail": "فشل إنشاء مفتاح التطبيق",
+      "config_saved": "تم حفظ التكوين",
+      "config_fail": "فشل حفظ التكوين",
+      "status_update": "المستأجر {status}",
+      "status_fail": "فشل تحديث الحالة",
+      "select_appkey": "الرجاء اختيار مفتاح التطبيق"
+    }
+  },
+  "iot": {
+    "title": "التوأم الرقمي: حالة المكان",
+    "occupied": "مشغول",
+    "empty": "فارغ",
+    "lightOn": "الضوء قيد التشغيل",
+    "people": "أشخاص",
+    "override": "تحكم يدوي"
+  },
+  "inventory": {
+    "title": "إدارة المخزون",
+    "checkLowStock": "التحقق من المخزون المنخفض",
+    "addItem": "إضافة عنصر",
+    "totalItems": "إجمالي العناصر",
+    "lowStockAlerts": "تنبيهات المخزون المنخفض",
+    "totalValue": "القيمة الإجمالية",
+    "sku": "رمز التخزين التعريفي",
+    "itemName": "اسم العنصر",
+    "category": "الفئة",
+    "stock": "المخزون",
+    "reorderPoint": "نقطة إعادة الطلب",
+    "sellPrice": "سعر البيع",
+    "restock": "إعادة التخزين",
+    "adjust": "تعديل",
+    "foundLowStock": "تم العثور على {count} عنصر بمخزون منخفض!",
+    "healthy": "جميع مستويات المخزون جيدة",
+    "restockTitle": "إعادة تخزين العنصر",
+    "confirmStockIn": "تأكيد المخزون الوارد"
+  },
+  "export": {
+      "title": "مركز تصدير البيانات",
+      "newTask": "مهمة تصدير جديدة",
+      "taskId": "معرف المهمة",
+      "taskName": "اسم المهمة",
+      "dataType": "نوع البيانات",
+      "status": "الحالة",
+      "createdAt": "تم الإنشاء في",
+      "action": "الإجراء",
+      "download": "تنزيل",
+      "types": {
+        "member": "بيانات الأعضاء",
+        "order": "بيانات الطلبات",
+        "finance": "البيانات المالية"
+      },
+      "dialog": {
+        "title": "إنشاء مهمة تصدير",
+        "name": "اسم المهمة",
+        "type": "نوع البيانات",
+        "cancel": "إلغاء",
+        "confirm": "تصدير"
+      }
+    },
+  "booking": {
+    "title": "حجز مورد",
+    "myBookings": "حجوزاتي",
+    "bookNow": "احجز الآن",
+    "price": "السعر",
+    "resource": "المورد",
+    "time": "الوقت",
+    "qr": "رمز الاستجابة السريعة للوصول",
+    "status": "الحالة",
+    "success": "تم تأكيد الحجز",
+    "failed": "فشل الحجز"
+  },
+  "technician": {
+    "title": "منصة الفني",
+    "workOrders": "أوامر العمل",
+    "faultyDevices": "الأجهزة المعيبة",
+    "offlineDevices": "الأجهزة غير المتصلة",
+    "inspection": "التفتيش",
+    "scanQr": "مسح رمز الاستجابة السريعة للجهاز",
+    "reportFault": "الإبلاغ عن عطل",
+    "preventive": "الصيانة الوقائية",
+    "maintenance": "الصيانة الوقائية",
+    "pending": "قيد الانتظار",
+    "in_progress": "قيد التنفيذ",
+    "completed": "مكتمل",
+    "device": "الجهاز",
+    "issue": "المشكلة",
+    "priority": "الأولوية",
+    "high": "عالية",
+    "medium": "متوسطة",
+    "low": "منخفضة",
+    "actions": "الإجراءات",
+    "start": "بدء الإصلاح",
+    "complete": "إكمال",
+    "done": "تم",
+    "notes": "ملاحظات الحل",
+    "cost": "تكلفة العمالة/القطع",
+    "parts": "قطع الغيار",
+    "submit": "إرسال"
+  },
+  "manager": {
+    "title": "منصة المدير",
+    "revenue": "إيرادات اليوم",
+    "visitors": "زوار اليوم",
+    "redemptions": "الاستبدالات",
+    "blindbox": "مبيعات الصناديق العمياء",
+    "koc": "مساهمة قادة الرأي",
+    "deviceRate": "معدل الأجهزة المتصلة",
+    "alerts": "التنبيهات",
+    "approvals": "الموافقات المعلقة",
+    "cost": "تفاصيل التكلفة",
+    "aiAssistant": "مساعد الذكاء الاصطناعي",
+    "emptyState": "لا توجد اقتراحات نشطة. النظام يعمل بشكل مثالي.",
+    "execute": "تنفيذ الإجراء",
+    "viewReport": "عرض التقرير",
+    "type": "النوع",
+    "applicant": "مقدم الطلب",
+    "summary": "ملخص",
+    "action": "الإجراء",
+    "approve": "موافقة",
+    "approveSuccess": "تمت الموافقة على الطلب بنجاح",
+    "approveFail": "فشلت الموافقة"
+  },
+  "frontdesk": {
+    "title": "الاستقبال",
+    "target": "هدف اليوم",
+    "sales": "المبيعات الحالية",
+    "checkins": "تسجيلات الدخول المعلقة",
+    "verifications": "عمليات التحقق المعلقة",
+    "quickCheckin": "تسجيل دخول سريع",
+    "newSale": "بيع جديد",
+    "memberReg": "تسجيل عضو",
+    "pos": "نقطة البيع",
+    "checkin": "تسجيل دخول سريع",
+    "scan": "مسح السوار/البطاقة",
+    "cart": "عربة التسوق الحالية",
+    "total": "الإجمالي",
+    "checkout": "دفع",
+    "empty": "العربة فارغة",
+    "search": "البحث عن عناصر...",
+    "add": "إضافة",
+    "ticket": "تذكرة"
+  },
+  "security": {
+    "title": "الأمن والصيانة",
+    "inspections": "عمليات التفتيش",
+    "incidents": "الحوادث",
+    "equipment": "السلامة من الحرائق",
+    "reportIncident": "الإبلاغ عن حادث",
+    "checkEquipment": "التحقق من المعدات",
+    "activeIncidents": "الحوادث النشطة",
+    "reportTitle": "الإبلاغ عن حادث أمني",
+    "fieldTitle": "العنوان",
+    "type": "النوع",
+    "severity": "الخطورة",
+    "location": "الموقع",
+    "status": "الحالة",
+    "description": "الوصف",
+    "actions": "الإجراءات",
+    "resolve": "حل",
+    "report": "إبلاغ",
+    "types": {
+      "injury": "إصابة",
+      "equipment_failure": "عطل في المعدات",
+      "security": "أمن",
+      "other": "آخر"
+    },
+    "severities": {
+      "low": "منخفضة",
+      "medium": "متوسطة",
+      "high": "عالية",
+      "critical": "حرجة"
+    },
+    "resolvePrompt": "ملاحظات الحل:",
+    "resolveTitle": "حل الحادث",
+    "resolveSuccess": "تم حل الحادث",
+    "reportSuccess": "تم الإبلاغ بنجاح"
+  },
+  "crm": {
+    "title": "مسار المبيعات",
+    "addLead": "إضافة عميل محتمل",
+    "columns": {
+      "new": "عميل محتمل جديد",
+      "contacted": "تم الاتصال",
+      "qualified": "مؤهل",
+      "converted": "تم التحويل"
+    },
+    "name": "الاسم",
+    "phone": "الهاتف",
+    "source": "المصدر",
+    "details": "التفاصيل",
+    "convert": "تحويل",
+    "confirmConvert": "هل تؤكد تحويل {name} إلى عضو؟",
+    "convertSuccess": "تم التحويل بنجاح",
+    "addSuccess": "تمت الإضافة بنجاح",
+    "dialog": {
+      "title": "إضافة عميل محتمل جديد",
+      "cancel": "إلغاء",
+      "add": "إضافة"
+    }
+  },
+  "hq": {
+    "title": "مركز المقر الرئيسي العالمي",
+    "financialHealth": "الصحة المالية (هذا الشهر)",
+    "healthy": "صحي",
+    "revenue": "الإيرادات",
+    "cogs": "تكلفة البضائع المباعة",
+    "payroll": "كشوف المرتبات",
+    "marketing": "التسويق",
+    "repairs": "الإصلاحات",
+    "loss": "خسارة المخزون",
+    "tax": "الضرائب المقدرة",
+    "liability": "المسؤولية (مدفوعة مسبقًا)",
+    "netProfit": "صافي الربح",
+    "aiBrain": "الدماغ الاستراتيجي للذكاء الاصطناعي",
+    "actionRequired": "إجراء مطلوب",
+    "allGood": "كل شيء جيد",
+    "execute": "تنفيذ الاستراتيجية",
+    "optimal": "النظام يعمل ضمن المعايير المثلى",
+    "opsHealth": "صحة العمليات",
+    "pendingTasks": "المهام المعلقة",
+    "activeCampaigns": "الحملات النشطة",
+    "liveFeed": "تغذية الأحداث الحية",
+    "deptStatus": "حالة القسم",
+    "inventory": "المخزون",
+    "lowStock": "عناصر منخفضة المخزون",
+    "finance": "المالية",
+    "balanced": "حسابات متوازنة",
+    "running": "قيد التشغيل"
+  },
+  "finance": {
+    "title": "المالية والمحاسبة",
+    "forecast": "توقعات التدفق النقدي بالذكاء الاصطناعي",
+    "confidence": "الثقة",
+    "calculator": "حاسبة الضرائب السريعة",
+    "amount": "المبلغ",
+    "country": "البلد",
+    "calc": "حساب",
+    "taxRate": "معدل الضريبة",
+    "taxAmount": "مبلغ الضريبة",
+    "vouchers": "قسائم المحاسبة",
+    "voucherNo": "رقم القسيمة",
+    "type": "النوع",
+    "debit": "مدين",
+    "credit": "دائن",
+    "postedAt": "تاريخ النشر"
+  },
+  "marketing": {
+    "title": "التسويق والنمو",
+    "create": "إنشاء حملة",
+    "active": "الحملات النشطة",
+    "reach": "إجمالي الوصول",
+    "conversion": "معدل التحويل",
+    "list": "الحملات",
+    "name": "الاسم",
+    "target": "الهدف",
+    "status": "الحالة",
+    "performance": "الأداء",
+    "sent": "تم الإرسال",
+    "converted": "تم التحويل",
+    "actions": "الإجراءات",
+    "launch": "إطلاق",
+    "view": "عرض",
+    "launchSuccess": "تم إطلاق الحملة!",
+    "launchFail": "فشل الإطلاق",
+    "viewMsg": "تفاصيل الحملة لـ {name} قريبًا"
+  },
+  "data_analytics": {
+    "title": "ذكاء البيانات",
+    "revenue": "إجمالي الإيرادات",
+    "stores": "المتاجر النشطة",
+    "members": "إجمالي الأعضاء",
+    "devices": "الأجهزة المتصلة",
+    "growth": "أعضاء جدد (آخر 7 أيام)",
+    "composition": "تكوين الإيرادات",
+    "peak": "ساعات الذروة (الإشغال)"
+  },
+  "system": {
+    "title": "إدارة النظام",
+    "audit": {
+      "title": "سجلات التدقيق",
+      "user": "المستخدم",
+      "action": "الإجراء",
+      "resource": "المورد",
+      "ip": "عنوان IP",
+      "time": "الوقت",
+      "status": "الحالة",
+      "success": "نجاح",
+      "fail": "فشل"
+    },
+    "notification": {
+      "title": "مركز الإشعارات",
+      "templates": "القوالب",
+      "logs": "سجلات الإرسال",
+      "create": "إنشاء قالب",
+      "code": "الرمز",
+      "name": "الاسم",
+      "channel": "القناة",
+      "enabled": "ممكن",
+      "disabled": "معطل",
+      "test": "إرسال تجريبي",
+      "recipient": "المستلم",
+      "time": "وقت الإرسال",
+      "sms": "رسالة نصية",
+      "email": "بريد إلكتروني"
+    },
+    "job": {
+      "title": "جدولة المهام",
+      "name": "اسم المهمة",
+      "cron": "تعبير Cron",
+      "lastRun": "آخر تشغيل",
+      "nextRun": "التشغيل التالي",
+      "status": "الحالة",
+      "trigger": "تشغيل الآن",
+      "pause": "إيقاف مؤقت",
+      "resume": "استئناف",
+      "running": "قيد التشغيل",
+      "paused": "متوقف مؤقتًا"
+    },
+    "lcms": {
+      "title": "مدير LCMS",
+      "header": "LCMS - محتوى متعدد اللغات",
+      "select_project": "اختر المشروع",
+      "key": "المفتاح",
+      "key_name": "اسم المفتاح",
+      "desc": "الوصف",
+      "zh": "صيني",
+      "zh_cn": "صيني (zh_CN)",
+      "en": "إنجليزي",
+      "en_us": "إنجليزي (en_US)",
+      "save": "حفظ",
+      "add": "إضافة مفتاح",
+      "delete": "حذف",
+      "trans_placeholder": "الترجمة",
+      "dialog_title": "إضافة مفتاح ترجمة",
+      "cancel": "إلغاء",
+      "create": "إنشاء",
+      "msg": {
+        "key_created": "تم إنشاء المفتاح",
+        "create_fail": "فشل إنشاء المفتاح",
+        "saved": "تم الحفظ",
+        "save_fail": "فشل الحفظ"
+      }
+    }
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ"
+  }
+}

@@ -56,7 +56,7 @@ public class FrontDeskService {
     }
 
     @Transactional
-    public Member registerMember(String name, String phoneNumber) {
+    public Member registerMember(String name, String phoneNumber, String locale) {
         // 1. Check if user exists by phone (username)
         if (userRepository.existsByUsername(phoneNumber)) {
             throw new RuntimeException("User with this phone number already exists.");
@@ -78,8 +78,56 @@ public class FrontDeskService {
         
         user = userRepository.save(user);
 
-        // 3. Create Member
-        return membershipService.createMember(user.getId(), name, phoneNumber);
+        // 3. Create Member (With Locale)
+        // Note: idCard is null for quick front desk reg. 
+        // If compliance requires ID Card (e.g. Italy), this might fail validation in MembershipService.
+        // The Front Desk UI should prompt for ID Card if locale requires it.
+        return membershipService.createMember(user.getId(), name, phoneNumber, null, locale);
+    }
+
+    @Transactional
+    public Member registerMember(String name, String phoneNumber, String locale, String idCard) {
+         // Overloaded method to support ID Card
+        if (userRepository.existsByUsername(phoneNumber)) {
+            throw new RuntimeException("User with this phone number already exists.");
+        }
+        String email = phoneNumber + "@member.local";
+        if (userRepository.existsByEmail(email)) email = phoneNumber + "_" + System.currentTimeMillis() + "@member.local";
+
+        User user = new User(phoneNumber, email, encoder.encode("123456"));
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.findByName(ERole.ROLE_USER).orElseThrow());
+        user.setRoles(roles);
+        user = userRepository.save(user);
+
+        return membershipService.createMember(user.getId(), name, phoneNumber, idCard, locale);
+    }
+
+    @Transactional
+    public Member processTopUp(String memberCode, Double amount, String paymentMethod) {
+        Member member = membershipService.findMemberByCodeOrPhone(memberCode);
+        
+        // 1. Update Balance
+        membershipService.topUp(member.getUserId(), amount);
+        
+        // 2. Process Payment
+        financeService.processPayment(
+            member.getUserId(), 
+            amount, 
+            "Top-Up (" + paymentMethod + ")"
+        );
+        
+        // 3. Finance Record (Deferred Revenue)
+        // Debit: Cash (1001), Credit: Advance from Customers (2203)
+        financeService.createVoucher(
+            "TOP_UP", 
+            member.getId(), 
+            BigDecimal.valueOf(amount), 
+            "Member Top-Up: " + memberCode, 
+            "CN"
+        );
+        
+        return member;
     }
 
     @Transactional
@@ -89,7 +137,7 @@ public class FrontDeskService {
         // Use the new Finance Service method for real double-entry accounting
         financeService.processPayment(
             member.getUserId(), 
-            BigDecimal.valueOf(amount), 
+            amount, 
             "POS Sale to " + member.getName()
         );
         
@@ -113,26 +161,38 @@ public class FrontDeskService {
             // Deduct Stock
             com.sportsant.saas.inventory.entity.InventoryItem invItem = inventoryService.adjustStock(sku, -qty, "POS Sale");
             
-            Double price = invItem.getSellPrice();
+            BigDecimal price = invItem.getSellPrice();
             if (price == null) {
-                Double cost = invItem.getCostPrice();
-                price = (cost != null) ? cost * 1.5 : 0.0;
+                BigDecimal cost = invItem.getCostPrice();
+                price = (cost != null) ? cost.multiply(new BigDecimal("1.5")) : BigDecimal.ZERO;
             }
             
-            double itemTotal = price * qty;
-            totalAmount += itemTotal;
+            BigDecimal itemTotal = price.multiply(BigDecimal.valueOf(qty));
+            totalAmount += itemTotal.doubleValue();
             desc.append(invItem.getName()).append(" x").append(qty).append(", ");
         }
 
-        // Finance Record
-        financeService.processPayment(
-            member.getUserId(), 
-            BigDecimal.valueOf(totalAmount), 
-            desc.toString()
-        );
+        if (desc.length() > 10) {
+            desc.setLength(desc.length() - 2);
+        }
+
+        // Determine Financial Source Type
+        String sourceType = "POS_SALE"; // Default Cash/Card
+        if ("BALANCE".equalsIgnoreCase(paymentMethod)) {
+            // Deduct Balance
+            membershipService.deductBalance(member.getUserId(), totalAmount);
+            sourceType = "POS_SALE_BALANCE";
+        } else {
+            // Assume Cash/Card -> Create external payment record
+            financeService.processPayment(
+                member.getUserId(), 
+                totalAmount, 
+                desc.toString()
+            );
+        }
         
         // Accounting Voucher (Business-Finance Integration)
-        financeService.createVoucher("POS_SALE", member.getId(), BigDecimal.valueOf(totalAmount), desc.toString(), "CN");
+        financeService.createVoucher(sourceType, member.getId(), BigDecimal.valueOf(totalAmount), desc.toString(), "CN");
         
         // Membership Points
         return membershipService.simulatePurchase(member.getUserId(), (int)totalAmount);

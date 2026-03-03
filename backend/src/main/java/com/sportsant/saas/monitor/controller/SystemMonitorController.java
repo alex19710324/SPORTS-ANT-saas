@@ -1,5 +1,6 @@
 package com.sportsant.saas.monitor.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,15 +12,21 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/monitor")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "系统监控", description = "CPU、内存、线程、HTTP 请求监控")
 public class SystemMonitorController {
 
-    @Autowired
+    @Autowired(required = false)
     private MetricsEndpoint metricsEndpoint;
 
     @GetMapping("/dashboard")
     @PreAuthorize("hasRole('ADMIN')")
     public Map<String, Object> getSystemMetrics() {
         Map<String, Object> dashboard = new HashMap<>();
+        
+        if (metricsEndpoint == null) {
+            dashboard.put("status", "Metrics Endpoint Not Available");
+            return dashboard;
+        }
         
         // CPU
         dashboard.put("systemCpu", getMetric("system.cpu.usage"));

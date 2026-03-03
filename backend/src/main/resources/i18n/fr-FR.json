@@ -1,0 +1,589 @@
+{
+  "membership": {
+    "title": "Carte de Membre",
+    "level": "Niveau",
+    "growth": "Croissance Actuelle",
+    "nextLevel": "Niveau Suivant",
+    "benefits": "Avantages",
+    "noBenefits": "Aucun avantage pour l'instant",
+    "aiInsights": "Insights IA",
+    "checkin": "Enregistrement Quotidien",
+    "simulate": "Simuler Achat",
+    "checkinSuccess": "Enregistrement réussi ! Croissance +10",
+    "simulateSuccess": "Achat simulé ! Croissance +{growth}"
+  },
+  "login": {
+    "title": "Connexion SPORTS ANT SaaS",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "submit": "Connexion",
+    "reset": "Réinitialiser",
+    "placeholder": {
+      "username": "Entrez votre nom d'utilisateur",
+      "password": "Entrez votre mot de passe"
+    },
+    "msg": {
+      "username_required": "Veuillez entrer le nom d'utilisateur",
+      "password_required": "Veuillez entrer le mot de passe",
+      "success": "Connexion réussie"
+    }
+  },
+  "sidebar": {
+    "groups": {
+      "workspace": "Espace de Travail",
+      "operations": "Opérations",
+      "resources": "Ressources",
+      "analytics": "Analytique",
+      "personal": "Personnel",
+      "system": "Système"
+    }
+  },
+  "home": {
+    "welcome": "Bienvenue sur SPORTS ANT SaaS",
+    "logout": "Déconnexion",
+    "applications": "Applications",
+    "header": {
+      "home": "Accueil",
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "logout": "Déconnexion"
+    },
+    "modules": {
+      "hq": { "title": "Centre HQ", "desc": "Franchise & Gestion Globale", "dashboard": "Tableau de Bord HQ" },
+      "manager": { "title": "Directeur de Magasin", "desc": "Opérations Quotidiennes & Personnel" },
+      "frontdesk": { "title": "Réception", "desc": "Enregistrement & POS" },
+      "technician": { "title": "Technicien", "desc": "Surveillance & Réparation" },
+      "data": { "title": "Centre de Données", "desc": "Analytique & Rapports" },
+      "marketing": { "title": "Marketing", "desc": "Campagnes & Membres", "dashboard": "Tableau de Bord", "campaigns": "Campagnes" },
+      "finance": { "title": "Finance", "desc": "Factures & Paie" },
+      "communication": {
+        "title": "Communication",
+        "desc": "Messages & Notifications",
+        "dashboard": "Tableau de Bord",
+        "notifications": "Mes Notifications",
+        "broadcast": {
+          "title": "Message Diffusé",
+          "tag": "Marketing",
+          "form": {
+            "title": "Titre",
+            "titlePlaceholder": "ex: Soldes d'été !",
+            "message": "Message",
+            "messagePlaceholder": "Entrez votre message ici...",
+            "send": "Envoyer à tous les membres",
+            "sending": "Envoi en cours..."
+          },
+          "history": {
+            "title": "Diffusions Récentes",
+            "colTitle": "Titre",
+            "colMessage": "Message",
+            "colType": "Type",
+            "colTime": "Heure"
+          },
+          "success": "Diffusion envoyée avec succès !",
+          "fail": "Échec de l'envoi",
+          "validation": "Veuillez remplir le titre et le message"
+        },
+        "notificationList": {
+          "markAllRead": "Tout marquer comme lu",
+          "empty": "Aucune notification",
+          "loadFail": "Échec du chargement"
+        },
+        "messageCenter": {
+          "empty": "Aucune nouvelle notification",
+          "viewDetails": "Voir Détails",
+          "markRead": "Marquer lu",
+          "fetchFail": "Échec de récupération",
+          "markReadFail": "Échec du marquage"
+        },
+        "types": {
+          "MARKETING": "Marketing",
+          "SYSTEM": "Système",
+          "ALERT": "Alerte",
+          "INFO": "Info"
+        }
+      },
+      "member": {
+        "portal": {
+          "title": "Mon Tableau de Bord",
+          "balance": "Solde",
+          "topUp": "Recharger",
+          "schedule": "Mon Planning",
+          "noClass": "Aucun cours à venir",
+          "rewards": "Boutique Récompenses",
+          "points": "Points",
+          "redeem": "Échanger",
+          "redeemSuccess": "Échange réussi !",
+          "redeemFail": "Échec de l'échange",
+          "history": "Historique",
+          "date": "Date",
+          "type": "Type",
+          "amount": "Montant",
+          "topUpTitle": "Recharger Portefeuille",
+          "cancel": "Annuler",
+          "pay": "Payer avec WeChat",
+          "topUpSuccess": "Recharge réussie !",
+          "confirmed": "Confirmé"
+        }
+      },
+      "points": {
+        "dashboard": {
+          "title": "Mes Points",
+          "balance": "Solde Actuel",
+          "history": "Historique",
+          "time": "Heure",
+          "type": "Type",
+          "reason": "Raison",
+          "points": "Points",
+          "rules": "Règles de Gain",
+          "earnFixed": "Gagnez {points} points par action",
+          "earnRatio": "Gagnez {ratio} points par RMB dépensé",
+          "dailyLimit": "Limite Quotidienne : {limit}",
+          "types": {
+            "EARN": "Gagner",
+            "SPEND": "Dépenser",
+            "TOP_UP": "Recharger",
+            "PAYMENT_SENT": "Paiement"
+          }
+        }
+      },
+      "security": { "title": "Sécurité & Maintenance", "desc": "Sûreté & Inspections" },
+      "bi": { "title": "Tableau de Bord BI", "desc": "Intelligence d'Affaires" },
+      "crm": { "title": "CRM & Pistes", "desc": "Relation Client" },
+      "cs": { "title": "Atelier Service Client", "desc": "Service Client" },
+      "mall": { "title": "Boutique Points", "desc": "Centre d'Échange" },
+      "risk": { "title": "Contrôle des Risques", "desc": "Gestion des Risques" },
+      "social": { "title": "Matrice Sociale", "desc": "Médias Sociaux" },
+      "system": { 
+        "title": "Outils Système", 
+        "desc": "Administration",
+        "audit": "Journaux d'Audit",
+        "notification": "Notifications",
+        "scheduler": "Planificateur",
+        "lcms": "LCMS (Traductions)",
+        "export": "Centre d'Export"
+      },
+      "workflow": { "title": "Flux de Travail", "desc": "Gestion des Tâches" },
+      "finance_workbench": { "title": "Atelier Finance", "desc": "Finance Quotidienne" },
+      "applications": { "title": "Accueil" },
+      "member_portal": { "title": "Mon Portail" },
+      "booking": { "title": "Réserver un Terrain" },
+      "inventory": { "title": "Inventaire" },
+      "iot": { "title": "Lieu Intelligent" },
+      "hr": { "title": "RH & Personnel", "dashboard": "Tableau de Bord", "schedule": "Planning Intelligent" },
+      "report": { "title": "Rapports" },
+      "monitor": { "title": "Moniteur Système" }
+    }
+  },
+  "saas_admin": { 
+    "title": "Admin SaaS", 
+    "desc": "Gestion des Locataires",
+    "dashboard": "Tableau de Bord Super Admin",
+    "onboard": "Nouveau Locataire",
+    "total_tenants": "Total Locataires",
+    "active_subs": "Abonnements Actifs",
+    "mrr": "Revenu Récurrent Mensuel",
+    "table": {
+      "id": "ID",
+      "name": "Nom de la Franchise",
+      "domain": "Domaine",
+      "plan": "Forfait",
+      "status": "Statut",
+      "actions": "Actions",
+      "suspend": "Suspendre",
+      "activate": "Activer"
+    },
+    "modal": {
+      "title": "Ajouter Nouveau Locataire",
+      "name": "Nom de la Franchise",
+      "domain": "Domaine",
+      "plan": "Forfait d'Abonnement",
+      "cancel": "Annuler",
+      "create": "Créer"
+    },
+    "tabs": {
+      "tenants": "Locataires",
+      "financials": "Finances"
+    },
+    "plans": {
+      "free": "Essai Gratuit",
+      "pro": "Pro (¥999/mois)",
+      "enterprise": "Entreprise (¥2999/mois)"
+    },
+    "config": {
+      "title": "Config Locataire",
+      "appKey": "AppKey",
+      "rate": "Taux (%)",
+      "cycle": "Cycle de Règlement (Jours)",
+      "permissions": "Permissions API"
+    },
+    "sandbox": {
+      "title": "Sandbox API",
+      "target_appkey": "AppKey Cible",
+      "select_tenant": "Sélectionner un locataire",
+      "endpoint": "Point de terminaison",
+      "payload": "Charge utile",
+      "send": "Envoyer Requête",
+      "response": "Réponse"
+    },
+    "financials": {
+      "empty": "Les transactions financières du marchand apparaîtront ici (Données en boucle fermée)"
+    },
+    "permissions": {
+      "mp01": "Intégration Marchand",
+      "mp03": "Interopérabilité Points",
+      "mp04": "Interopérabilité Coupons"
+    },
+    "msg": {
+      "load_fail": "Échec du chargement des locataires",
+      "create_success": "Locataire créé avec succès",
+      "create_fail": "Échec de la création du locataire",
+      "appkey_success": "AppKey générée avec succès",
+      "appkey_fail": "Échec de la génération de l'AppKey",
+      "config_saved": "Configuration enregistrée",
+      "config_fail": "Échec de l'enregistrement de la configuration",
+      "status_update": "Locataire {status}",
+      "status_fail": "Échec de la mise à jour du statut",
+      "select_appkey": "Veuillez sélectionner une AppKey"
+    }
+  },
+  "iot": {
+    "title": "Jumeau Numérique : Statut du Lieu",
+    "occupied": "Occupé",
+    "empty": "Vide",
+    "lightOn": "Lumière Allumée",
+    "people": "personnes",
+    "override": "Contrôle Manuel"
+  },
+  "inventory": {
+    "title": "Gestion des Stocks",
+    "checkLowStock": "Vérifier Stock Faible",
+    "addItem": "Ajouter Article",
+    "totalItems": "Total Articles",
+    "lowStockAlerts": "Alertes Stock Faible",
+    "totalValue": "Valeur Totale",
+    "sku": "SKU",
+    "itemName": "Nom de l'Article",
+    "category": "Catégorie",
+    "stock": "Stock",
+    "reorderPoint": "Point de Commande",
+    "sellPrice": "Prix de Vente",
+    "restock": "Réapprovisionner",
+    "adjust": "Ajuster",
+    "foundLowStock": "{count} articles en stock faible trouvés !",
+    "healthy": "Tous les niveaux de stock sont sains",
+    "restockTitle": "Réapprovisionner l'Article",
+    "confirmStockIn": "Confirmer l'Entrée"
+  },
+  "export": {
+      "title": "Centre d'Export de Données",
+      "newTask": "Nouvelle Tâche d'Export",
+      "taskId": "ID Tâche",
+      "taskName": "Nom de la Tâche",
+      "dataType": "Type de Données",
+      "status": "Statut",
+      "createdAt": "Créé Le",
+      "action": "Action",
+      "download": "Télécharger",
+      "types": {
+        "member": "Données Membres",
+        "order": "Données Commandes",
+        "finance": "Données Financières"
+      },
+      "dialog": {
+        "title": "Créer Tâche d'Export",
+        "name": "Nom de la Tâche",
+        "type": "Type de Données",
+        "cancel": "Annuler",
+        "confirm": "Exporter"
+      }
+    },
+  "booking": {
+    "title": "Réserver une Ressource",
+    "myBookings": "Mes Réservations",
+    "bookNow": "Réserver",
+    "price": "Prix",
+    "resource": "Ressource",
+    "time": "Heure",
+    "qr": "QR d'Accès",
+    "status": "Statut",
+    "success": "Réservation Confirmée",
+    "failed": "Échec de la Réservation"
+  },
+  "technician": {
+    "title": "Atelier Technicien",
+    "workOrders": "Ordres de Travail",
+    "faultyDevices": "Appareils Défectueux",
+    "offlineDevices": "Appareils Hors Ligne",
+    "inspection": "Inspection",
+    "scanQr": "Scanner QR Appareil",
+    "reportFault": "Signaler Défaut",
+    "preventive": "Maint. Préventive",
+    "maintenance": "Maintenance Préventive",
+    "pending": "En Attente",
+    "in_progress": "En Cours",
+    "completed": "Terminé",
+    "device": "Appareil",
+    "issue": "Problème",
+    "priority": "Priorité",
+    "high": "Haute",
+    "medium": "Moyenne",
+    "low": "Basse",
+    "actions": "Actions",
+    "start": "Commencer Réparation",
+    "complete": "Terminer",
+    "done": "Fait",
+    "notes": "Notes de Résolution",
+    "cost": "Coût Main d'œuvre/Pièces",
+    "parts": "Pièces Détachées",
+    "submit": "Soumettre"
+  },
+  "manager": {
+    "title": "Atelier Directeur",
+    "revenue": "Revenu du Jour",
+    "visitors": "Visiteurs du Jour",
+    "redemptions": "Échanges",
+    "blindbox": "Ventes Blind Box",
+    "koc": "Contribution KOC",
+    "deviceRate": "Taux Appareils en Ligne",
+    "alerts": "Alertes",
+    "approvals": "Approbations En Attente",
+    "cost": "Répartition des Coûts",
+    "aiAssistant": "Assistant IA",
+    "emptyState": "Aucune suggestion active. Le système fonctionne de manière optimale.",
+    "execute": "Exécuter Action",
+    "viewReport": "Voir Rapport",
+    "type": "Type",
+    "applicant": "Demandeur",
+    "summary": "Résumé",
+    "action": "Action",
+    "approve": "Approuver",
+    "approveSuccess": "Demande approuvée avec succès",
+    "approveFail": "Échec de l'approbation"
+  },
+  "frontdesk": {
+    "title": "Réception",
+    "target": "Objectif du Jour",
+    "sales": "Ventes Actuelles",
+    "checkins": "Enregistrements En Attente",
+    "verifications": "Vérifications En Attente",
+    "quickCheckin": "Enregistrement Rapide",
+    "newSale": "Nouvelle Vente",
+    "memberReg": "Inscrip. Membre",
+    "pos": "Caisse",
+    "checkin": "Enregistrement Rapide",
+    "scan": "Scanner Bracelet/Carte",
+    "cart": "Panier Actuel",
+    "total": "Total",
+    "checkout": "Payer",
+    "empty": "Le panier est vide",
+    "search": "Rechercher articles...",
+    "add": "Ajouter",
+    "ticket": "Billet"
+  },
+  "security": {
+    "title": "Sécurité & Maintenance",
+    "inspections": "Inspections",
+    "incidents": "Incidents",
+    "equipment": "Sécurité Incendie",
+    "reportIncident": "Signaler Incident",
+    "checkEquipment": "Vérifier Équipement",
+    "activeIncidents": "Incidents Actifs",
+    "reportTitle": "Signaler Incident de Sécurité",
+    "fieldTitle": "Titre",
+    "type": "Type",
+    "severity": "Sévérité",
+    "location": "Lieu",
+    "status": "Statut",
+    "description": "Description",
+    "actions": "Actions",
+    "resolve": "Résoudre",
+    "report": "Signaler",
+    "types": {
+      "injury": "Blessure",
+      "equipment_failure": "Panne d'Équipement",
+      "security": "Sécurité",
+      "other": "Autre"
+    },
+    "severities": {
+      "low": "Basse",
+      "medium": "Moyenne",
+      "high": "Haute",
+      "critical": "Critique"
+    },
+    "resolvePrompt": "Notes de Résolution :",
+    "resolveTitle": "Résoudre Incident",
+    "resolveSuccess": "Incident Résolu",
+    "reportSuccess": "Signalé avec Succès"
+  },
+  "crm": {
+    "title": "Pipeline de Vente",
+    "addLead": "Ajouter Piste",
+    "columns": {
+      "new": "Nouvelle Piste",
+      "contacted": "Contacté",
+      "qualified": "Qualifié",
+      "converted": "Converti"
+    },
+    "name": "Nom",
+    "phone": "Téléphone",
+    "source": "Source",
+    "details": "Détails",
+    "convert": "Convertir",
+    "confirmConvert": "Confirmer la conversion de {name} en Membre ?",
+    "convertSuccess": "Converti avec Succès",
+    "addSuccess": "Ajouté avec Succès",
+    "dialog": {
+      "title": "Ajouter Nouvelle Piste",
+      "cancel": "Annuler",
+      "add": "Ajouter"
+    }
+  },
+  "hq": {
+    "title": "Centre HQ Global",
+    "financialHealth": "Santé Financière (Ce Mois)",
+    "healthy": "Sain",
+    "revenue": "Revenu",
+    "cogs": "COGS",
+    "payroll": "Paie",
+    "marketing": "Marketing",
+    "repairs": "Réparations",
+    "loss": "Perte Inv.",
+    "tax": "Impôt Est.",
+    "liability": "Passif (Prépayé)",
+    "netProfit": "Bénéfice Net",
+    "aiBrain": "Cerveau Stratégique IA",
+    "actionRequired": "Action Requise",
+    "allGood": "Tout va bien",
+    "execute": "Exécuter Stratégie",
+    "optimal": "Système fonctionnant dans les paramètres optimaux",
+    "opsHealth": "Santé des Opérations",
+    "pendingTasks": "Tâches en Attente",
+    "activeCampaigns": "Campagnes Actives",
+    "liveFeed": "Flux d'Événements en Direct",
+    "deptStatus": "Statut Département",
+    "inventory": "Inventaire",
+    "lowStock": "Articles Stock Faible",
+    "finance": "Finance",
+    "balanced": "Comptes Équilibrés",
+    "running": "En Cours"
+  },
+  "finance": {
+    "title": "Finance & Comptabilité",
+    "forecast": "Prédiction Flux de Trésorerie IA",
+    "confidence": "Confiance",
+    "calculator": "Calculateur Rapide d'Impôt",
+    "amount": "Montant",
+    "country": "Pays",
+    "calc": "Calculer",
+    "taxRate": "Taux d'Imposition",
+    "taxAmount": "Montant de l'Impôt",
+    "vouchers": "Pièces Comptables",
+    "voucherNo": "N° Pièce",
+    "type": "Type",
+    "debit": "Débit",
+    "credit": "Crédit",
+    "postedAt": "Comptabilisé Le"
+  },
+  "marketing": {
+    "title": "Marketing & Croissance",
+    "create": "Créer Campagne",
+    "active": "Campagnes Actives",
+    "reach": "Portée Totale",
+    "conversion": "Taux de Conversion",
+    "list": "Campagnes",
+    "name": "Nom",
+    "target": "Cible",
+    "status": "Statut",
+    "performance": "Performance",
+    "sent": "Envoyé",
+    "converted": "Conv",
+    "actions": "Actions",
+    "launch": "Lancer",
+    "view": "Voir",
+    "launchSuccess": "Campagne Lancée !",
+    "launchFail": "Échec du lancement",
+    "viewMsg": "Détails de la campagne pour {name} bientôt disponibles"
+  },
+  "data_analytics": {
+    "title": "Intelligence des Données",
+    "revenue": "Revenu Total",
+    "stores": "Magasins Actifs",
+    "members": "Total Membres",
+    "devices": "Appareils Connectés",
+    "growth": "Nouveaux Membres (7 derniers jours)",
+    "composition": "Composition du Revenu",
+    "peak": "Heures de Pointe (Occupation)"
+  },
+  "system": {
+    "title": "Gestion Système",
+    "audit": {
+      "title": "Journaux d'Audit",
+      "user": "Utilisateur",
+      "action": "Action",
+      "resource": "Ressource",
+      "ip": "Adresse IP",
+      "time": "Heure",
+      "status": "Statut",
+      "success": "Succès",
+      "fail": "Échec"
+    },
+    "notification": {
+      "title": "Centre de Notification",
+      "templates": "Modèles",
+      "logs": "Journaux d'Envoi",
+      "create": "Créer Modèle",
+      "code": "Code",
+      "name": "Nom",
+      "channel": "Canal",
+      "enabled": "Activé",
+      "disabled": "Désactivé",
+      "test": "Envoi Test",
+      "recipient": "Destinataire",
+      "time": "Heure d'Envoi",
+      "sms": "SMS",
+      "email": "Email"
+    },
+    "job": {
+      "title": "Planificateur de Tâches",
+      "name": "Nom de la Tâche",
+      "cron": "Expression Cron",
+      "lastRun": "Dernière Exécution",
+      "nextRun": "Prochaine Exécution",
+      "status": "Statut",
+      "trigger": "Déclencher Maintenant",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "running": "En Cours",
+      "paused": "En Pause"
+    },
+    "lcms": {
+      "title": "Gestionnaire LCMS",
+      "header": "LCMS - Contenu Multi-langue",
+      "select_project": "Sélectionner Projet",
+      "key": "Clé",
+      "key_name": "Nom de la Clé",
+      "desc": "Description",
+      "zh": "Chinois",
+      "zh_cn": "Chinois (zh_CN)",
+      "en": "Anglais",
+      "en_us": "Anglais (en_US)",
+      "save": "Enregistrer",
+      "add": "Ajouter Clé",
+      "delete": "Supprimer",
+      "trans_placeholder": "Traduction",
+      "dialog_title": "Ajouter Clé de Traduction",
+      "cancel": "Annuler",
+      "create": "Créer",
+      "msg": {
+        "key_created": "Clé créée",
+        "create_fail": "Échec de création de la clé",
+        "saved": "Enregistré",
+        "save_fail": "Échec de l'enregistrement"
+      }
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue"
+  }
+}

@@ -1,0 +1,589 @@
+{
+  "membership": {
+    "title": "Membership Card",
+    "level": "Level",
+    "growth": "Current Growth",
+    "nextLevel": "Next Level",
+    "benefits": "Benefits",
+    "noBenefits": "No benefits yet",
+    "aiInsights": "AI Insights",
+    "checkin": "Daily Check-in",
+    "simulate": "Simulate Purchase",
+    "checkinSuccess": "Check-in Success! Growth +10",
+    "simulateSuccess": "Purchase Simulated! Growth +{growth}"
+  },
+  "login": {
+    "title": "SPORTS ANT SaaS Login",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Login",
+    "reset": "Reset",
+    "placeholder": {
+      "username": "Enter Username",
+      "password": "Enter Password"
+    },
+    "msg": {
+      "username_required": "Please input username",
+      "password_required": "Please input password",
+      "success": "Login successful"
+    }
+  },
+  "sidebar": {
+    "groups": {
+      "workspace": "Workspace",
+      "operations": "Operations",
+      "resources": "Resources",
+      "analytics": "Analytics",
+      "personal": "Personal",
+      "system": "System"
+    }
+  },
+  "home": {
+    "welcome": "Welcome to SPORTS ANT SaaS",
+    "logout": "Logout",
+    "applications": "Applications",
+    "header": {
+      "home": "Home",
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "modules": {
+      "hq": { "title": "HQ Center", "desc": "Franchise & Global Management", "dashboard": "HQ Dashboard" },
+      "manager": { "title": "Store Manager", "desc": "Daily Operations & Staff" },
+      "frontdesk": { "title": "Front Desk", "desc": "Check-in & POS" },
+      "technician": { "title": "Technician", "desc": "Device Monitoring & Repair" },
+      "data": { "title": "Data Center", "desc": "Analytics & Reports" },
+      "marketing": { "title": "Marketing", "desc": "Campaigns & Members", "dashboard": "Dashboard", "campaigns": "Campaigns" },
+      "finance": { "title": "Finance", "desc": "Invoices & Payroll" },
+      "communication": {
+        "title": "Communication",
+        "desc": "Messages & Notifications",
+        "dashboard": "Dashboard",
+        "notifications": "My Notifications",
+        "broadcast": {
+          "title": "Broadcast Message",
+          "tag": "Marketing",
+          "form": {
+            "title": "Title",
+            "titlePlaceholder": "e.g. Summer Sale!",
+            "message": "Message",
+            "messagePlaceholder": "Enter your message here...",
+            "send": "Send to All Members",
+            "sending": "Sending..."
+          },
+          "history": {
+            "title": "Recent Broadcasts",
+            "colTitle": "Title",
+            "colMessage": "Message",
+            "colType": "Type",
+            "colTime": "Time"
+          },
+          "success": "Broadcast sent successfully!",
+          "fail": "Failed to send broadcast",
+          "validation": "Please fill in title and message"
+        },
+        "notificationList": {
+          "markAllRead": "Mark all read",
+          "empty": "No notifications",
+          "loadFail": "Failed to load notifications"
+        },
+        "messageCenter": {
+          "empty": "No new notifications",
+          "viewDetails": "View Details",
+          "markRead": "Mark Read",
+          "fetchFail": "Failed to fetch notifications",
+          "markReadFail": "Failed to mark as read"
+        },
+        "types": {
+          "MARKETING": "Marketing",
+          "SYSTEM": "System",
+          "ALERT": "Alert",
+          "INFO": "Info"
+        }
+      },
+      "member": {
+        "portal": {
+          "title": "My Dashboard",
+          "balance": "Balance",
+          "topUp": "Top Up",
+          "schedule": "My Schedule",
+          "noClass": "No upcoming classes",
+          "rewards": "Rewards Shop",
+          "points": "Points",
+          "redeem": "Redeem",
+          "redeemSuccess": "Redeemed successfully!",
+          "redeemFail": "Redemption failed",
+          "history": "Transaction History",
+          "date": "Date",
+          "type": "Type",
+          "amount": "Amount",
+          "topUpTitle": "Top Up Wallet",
+          "cancel": "Cancel",
+          "pay": "Pay with WeChat",
+          "topUpSuccess": "Top up successful!",
+          "confirmed": "Confirmed"
+        }
+      },
+      "points": {
+        "dashboard": {
+          "title": "My Points",
+          "balance": "Current Balance",
+          "history": "Transaction History",
+          "time": "Time",
+          "type": "Type",
+          "reason": "Reason",
+          "points": "Points",
+          "rules": "Earning Rules",
+          "earnFixed": "Earn {points} points per action",
+          "earnRatio": "Earn {ratio} points per RMB spent",
+          "dailyLimit": "Daily Limit: {limit}",
+          "types": {
+            "EARN": "Earn",
+            "SPEND": "Spend",
+            "TOP_UP": "Top Up",
+            "PAYMENT_SENT": "Payment"
+          }
+        }
+      },
+      "security": { "title": "Security & Maintenance", "desc": "Safety & Inspections" },
+      "bi": { "title": "BI Dashboard", "desc": "Business Intelligence" },
+      "crm": { "title": "CRM & Leads", "desc": "Customer Relationship" },
+      "cs": { "title": "CS Workbench", "desc": "Customer Service" },
+      "mall": { "title": "Points Mall", "desc": "Redemption Center" },
+      "risk": { "title": "Risk Control", "desc": "Risk Management" },
+      "social": { "title": "Social Matrix", "desc": "Social Media" },
+      "system": { 
+        "title": "System Tools", 
+        "desc": "Administration",
+        "audit": "Audit Logs",
+        "notification": "Notifications",
+        "scheduler": "Scheduler",
+        "lcms": "LCMS (Translations)",
+        "export": "Data Export Center"
+      },
+      "workflow": { "title": "Workflow", "desc": "Task Management" },
+      "finance_workbench": { "title": "Finance Workbench", "desc": "Daily Finance" },
+      "applications": { "title": "Home" },
+      "member_portal": { "title": "My Portal" },
+      "booking": { "title": "Book Court" },
+      "inventory": { "title": "Inventory" },
+      "iot": { "title": "Smart Venue" },
+      "hr": { "title": "HR & Staff", "dashboard": "Dashboard", "schedule": "Smart Schedule" },
+      "report": { "title": "Reports" },
+      "monitor": { "title": "System Monitor" }
+    }
+  },
+  "saas_admin": { 
+    "title": "SaaS Admin", 
+    "desc": "Tenant Management",
+    "dashboard": "Super Admin Dashboard",
+    "onboard": "Onboard New Tenant",
+    "total_tenants": "Total Tenants",
+    "active_subs": "Active Subscriptions",
+    "mrr": "Monthly Recurring Revenue",
+    "table": {
+      "id": "ID",
+      "name": "Franchise Name",
+      "domain": "Domain",
+      "plan": "Plan",
+      "status": "Status",
+      "actions": "Actions",
+      "suspend": "Suspend",
+      "activate": "Activate"
+    },
+    "modal": {
+      "title": "Onboard New Tenant",
+      "name": "Franchise Name",
+      "domain": "Domain",
+      "plan": "Subscription Plan",
+      "cancel": "Cancel",
+      "create": "Create"
+    },
+    "tabs": {
+      "tenants": "Tenants",
+      "financials": "Financials"
+    },
+    "plans": {
+      "free": "Free Trial",
+      "pro": "Pro (¥999/mo)",
+      "enterprise": "Enterprise (¥2999/mo)"
+    },
+    "config": {
+      "title": "Tenant Config",
+      "appKey": "AppKey",
+      "rate": "Rate (%)",
+      "cycle": "Settlement Cycle (Days)",
+      "permissions": "API Permissions"
+    },
+    "sandbox": {
+      "title": "API Sandbox",
+      "target_appkey": "Target AppKey",
+      "select_tenant": "Select a tenant",
+      "endpoint": "Endpoint",
+      "payload": "Payload",
+      "send": "Send Request",
+      "response": "Response"
+    },
+    "financials": {
+      "empty": "Merchant Financial Transactions will appear here (Closed Loop Data)"
+    },
+    "permissions": {
+      "mp01": "Merchant Onboarding",
+      "mp03": "Points Interop",
+      "mp04": "Coupon Interop"
+    },
+    "msg": {
+      "load_fail": "Failed to load tenants",
+      "create_success": "Tenant created successfully",
+      "create_fail": "Failed to create tenant",
+      "appkey_success": "AppKey generated successfully",
+      "appkey_fail": "Failed to generate AppKey",
+      "config_saved": "Configuration saved",
+      "config_fail": "Failed to save configuration",
+      "status_update": "Tenant {status}",
+      "status_fail": "Failed to update status",
+      "select_appkey": "Please select an AppKey"
+    }
+  },
+  "iot": {
+    "title": "Digital Twin: Venue Status",
+    "occupied": "Occupied",
+    "empty": "Empty",
+    "lightOn": "Light On",
+    "people": "people",
+    "override": "Manual Override"
+  },
+  "inventory": {
+    "title": "Inventory Management",
+    "checkLowStock": "Check Low Stock",
+    "addItem": "Add Item",
+    "totalItems": "Total Items",
+    "lowStockAlerts": "Low Stock Alerts",
+    "totalValue": "Total Value",
+    "sku": "SKU",
+    "itemName": "Item Name",
+    "category": "Category",
+    "stock": "Stock",
+    "reorderPoint": "Reorder Point",
+    "sellPrice": "Sell Price",
+    "restock": "Restock",
+    "adjust": "Adjust",
+    "foundLowStock": "Found {count} low stock items!",
+    "healthy": "All stock levels healthy",
+    "restockTitle": "Restock Item",
+    "confirmStockIn": "Confirm Stock In"
+  },
+  "export": {
+      "title": "Data Export Center",
+      "newTask": "New Export Task",
+      "taskId": "Task ID",
+      "taskName": "Task Name",
+      "dataType": "Data Type",
+      "status": "Status",
+      "createdAt": "Created At",
+      "action": "Action",
+      "download": "Download",
+      "types": {
+        "member": "Member Data",
+        "order": "Order Data",
+        "finance": "Finance Data"
+      },
+      "dialog": {
+        "title": "Create Export Task",
+        "name": "Task Name",
+        "type": "Data Type",
+        "cancel": "Cancel",
+        "confirm": "Export"
+      }
+    },
+  "booking": {
+    "title": "Book a Resource",
+    "myBookings": "My Bookings",
+    "bookNow": "Book Now",
+    "price": "Price",
+    "resource": "Resource",
+    "time": "Time",
+    "qr": "Access QR",
+    "status": "Status",
+    "success": "Booking Confirmed",
+    "failed": "Booking Failed"
+  },
+  "technician": {
+    "title": "Technician Workbench",
+    "workOrders": "Work Orders",
+    "faultyDevices": "Faulty Devices",
+    "offlineDevices": "Offline Devices",
+    "inspection": "Inspection",
+    "scanQr": "Scan Device QR",
+    "reportFault": "Report Fault",
+    "preventive": "Preventive Maint",
+    "maintenance": "Preventive Maintenance",
+    "pending": "Pending",
+    "in_progress": "In Progress",
+    "completed": "Completed",
+    "device": "Device",
+    "issue": "Issue",
+    "priority": "Priority",
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low",
+    "actions": "Actions",
+    "start": "Start Repair",
+    "complete": "Complete",
+    "done": "Done",
+    "notes": "Resolution Notes",
+    "cost": "Labor/Parts Cost",
+    "parts": "Spare Parts",
+    "submit": "Submit"
+  },
+  "manager": {
+    "title": "Manager Workbench",
+    "revenue": "Today's Revenue",
+    "visitors": "Today's Visitors",
+    "redemptions": "Redemptions",
+    "blindbox": "Blind Box Sales",
+    "koc": "KOC Contribution",
+    "deviceRate": "Device Online Rate",
+    "alerts": "Alerts",
+    "approvals": "Pending Approvals",
+    "cost": "Cost Breakdown",
+    "aiAssistant": "AI Assistant",
+    "emptyState": "No active suggestions. System is running optimally.",
+    "execute": "Execute Action",
+    "viewReport": "View Report",
+    "type": "Type",
+    "applicant": "Applicant",
+    "summary": "Summary",
+    "action": "Action",
+    "approve": "Approve",
+    "approveSuccess": "Request approved successfully",
+    "approveFail": "Failed to approve request"
+  },
+  "frontdesk": {
+    "title": "Front Desk",
+    "target": "Today's Target",
+    "sales": "Current Sales",
+    "checkins": "Pending Check-ins",
+    "verifications": "Pending Verifications",
+    "quickCheckin": "Quick Check-in",
+    "newSale": "New Sale",
+    "memberReg": "Member Reg",
+    "pos": "Checkout",
+    "checkin": "Quick Check-in",
+    "scan": "Scan Band/Card",
+    "cart": "Current Cart",
+    "total": "Total",
+    "checkout": "Checkout",
+    "empty": "Cart is empty",
+    "search": "Search items...",
+    "add": "Add",
+    "ticket": "Ticket"
+  },
+  "security": {
+    "title": "Safety & Maintenance",
+    "inspections": "Inspections",
+    "incidents": "Incidents",
+    "equipment": "Fire Safety",
+    "reportIncident": "Report Incident",
+    "checkEquipment": "Check Equipment",
+    "activeIncidents": "Active Incidents",
+    "reportTitle": "Report Safety Incident",
+    "fieldTitle": "Title",
+    "type": "Type",
+    "severity": "Severity",
+    "location": "Location",
+    "status": "Status",
+    "description": "Description",
+    "actions": "Actions",
+    "resolve": "Resolve",
+    "report": "Report",
+    "types": {
+      "injury": "Injury",
+      "equipment_failure": "Equipment Failure",
+      "security": "Security",
+      "other": "Other"
+    },
+    "severities": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "resolvePrompt": "Resolution Notes:",
+    "resolveTitle": "Resolve Incident",
+    "resolveSuccess": "Incident Resolved",
+    "reportSuccess": "Reported Successfully"
+  },
+  "crm": {
+    "title": "Sales Pipeline",
+    "addLead": "Add Lead",
+    "columns": {
+      "new": "New Lead",
+      "contacted": "Contacted",
+      "qualified": "Qualified",
+      "converted": "Converted"
+    },
+    "name": "Name",
+    "phone": "Phone",
+    "source": "Source",
+    "details": "Details",
+    "convert": "Convert",
+    "confirmConvert": "Confirm convert {name} to Member?",
+    "convertSuccess": "Converted Successfully",
+    "addSuccess": "Added Successfully",
+    "dialog": {
+      "title": "Add New Lead",
+      "cancel": "Cancel",
+      "add": "Add"
+    }
+  },
+  "hq": {
+    "title": "Global HQ Center",
+    "financialHealth": "Financial Health (This Month)",
+    "healthy": "Healthy",
+    "revenue": "Revenue",
+    "cogs": "COGS",
+    "payroll": "Payroll",
+    "marketing": "Marketing",
+    "repairs": "Repairs",
+    "loss": "Inv. Loss",
+    "tax": "Est. Tax",
+    "liability": "Liability (Prepaid)",
+    "netProfit": "Net Profit",
+    "aiBrain": "AI Strategic Brain",
+    "actionRequired": "Action Required",
+    "allGood": "All Good",
+    "execute": "Execute Strategy",
+    "optimal": "System operating within optimal parameters",
+    "opsHealth": "Operations Health",
+    "pendingTasks": "Pending Tasks",
+    "activeCampaigns": "Active Campaigns",
+    "liveFeed": "Live Events Feed",
+    "deptStatus": "Department Status",
+    "inventory": "Inventory",
+    "lowStock": "Low Stock Items",
+    "finance": "Finance",
+    "balanced": "Books Balanced",
+    "running": "Running"
+  },
+  "finance": {
+    "title": "Finance & Accounting",
+    "forecast": "AI Cash Flow Prediction",
+    "confidence": "Confidence",
+    "calculator": "Quick Tax Calculator",
+    "amount": "Amount",
+    "country": "Country",
+    "calc": "Calculate",
+    "taxRate": "Tax Rate",
+    "taxAmount": "Tax Amount",
+    "vouchers": "Accounting Vouchers",
+    "voucherNo": "Voucher No",
+    "type": "Type",
+    "debit": "Debit",
+    "credit": "Credit",
+    "postedAt": "Posted At"
+  },
+  "marketing": {
+    "title": "Marketing & Growth",
+    "create": "Create Campaign",
+    "active": "Active Campaigns",
+    "reach": "Total Reach",
+    "conversion": "Conversion Rate",
+    "list": "Campaigns",
+    "name": "Name",
+    "target": "Target",
+    "status": "Status",
+    "performance": "Performance",
+    "sent": "Sent",
+    "converted": "Conv",
+    "actions": "Actions",
+    "launch": "Launch",
+    "view": "View",
+    "launchSuccess": "Campaign Launched!",
+    "launchFail": "Failed to launch",
+    "viewMsg": "Campaign details view for {name} coming soon"
+  },
+  "data_analytics": {
+    "title": "Data Intelligence",
+    "revenue": "Total Revenue",
+    "stores": "Active Stores",
+    "members": "Total Members",
+    "devices": "Connected Devices",
+    "growth": "New Members (Last 7 Days)",
+    "composition": "Revenue Composition",
+    "peak": "Peak Hours (Occupancy)"
+  },
+  "system": {
+    "title": "System Management",
+    "audit": {
+      "title": "Audit Logs",
+      "user": "User",
+      "action": "Action",
+      "resource": "Resource",
+      "ip": "IP Address",
+      "time": "Time",
+      "status": "Status",
+      "success": "Success",
+      "fail": "Failed"
+    },
+    "notification": {
+      "title": "Notification Center",
+      "templates": "Templates",
+      "logs": "Send Logs",
+      "create": "Create Template",
+      "code": "Code",
+      "name": "Name",
+      "channel": "Channel",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "test": "Test Send",
+      "recipient": "Recipient",
+      "time": "Sent Time",
+      "sms": "SMS",
+      "email": "Email"
+    },
+    "job": {
+      "title": "Job Scheduler",
+      "name": "Job Name",
+      "cron": "Cron Expression",
+      "lastRun": "Last Run",
+      "nextRun": "Next Run",
+      "status": "Status",
+      "trigger": "Trigger Now",
+      "pause": "Pause",
+      "resume": "Resume",
+      "running": "Running",
+      "paused": "Paused"
+    },
+    "lcms": {
+      "title": "LCMS Manager",
+      "header": "LCMS - Multi-language Content",
+      "select_project": "Select Project",
+      "key": "Key",
+      "key_name": "Key Name",
+      "desc": "Description",
+      "zh": "Chinese",
+      "zh_cn": "Chinese (zh_CN)",
+      "en": "English",
+      "en_us": "English (en_US)",
+      "save": "Save",
+      "add": "Add Key",
+      "delete": "Delete",
+      "trans_placeholder": "Translation",
+      "dialog_title": "Add Translation Key",
+      "cancel": "Cancel",
+      "create": "Create",
+      "msg": {
+        "key_created": "Key created",
+        "create_fail": "Failed to create key",
+        "saved": "Saved",
+        "save_fail": "Failed to save"
+      }
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred"
+  }
+}

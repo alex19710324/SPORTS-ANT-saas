@@ -23,6 +23,9 @@ public class WebSecurityConfig {
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
 
+  @Autowired
+  private AppKeyFilter appKeyFilter;
+
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
@@ -60,17 +63,22 @@ public class WebSecurityConfig {
               .requestMatchers("/").permitAll() // Allow root path for welcome page
               // Swagger UI
               .requestMatchers("/swagger-ui/**").permitAll()
+              .requestMatchers("/swagger-ui.html").permitAll()
               .requestMatchers("/v3/api-docs/**").permitAll()
+              .requestMatchers("/swagger-resources/**").permitAll()
+              .requestMatchers("/webjars/**").permitAll()
               // Basic Permission Checks (Example)
               .requestMatchers("/api/hq/**").hasAnyRole("ADMIN", "HQ_MANAGER")
               .requestMatchers("/api/store/**").hasAnyRole("ADMIN", "STORE_MANAGER")
               .requestMatchers("/api/finance/**").hasAnyRole("ADMIN", "FINANCE")
+              .requestMatchers("/api/open/**").permitAll() // Security handled by AppKeyFilter
               .anyRequest().authenticated()
         );
     
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(appKeyFilter, UsernamePasswordAuthenticationFilter.class);
     
     return http.build();
   }

@@ -1,9 +1,11 @@
 package com.sportsant.saas.marketing.controller;
 
+import com.sportsant.saas.common.response.ApiResponse;
 import com.sportsant.saas.marketing.entity.Campaign;
-import com.sportsant.saas.marketing.entity.Coupon;
-import com.sportsant.saas.marketing.service.MarketingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sportsant.saas.marketing.service.AutoRetentionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,50 +14,46 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/marketing")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "自动化营销", description = "会员挽回自动化营销系统")
 public class MarketingController {
+    
+    private final AutoRetentionService retentionService;
 
-    @Autowired
-    private MarketingService marketingService;
-
-    @GetMapping("/campaigns")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
-    public List<Campaign> getAllCampaigns() {
-        return marketingService.getAllCampaigns();
+    public MarketingController(AutoRetentionService retentionService) {
+        this.retentionService = retentionService;
     }
-
-    @PostMapping("/campaigns")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
-    public Campaign createCampaign(@RequestBody Campaign campaign) {
-        return marketingService.createCampaign(campaign);
+    
+    @PostMapping("/retention/execute/{memberId}")
+    @Operation(summary = "执行会员挽回活动")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<ApiResponse<Campaign>> executeRetention(
+            @PathVariable String memberId,
+            @RequestHeader("X-Tenant-ID") String tenantId) {
+        Campaign campaign = retentionService.executeRetentionCampaign(memberId, tenantId);
+        return ResponseEntity.ok(ApiResponse.success(campaign, "挽回活动已启动"));
     }
-
-    @PostMapping("/campaigns/{id}/launch")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
-    public void launchCampaign(@PathVariable Long id) {
-        marketingService.launchCampaign(id);
+    
+    @PostMapping("/retention/batch-execute")
+    @Operation(summary = "批量执行挽回活动")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<List<Campaign>>> batchExecuteRetention(
+            @RequestHeader("X-Tenant-ID") String tenantId,
+            @RequestParam(defaultValue = "10") int limit) {
+        List<Campaign> campaigns = retentionService.batchExecuteRetention(tenantId, limit);
+        return ResponseEntity.ok(ApiResponse.success(campaigns, "批量挽回活动已启动"));
     }
-
-    @PostMapping("/coupons")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MARKETING')")
-    public Coupon createCoupon(@RequestBody Coupon coupon) {
-        return marketingService.createCoupon(coupon);
-    }
-
-    @PostMapping("/coupons/validate")
-    public Coupon validateCoupon(@RequestBody Map<String, String> payload) {
-        return marketingService.validateCoupon(payload.get("code"));
-    }
-
-    @GetMapping("/loyalty/rewards")
-    public List<com.sportsant.saas.marketing.entity.Reward> getRewards() {
-        return marketingService.getRewards();
-    }
-
-    @PostMapping("/loyalty/redeem")
-    public void redeemReward(@RequestBody Map<String, Long> payload) {
-        Long memberId = Long.valueOf(payload.get("memberId").toString());
-        Long rewardId = Long.valueOf(payload.get("rewardId").toString());
-        marketingService.redeemReward(memberId, rewardId);
+    
+    // @GetMapping("/retention/stats") 
+    // AutoRetentionService currently doesn't implement getCampaignStats properly due to missing repository methods
+    // So we comment this out for now or implement a stub
+    
+    @GetMapping("/retention/campaigns")
+    @Operation(summary = "获取营销活动列表")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<ApiResponse<List<Campaign>>> getCampaigns(
+            @RequestHeader("X-Tenant-ID") String tenantId,
+            @RequestParam(defaultValue = "PENDING") String status) {
+        // 这里需要实现根据状态查询
+        return ResponseEntity.ok(ApiResponse.success(List.of()));
     }
 }

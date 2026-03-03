@@ -14,7 +14,9 @@ public class FranchiseApplication {
     private String applicantName;
     private String contactInfo;
     private String proposedCity;
-    private String status; // PENDING, APPROVED, REJECTED
+    private String status; // PENDING, APPROVED, REJECTED, PAID
+
+    private Double initialFee; // Franchise Fee
 
     @Column(columnDefinition = "TEXT")
     private String comments;
@@ -28,6 +30,8 @@ public class FranchiseApplication {
     }
     
     // Getters and Setters
+    public Double getInitialFee() { return initialFee; }
+    public void setInitialFee(Double initialFee) { this.initialFee = initialFee; }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getApplicantName() { return applicantName; }

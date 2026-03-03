@@ -11,8 +11,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service
 public class MembershipAiLifecycleService implements AiAware {
@@ -26,6 +28,35 @@ public class MembershipAiLifecycleService implements AiAware {
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+
+    public Map<String, Object> getMemberInsights(Long userId) {
+        Member member = memberRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Member not found"));
+        
+        Map<String, Object> insights = new HashMap<>();
+        
+        // Mock Real-time Inference
+        // In reality, this would query a model endpoint or a pre-computed table
+        Random rand = new Random();
+        double churnProb = rand.nextDouble(); 
+        
+        insights.put("churnProbability", churnProb);
+        if (churnProb > 0.7) {
+            insights.put("riskLevel", "HIGH");
+            insights.put("retentionStrategy", "Send 20% Coupon immediately");
+        } else if (churnProb > 0.4) {
+             insights.put("riskLevel", "MEDIUM");
+             insights.put("retentionStrategy", "Send personalized email");
+        } else {
+             insights.put("riskLevel", "LOW");
+             insights.put("retentionStrategy", "Upsell premium membership");
+        }
+        
+        // Recommended Actions
+        insights.put("nextBestAction", "Offer Personal Training Session");
+        insights.put("engagementScore", rand.nextInt(100));
+        
+        return insights;
+    }
 
     /**
      * Daily job to analyze all members for churn risk and segmentation.

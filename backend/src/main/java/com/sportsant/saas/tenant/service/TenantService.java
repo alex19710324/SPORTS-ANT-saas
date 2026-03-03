@@ -56,4 +56,26 @@ public class TenantService {
         tenant.setUpdatedAt(LocalDateTime.now());
         return tenantRepository.save(tenant);
     }
+
+    @Transactional
+    public Tenant updateConfig(Long id, Double rate, Integer cycle, String permissions) {
+        Tenant tenant = tenantRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tenant not found"));
+        tenant.setRate(rate);
+        tenant.setCycle(cycle);
+        tenant.setPermissions(permissions);
+        tenant.setUpdatedAt(LocalDateTime.now());
+        return tenantRepository.save(tenant);
+    }
+
+    @Transactional
+    public Tenant generateAppKey(Long id) {
+        Tenant tenant = tenantRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tenant not found"));
+        // Generate a random AppKey (simple UUID for now, in production use stronger crypto)
+        String appKey = "ak_" + java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+        tenant.setAppKey(appKey);
+        tenant.setUpdatedAt(LocalDateTime.now());
+        return tenantRepository.save(tenant);
+    }
 }

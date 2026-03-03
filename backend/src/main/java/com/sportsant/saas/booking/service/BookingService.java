@@ -5,10 +5,14 @@ import com.sportsant.saas.booking.entity.Resource;
 import com.sportsant.saas.booking.repository.BookingRepository;
 import com.sportsant.saas.booking.repository.ResourceRepository;
 import com.sportsant.saas.data.service.AnalyticsService;
+import com.sportsant.saas.finance.service.FinanceService;
+import com.sportsant.saas.membership.service.MembershipService;
+import com.sportsant.saas.hr.service.WorkforceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +30,15 @@ public class BookingService {
     @Autowired
     private AnalyticsService analyticsService;
 
+    @Autowired
+    private FinanceService financeService;
+
+    @Autowired
+    private MembershipService membershipService;
+
+    @Autowired
+    private WorkforceService workforceService;
+
     public List<Resource> getAvailableResources() {
         return resourceRepository.findByActiveTrue();
     }
@@ -40,11 +53,8 @@ public class BookingService {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
 
-        // 1. Conflict Check
-        // Using strict time overlap logic
-        // findByResourceAndStartTimeLessThanAndEndTimeGreaterThan
-        // For MVP, relying on simple query. Let's assume start time matches slots.
-        List<Booking> conflicts = bookingRepository.findByResourceAndStartTimeBetween(resource, startTime, endTime);
+        // 1. Conflict Check (Enhanced)
+        List<Booking> conflicts = bookingRepository.findConflicts(resource, startTime, endTime);
         if (!conflicts.isEmpty()) {
             throw new RuntimeException("Time slot already booked");
         }
@@ -71,7 +81,31 @@ public class BookingService {
         booking.setTotalPrice(price);
         booking.setAccessCode(UUID.randomUUID().toString()); // Generate QR content
         
-        return bookingRepository.save(booking);
+        // 3. Payment Processing (Deduct Balance)
+        try {
+            membershipService.deductBalance(memberId, price);
+        } catch (Exception e) {
+            throw new RuntimeException("Payment failed: " + e.getMessage());
+        }
+
+        Booking savedBooking = bookingRepository.save(booking);
+
+        // 4. Financial Record (Revenue Recognition)
+        // Debit: Advance from Customers, Credit: Service Revenue
+        financeService.createVoucher(
+            "POS_SALE_BALANCE", 
+            savedBooking.getId(), 
+            BigDecimal.valueOf(price), 
+            "Booking: " + resource.getName(), 
+            "CN"
+        );
+
+        // 5. HR Auto-Scheduling (If resource requires staff, e.g., Personal Training)
+        if ("PERSONAL_TRAINER".equals(resource.getType())) {
+            workforceService.autoAssignTrainer(savedBooking);
+        }
+
+        return savedBooking;
     }
 
     @Transactional

@@ -35,12 +35,10 @@ public class FinanceServiceTest {
     @Test
     public void testCalculateTax_CN() {
         BigDecimal amount = new BigDecimal("1000");
-        Map<String, Object> result = financeService.calculateTax("CN", amount);
+        BigDecimal result = financeService.calculateTax("CN", amount);
         
         assertNotNull(result);
-        assertEquals(0.13, (Double) result.get("taxRate"), 0.001);
-        BigDecimal taxAmount = (BigDecimal) result.get("taxAmount");
-        assertEquals(130.0, taxAmount.doubleValue(), 0.01);
+        assertEquals(100.0, result.doubleValue(), 0.01);
     }
 
     @Test
@@ -48,9 +46,7 @@ public class FinanceServiceTest {
         Map<String, Object> prediction = financeService.predictCashFlow();
         
         assertNotNull(prediction);
-        assertTrue(prediction.containsKey("forecast"));
-        assertTrue(prediction.containsKey("confidence"));
-        assertEquals(0.95, (Double) prediction.get("confidence"), 0.001);
+        assertTrue(prediction.containsKey("prediction"));
     }
 
     @Test

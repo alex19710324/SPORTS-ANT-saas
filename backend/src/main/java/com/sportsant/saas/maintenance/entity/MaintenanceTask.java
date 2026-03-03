@@ -12,7 +12,7 @@ public class MaintenanceTask {
 
     @ManyToOne
     @JoinColumn(name = "device_id", nullable = false)
-    private Device device;
+    private MaintenanceDevice device;
 
     @Column(nullable = false)
     private String description;
@@ -25,12 +25,16 @@ public class MaintenanceTask {
     private String technicianName; // Assigned to
 
     private LocalDate completedDate;
+    
+    private Double cost; // Parts + Labor
 
     // Getters and Setters
+    public Double getCost() { return cost; }
+    public void setCost(Double cost) { this.cost = cost; }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public Device getDevice() { return device; }
-    public void setDevice(Device device) { this.device = device; }
+    public MaintenanceDevice getDevice() { return device; }
+    public void setDevice(MaintenanceDevice device) { this.device = device; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
     public LocalDate getDueDate() { return dueDate; }

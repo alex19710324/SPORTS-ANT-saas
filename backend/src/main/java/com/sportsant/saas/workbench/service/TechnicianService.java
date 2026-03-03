@@ -1,15 +1,14 @@
 package com.sportsant.saas.workbench.service;
 
 import com.sportsant.saas.device.repository.DeviceRepository;
-import com.sportsant.saas.device.repository.WorkOrderRepository;
+import com.sportsant.saas.device.repository.DeviceWorkOrderRepository;
 import com.sportsant.saas.device.entity.Device;
-import com.sportsant.saas.device.entity.WorkOrder;
+import com.sportsant.saas.device.entity.DeviceWorkOrder;
 import com.sportsant.saas.inventory.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 public class TechnicianService {
 
     @Autowired
-    private WorkOrderRepository workOrderRepository;
+    private DeviceWorkOrderRepository workOrderRepository;
 
     @Autowired
     private DeviceRepository deviceRepository;
@@ -29,7 +28,7 @@ public class TechnicianService {
 
     public Map<String, Object> getTechnicianOverview(Long technicianId) {
         // Mock data for now, in real app filter by technicianId or storeId
-        List<WorkOrder> pendingOrders = workOrderRepository.findAll().stream()
+        List<DeviceWorkOrder> pendingOrders = workOrderRepository.findAll().stream()
                 .filter(wo -> "OPEN".equals(wo.getStatus()) || "IN_PROGRESS".equals(wo.getStatus()))
                 .limit(10)
                 .collect(Collectors.toList());
@@ -49,16 +48,16 @@ public class TechnicianService {
     }
 
     @Transactional
-    public WorkOrder updateWorkOrderStatus(Long orderId, String newStatus, Long technicianId, List<Map<String, Object>> partsUsed) {
-        WorkOrder order = workOrderRepository.findById(orderId)
+    public DeviceWorkOrder updateWorkOrderStatus(Long orderId, String newStatus, Long technicianId, List<Map<String, Object>> partsUsed) {
+        DeviceWorkOrder order = workOrderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Work Order not found"));
         
         if ("IN_PROGRESS".equals(newStatus)) {
-            order.setAssignedTo(technicianId);
+            // order.setAssignedTo(technicianId); // Field removed in DeviceWorkOrder
             order.setStatus("IN_PROGRESS");
         } else if ("CLOSED".equals(newStatus)) {
             order.setStatus("CLOSED");
-            order.setClosedAt(LocalDateTime.now());
+            // order.setClosedAt(LocalDateTime.now()); // Field removed in DeviceWorkOrder
             
             // Deduct Inventory Parts
             if (partsUsed != null && !partsUsed.isEmpty()) {

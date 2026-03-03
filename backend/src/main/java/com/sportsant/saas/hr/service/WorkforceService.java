@@ -1,5 +1,6 @@
 package com.sportsant.saas.hr.service;
 
+import com.sportsant.saas.booking.entity.Booking;
 import com.sportsant.saas.data.service.AnalyticsService;
 import com.sportsant.saas.hr.entity.Shift;
 import com.sportsant.saas.hr.repository.ShiftRepository;
@@ -22,6 +23,31 @@ public class WorkforceService {
 
     @Autowired
     private AnalyticsService analyticsService;
+
+    @Transactional
+    public void autoAssignTrainer(Booking booking) {
+        // Find a Trainer shift that covers the booking time
+        List<Shift> availableShifts = shiftRepository.findByStartTimeBetween(booking.getStartTime().minusHours(1), booking.getEndTime().plusHours(1));
+        
+        Shift trainerShift = availableShifts.stream()
+            .filter(s -> "TRAINER".equals(s.getRole()) && 
+                         (s.getStartTime().isBefore(booking.getStartTime()) || s.getStartTime().isEqual(booking.getStartTime())) &&
+                         (s.getEndTime().isAfter(booking.getEndTime()) || s.getEndTime().isEqual(booking.getEndTime())))
+            .findFirst()
+            .orElse(null);
+
+        if (trainerShift != null) {
+            // Assign (In a real system, we'd link booking to employee, here we just log or update shift note)
+            // Ideally Booking entity should have 'assignedStaffId'
+            System.out.println("Assigned Trainer: " + trainerShift.getEmployeeName() + " to Booking " + booking.getId());
+        } else {
+            // Create Ad-hoc Shift
+            Shift adhoc = createShift("Ad-hoc Trainer", "TRAINER", booking.getStartTime().toLocalDate(), booking.getStartTime().getHour(), booking.getEndTime().getHour());
+            adhoc.setEmployeeName("Auto-Assigned Trainer");
+            shiftRepository.save(adhoc);
+            System.out.println("Created Ad-hoc Shift for Booking " + booking.getId());
+        }
+    }
 
     public List<Shift> getShifts(LocalDate start, LocalDate end) {
         return shiftRepository.findByStartTimeBetween(start.atStartOfDay(), end.atTime(23, 59, 59));

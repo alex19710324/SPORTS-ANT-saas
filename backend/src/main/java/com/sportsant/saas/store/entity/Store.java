@@ -16,6 +16,10 @@ public class Store {
     private String city;
     private Double latitude;
     private Double longitude;
+    
+    private String timezone; // e.g., "Asia/Shanghai"
+    private String locale;   // e.g., "zh-CN"
+    private String currency; // e.g., "CNY"
 
     // Real-time cached metrics (updated by async jobs)
     private BigDecimal todayRevenue;
@@ -52,4 +56,10 @@ public class Store {
     public void setAlertCount(Integer alertCount) { this.alertCount = alertCount; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    public String getTimezone() { return timezone; }
+    public void setTimezone(String timezone) { this.timezone = timezone; }
+    public String getLocale() { return locale; }
+    public void setLocale(String locale) { this.locale = locale; }
+    public String getCurrency() { return currency; }
+    public void setCurrency(String currency) { this.currency = currency; }
 }

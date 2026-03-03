@@ -38,4 +38,31 @@ public class SaaSAdminController {
     public Tenant updateStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
         return tenantService.updateStatus(id, payload.get("status"));
     }
+
+    @PutMapping("/tenants/{id}/config")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Tenant updateConfig(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
+        Double rate = payload.get("rate") != null ? Double.valueOf(payload.get("rate").toString()) : null;
+        Integer cycle = payload.get("cycle") != null ? Integer.valueOf(payload.get("cycle").toString()) : null;
+        String permissions = payload.get("permissions") != null ? payload.get("permissions").toString() : null;
+        
+        // Handle array permissions if frontend sends array
+        Object permissionsObj = payload.get("permissions");
+        if (permissionsObj instanceof List<?>) {
+            List<?> list = (List<?>) permissionsObj;
+            if (!list.isEmpty() && list.get(0) instanceof String) {
+                @SuppressWarnings("unchecked")
+                List<String> strList = (List<String>) list;
+                permissions = String.join(",", strList);
+            }
+        }
+
+        return tenantService.updateConfig(id, rate, cycle, permissions);
+    }
+
+    @PostMapping("/tenants/{id}/appkey")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Tenant generateAppKey(@PathVariable Long id) {
+        return tenantService.generateAppKey(id);
+    }
 }

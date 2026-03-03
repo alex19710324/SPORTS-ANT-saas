@@ -10,30 +10,30 @@ public class AiSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type; // REVENUE_SPIKE, SAFETY_ALERT, STAFFING_SHORTAGE, MARKETING_OPPORTUNITY
-    
+    @Column(nullable = false)
+    private String type; // INVENTORY, MARKETING, MEMBERSHIP, FINANCE
+
     private String title;
     
     @Column(columnDefinition = "TEXT")
-    private String content; // The suggestion text
+    private String content;
 
     private String priority; // HIGH, MEDIUM, LOW
 
-    private String actionableApi; // Endpoint to call if user accepts
+    private String actionType; // LINK, API, NONE
+    private String actionPayload; // JSON: { "route": "/inventory", "params": { "sku": "A123" } }
 
-    private String status; // NEW, ACCEPTED, REJECTED
-    
-    @Column(columnDefinition = "TEXT")
-    private String feedback;
-    
+    private String status; // PENDING, EXECUTED, IGNORED
+
+    private Long relatedId; // e.g. StoreID or MemberID
+
     private LocalDateTime createdAt;
-    
-    private Double confidence; // 0.0 - 1.0
+    private LocalDateTime executedAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        if (status == null) status = "NEW";
+        if (status == null) status = "PENDING";
     }
 
     // Getters and Setters
@@ -47,14 +47,16 @@ public class AiSuggestion {
     public void setContent(String content) { this.content = content; }
     public String getPriority() { return priority; }
     public void setPriority(String priority) { this.priority = priority; }
-    public String getActionableApi() { return actionableApi; }
-    public void setActionableApi(String actionableApi) { this.actionableApi = actionableApi; }
+    public String getActionType() { return actionType; }
+    public void setActionType(String actionType) { this.actionType = actionType; }
+    public String getActionPayload() { return actionPayload; }
+    public void setActionPayload(String actionPayload) { this.actionPayload = actionPayload; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-    public String getFeedback() { return feedback; }
-    public void setFeedback(String feedback) { this.feedback = feedback; }
+    public Long getRelatedId() { return relatedId; }
+    public void setRelatedId(Long relatedId) { this.relatedId = relatedId; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public Double getConfidence() { return confidence; }
-    public void setConfidence(Double confidence) { this.confidence = confidence; }
+    public LocalDateTime getExecutedAt() { return executedAt; }
+    public void setExecutedAt(LocalDateTime executedAt) { this.executedAt = executedAt; }
 }
