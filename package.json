@@ -2,9 +2,21 @@
   "name": "sports-ant-saas-root",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm install && npm run build"
+    "git:auto-commit": "node scripts/auto-git-commit.cjs",
+    "git:auto-commit:dry-run": "node scripts/auto-git-commit.cjs --dry-run",
+    "git:auto-commit:start": "node scripts/auto-git-commit-daemon.cjs",
+    "git:auto-commit:stop": "node scripts/auto-git-commit-daemon-stop.cjs",
+    "git:auto-commit:status": "node scripts/auto-git-commit-daemon-status.cjs",
+    "build": "cd frontend && npm install && npm run build",
+    "regression:four-end": "python3 /Users/yaoyunzhong/.trae/skills/webapp-testing/scripts/with_server.py --server \"node scripts/regression-backend.cjs\" --port 8080 -- node scripts/run-four-end-regression.cjs",
+    "regression:four-end:check": "node four-end-regression.cjs"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
   }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.sportsant.saas.git-autocommit</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/node</string>
+    <string>/Users/yaoyunzhong/Desktop/SPORTS ANT saas/scripts/auto-git-commit.cjs</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/yaoyunzhong/Desktop/SPORTS ANT saas</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>1800</integer>
+  <key>StandardOutPath</key>
+  <string>/Users/yaoyunzhong/Library/Logs/com.sportsant.saas.git-autocommit.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/yaoyunzhong/Library/Logs/com.sportsant.saas.git-autocommit.error.log</string>
+</dict>
+</plist>
