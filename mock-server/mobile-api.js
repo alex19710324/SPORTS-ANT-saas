@@ -742,6 +742,68 @@ module.exports = function(app, io, db) {
         ]
       });
     }
+
+    if (path.includes('play/categories') && method === 'GET') {
+      const categories = Array.from(
+        new Set(
+          db.game_library
+            .map((item) => item.category)
+            .filter(Boolean)
+        )
+      );
+      return respond(res, ['全部节点', ...categories]);
+    }
+
+    if (path.includes('booking/resources') && method === 'GET') {
+      const pricePool = [168, 128, 88, 199];
+      const resources = db.game_library.map((item, index) => {
+        const id = String(item.id || index + 1);
+        const category = item.category || '体验';
+        const players = item.players ? `${item.players}人` : '多人';
+        return {
+          id,
+          name: item.title || item.name || `体验项目 ${id}`,
+          image: item.image || '/static/assets/images/mobile_hero.jpg',
+          price: pricePool[index % pricePool.length],
+          status: index % 3 === 2 ? 'BUSY' : 'AVAILABLE',
+          hot: index % 2 === 0,
+          tags: [category, players]
+        };
+      });
+      return respond(res, resources);
+    }
+
+    if (path.includes('play/detail') && method === 'GET') {
+      const id = String(req.query?.id || '');
+      const item = db.game_library.find((game) => String(game.id) === id);
+      const name = item?.title || '未来战场 VR';
+      const category = item?.category || '沉浸式';
+      const players = item?.players ? `${item.players}人` : '多人联机';
+      return respond(res, {
+        id: id || 'g1',
+        name,
+        price: 88,
+        tags: [category, players],
+        description: `佩戴最新的VR头显，进入 ${name} 的沉浸式场景，支持多人联机与现场 IoT 联动授权入场。`,
+        image: item?.image || 'http://localhost:8080/images/asset_52ffd21165f088875945738c4f5fcee2.jpg'
+      });
+    }
+
+    if (path.includes('booking/create') && method === 'POST') {
+      const booking = {
+        id: `BK-${Date.now()}`,
+        resourceId: String(req.body?.resourceId || ''),
+        time: req.body?.time || '',
+        people: Number(req.body?.people || 1),
+        teamCode: req.body?.teamCode || '',
+        status: 'CONFIRMED',
+        createdAt: new Date().toISOString()
+      };
+      if (!db.bookings) db.bookings = [];
+      db.bookings.push(booking);
+      io.emit('data_sync', { type: 'BOOKING_CREATED', payload: booking });
+      return respond(res, booking);
+    }
     
     if (path.includes('profile/entry-code')) {
       db.entryPass = {
