@@ -6,9 +6,28 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [vue()],
   resolve: {
+    dedupe: ['axios'],
     alias: {
       '@': resolve(__dirname, 'src'),
       '@sportsant/utils': resolve(__dirname, '../packages/utils/src/index.ts')
+    }
+  },
+  server: {
+    port: 5174,
+    strictPort: true,
+    host: true,
+    allowedHosts: true,
+    proxy: {
+      '/api/iot': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        secure: false
+      },
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false
+      }
     }
   },
   build: {

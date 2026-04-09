@@ -8,6 +8,18 @@
 npm run regression:four-end
 ```
 
+如果要跑真实四端链路：
+
+```bash
+npm run regression:four-end:real
+```
+
+如果要跑当前最稳的混合链路：
+
+```bash
+npm run regression:four-end:hybrid
+```
+
 如果四个前端端口已经由你手动启动，也可以只执行断言脚本：
 
 ```bash
@@ -32,6 +44,16 @@ npm run regression:four-end:check
   - 自动拉起 8080 轻量回归后端
   - 自动拉起 5171 / 5174 / 5176 / 5178 四个回归夹具页面
   - 自动执行 `four-end-regression.cjs`
+- `npm run regression:four-end:real`
+  - 自动拉起 8080 轻量回归后端
+  - 5171 使用真实 UniApp dev server
+  - 5174 / 5176 / 5178 使用真实构建产物
+  - 自动执行 `four-end-regression.cjs`
+- `npm run regression:four-end:hybrid`
+  - 自动拉起 8080 轻量回归后端
+  - 5171 使用回归夹具页面
+  - 5174 / 5176 / 5178 使用真实构建产物
+  - 自动执行 `four-end-regression.cjs`
 - `npm run regression:four-end:check`
   - 只执行断言脚本
   - 适用于你已经手动准备好 8080 / 5171 / 5174 / 5176 / 5178 的场景
@@ -45,6 +67,12 @@ npm run regression:four-end:check
   - 接口联调是否成功
   - 跨端跳转语义是否一致
   - 关键文案和上下文承接是否完整
+
+## 当前推荐
+
+- 日常稳态回归优先使用 `npm run regression:four-end:hybrid`
+- 真实链路验证使用 `npm run regression:four-end:real`
+- 5171 UniApp 当前已经修复 H5 启动阻塞，关键点是 [frontend-uniapp/package.json](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/frontend-uniapp/package.json) 改为直接使用本机 `node` 调用 uni CLI，而不是再包一层 `npx -y node@20`
 
 ## 输出
 
@@ -60,6 +88,9 @@ npm run regression:four-end:check
 ## 实现文件
 
 - 正式入口脚本：[run-four-end-regression.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/run-four-end-regression.cjs)
+- 真实四端入口：[run-four-end-regression-real.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/run-four-end-regression-real.cjs)
+- 混合四端入口：[run-four-end-regression-hybrid.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/run-four-end-regression-hybrid.cjs)
 - 轻量回归后端：[regression-backend.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/regression-backend.cjs)
 - 四端夹具页面服务：[regression-fixture-server.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/regression-fixture-server.cjs)
+- 静态产物服务：[static-site-server.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/static-site-server.cjs)
 - 实际断言脚本：[four-end-regression.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/four-end-regression.cjs)

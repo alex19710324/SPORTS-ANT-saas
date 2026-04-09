@@ -15,6 +15,8 @@
     "git:sync-local-main": "node scripts/sync-local-main.cjs",
     "build": "cd frontend && npm install && npm run build",
     "regression:four-end": "python3 /Users/yaoyunzhong/.trae/skills/webapp-testing/scripts/with_server.py --server \"node scripts/regression-backend.cjs\" --port 8080 -- node scripts/run-four-end-regression.cjs",
+    "regression:four-end:hybrid": "python3 /Users/yaoyunzhong/.trae/skills/webapp-testing/scripts/with_server.py --server \"node scripts/regression-backend.cjs\" --port 8080 -- node scripts/run-four-end-regression-hybrid.cjs",
+    "regression:four-end:real": "python3 /Users/yaoyunzhong/.trae/skills/webapp-testing/scripts/with_server.py --server \"node scripts/regression-backend.cjs\" --port 8080 -- node scripts/run-four-end-regression-real.cjs",
     "regression:four-end:check": "node four-end-regression.cjs"
   },
   "engines": {
