@@ -13,6 +13,7 @@
     "git:auto-commit:launchagent:uninstall": "node scripts/manage-auto-git-launchagent.cjs uninstall",
     "git:auto-commit:launchagent:status": "node scripts/manage-auto-git-launchagent.cjs status",
     "git:sync-local-main": "node scripts/sync-local-main.cjs",
+    "dev:5171": "node scripts/run-5171-local-stack.cjs",
     "build": "cd frontend && npm install && npm run build",
     "regression:four-end": "python3 /Users/yaoyunzhong/.trae/skills/webapp-testing/scripts/with_server.py --server \"node scripts/regression-backend.cjs\" --port 8080 -- node scripts/run-four-end-regression.cjs",
     "regression:four-end:hybrid": "python3 /Users/yaoyunzhong/.trae/skills/webapp-testing/scripts/with_server.py --server \"node scripts/regression-backend.cjs\" --port 8080 -- node scripts/run-four-end-regression-hybrid.cjs",

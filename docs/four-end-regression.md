@@ -26,6 +26,12 @@ npm run regression:four-end:hybrid
 npm run regression:four-end:check
 ```
 
+如果只是要恢复 5171 本地联调环境：
+
+```bash
+npm run dev:5171
+```
+
 ## 覆盖范围
 
 - 5171 → 5176 → 5178 租赁链
@@ -57,6 +63,10 @@ npm run regression:four-end:check
 - `npm run regression:four-end:check`
   - 只执行断言脚本
   - 适用于你已经手动准备好 8080 / 5171 / 5174 / 5176 / 5178 的场景
+- `npm run dev:5171`
+  - 同时准备 8080 mock-server 与 5171 UniApp dev server
+  - 如果 8080 或 5171 已被现有本地服务占用，会直接复用，不重复启动
+  - 适用于只需要恢复 5171 页面与其依赖接口的场景
 
 ## 回归夹具说明
 
@@ -72,6 +82,7 @@ npm run regression:four-end:check
 
 - 日常稳态回归优先使用 `npm run regression:four-end:hybrid`
 - 真实链路验证使用 `npm run regression:four-end:real`
+- 只做 5171 本地开发或排障时优先使用 `npm run dev:5171`
 - 5171 UniApp 当前已经修复 H5 启动阻塞，关键点是 [frontend-uniapp/package.json](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/frontend-uniapp/package.json) 改为直接使用本机 `node` 调用 uni CLI，而不是再包一层 `npx -y node@20`
 
 ## 输出
@@ -90,6 +101,7 @@ npm run regression:four-end:check
 - 正式入口脚本：[run-four-end-regression.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/run-four-end-regression.cjs)
 - 真实四端入口：[run-four-end-regression-real.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/run-four-end-regression-real.cjs)
 - 混合四端入口：[run-four-end-regression-hybrid.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/run-four-end-regression-hybrid.cjs)
+- 5171 本地联调入口：[run-5171-local-stack.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/run-5171-local-stack.cjs)
 - 轻量回归后端：[regression-backend.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/regression-backend.cjs)
 - 四端夹具页面服务：[regression-fixture-server.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/regression-fixture-server.cjs)
 - 静态产物服务：[static-site-server.cjs](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/scripts/static-site-server.cjs)
