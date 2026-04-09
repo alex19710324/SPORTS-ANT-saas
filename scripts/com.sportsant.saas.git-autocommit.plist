@@ -7,14 +7,14 @@
   <key>ProgramArguments</key>
   <array>
     <string>/usr/local/bin/node</string>
-    <string>/Users/yaoyunzhong/Desktop/SPORTS ANT saas/scripts/auto-git-commit.cjs</string>
+    <string>/Users/yaoyunzhong/Desktop/SPORTS ANT saas/scripts/auto-git-commit-daemon.cjs</string>
   </array>
   <key>WorkingDirectory</key>
   <string>/Users/yaoyunzhong/Desktop/SPORTS ANT saas</string>
   <key>RunAtLoad</key>
   <true/>
-  <key>StartInterval</key>
-  <integer>1800</integer>
+  <key>KeepAlive</key>
+  <true/>
   <key>StandardOutPath</key>
   <string>/Users/yaoyunzhong/Library/Logs/com.sportsant.saas.git-autocommit.log</string>
   <key>StandardErrorPath</key>

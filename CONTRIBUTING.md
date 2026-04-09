@@ -57,3 +57,13 @@ We follow the **Conventional Commits** specification. This leads to more readabl
 ## Development Setup
 
 Please refer to the [README.md](./README.md) for instructions on how to set up your local development environment.
+
+## Local Automation
+
+For repository-local Git auto-commit and launchd auto-start operations, refer to [docs/git-auto-commit.md](file:///Users/yaoyunzhong/Desktop/SPORTS%20ANT%20saas/docs/git-auto-commit.md).
+
+Useful commands:
+
+*   `npm run git:auto-commit:status`
+*   `npm run git:auto-commit:launchagent:status`
+*   `npm run git:sync-local-main`
