@@ -1,0 +1,421 @@
+{
+  "easycom": {
+    "autoscan": false
+  },
+  "pages": [
+    {
+      "path": "pages/home/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/feed/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/play/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/play/detail/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mall/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+        "path": "pages/koc/index",
+        "style": {
+          "navigationBarTitleText": "KOC分销",
+          "enablePullDownRefresh": false
+        }
+      },
+      {
+      "path": "pages/order/index",
+      "style": {
+        "navigationBarTitleText": "我的订单",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/lostfound/index",
+      "style": {
+        "navigationBarTitleText": "失物招领",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/fnb/index",
+      "style": {
+        "navigationBarTitleText": "能量补给站",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/schedule/index",
+      "style": {
+        "navigationBarTitleText": "我的排班",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/invoice/index",
+      "style": {
+        "navigationBarTitleText": "发票与报销",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/vip/upgrade",
+      "style": {
+        "navigationBarTitleText": "升级会员",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/achievement/index",
+      "style": {
+        "navigationBarTitleText": "成就徽章",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/nft/index",
+        "style": {
+          "navigationBarTitleText": "数字资产",
+          "enablePullDownRefresh": false
+        }
+      },
+    {
+      "path": "pages/mall/draw",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mall/detail/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mall/cart/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/my/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/wiki/index",
+      "style": {
+        "navigationBarTitleText": "Wiki"
+      }
+    },
+    {
+      "path": "pages/login/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/venue/showcase",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/leaderboard/index",
+      "style": {
+        "navigationBarTitleText": "全服排行榜",
+        "navigationBarBackgroundColor": "#121212",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/map/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/event/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/deposit/index",
+      "style": {
+        "navigationBarTitleText": "押金与设备",
+        "navigationBarBackgroundColor": "#121212",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/scan/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/social/index",
+      "style": {
+        "navigationBarTitleText": "组局大厅",
+        "navigationBarBackgroundColor": "#050B14",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/locker/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/chat/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/task/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/notification/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/metaverse/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/wallet/did",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/wallet/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/open/index",
+      "style": {
+        "navigationBarTitleText": "开放平台",
+        "navigationBarBackgroundColor": "#050B14",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/health/index",
+      "style": {
+        "navigationBarTitleText": "健康与运动数据",
+        "navigationBarBackgroundColor": "#050B14",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/training/index",
+      "style": {
+        "navigationBarTitleText": "员工培训",
+        "navigationBarBackgroundColor": "#050B14",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/safety/index",
+      "style": {
+        "navigationBarTitleText": "安全与应急",
+        "navigationBarBackgroundColor": "#050B14",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/feedback/index",
+      "style": {
+        "navigationBarTitleText": "服务评价",
+        "navigationBarBackgroundColor": "#050B14",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/marketing/index",
+      "style": {
+        "navigationBarTitleText": "全员营销",
+        "navigationBarBackgroundColor": "#050B14",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/ticket/index",
+      "style": {
+        "navigationBarTitleText": "工单中心",
+        "navigationBarBackgroundColor": "#050B14",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/tournament/index",
+      "style": {
+        "navigationBarTitleText": "赛事中心",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/queue/index",
+      "style": {
+        "navigationBarTitleText": "排队预约",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/rental/index",
+      "style": {
+        "navigationBarTitleText": "设备租赁",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/meeting/index",
+      "style": {
+        "navigationBarTitleText": "会议室预订",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/workflow/tasks",
+      "style": {
+        "navigationBarTitleText": "我的审批",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/help/index",
+      "style": {
+        "navigationBarTitleText": "帮助中心",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/inventory/index",
+      "style": {
+        "navigationBarTitleText": "资产盘点",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/inspection/index",
+      "style": {
+        "navigationBarTitleText": "标准巡店",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/desk/index",
+      "style": {
+        "navigationBarTitleText": "工位预约",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/crowdfunding/index",
+      "style": {
+        "navigationBarTitleText": "新品众筹",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/notice/index",
+      "style": {
+        "navigationBarTitleText": "内部公告",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/iot/vip-env",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/parking/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/jukebox/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "SPORTS ANT",
+    "navigationBarBackgroundColor": "#0B0C10",
+    "backgroundColor": "#0B0C10"
+  },
+  "tabBar": {
+    "color": "#9ca3af",
+    "selectedColor": "#00F0FF",
+    "backgroundColor": "#0B0C10",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "static/tabbar/home.svg",
+        "selectedIconPath": "static/tabbar/home-active.svg"
+      },
+      {
+        "pagePath": "pages/feed/index",
+        "text": "社区",
+        "iconPath": "static/tabbar/feed.svg",
+        "selectedIconPath": "static/tabbar/feed-active.svg"
+      },
+      {
+        "pagePath": "pages/play/index",
+        "text": "游玩",
+        "iconPath": "static/tabbar/ant-head.svg",
+        "selectedIconPath": "static/tabbar/ant-head-active.svg"
+      },
+      {
+        "pagePath": "pages/mall/index",
+        "text": "商城",
+        "iconPath": "static/tabbar/mall.svg",
+        "selectedIconPath": "static/tabbar/mall-active.svg"
+      },
+      {
+        "pagePath": "pages/my/index",
+        "text": "我的",
+        "iconPath": "static/tabbar/my.svg",
+        "selectedIconPath": "static/tabbar/my-active.svg"
+      }
+    ]
+  }
+}

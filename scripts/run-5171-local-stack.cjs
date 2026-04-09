@@ -8,7 +8,7 @@ const servers = [
   {
     name: '8080 mock-server',
     cwd: path.join(rootDir, 'mock-server'),
-    command: 'npm run start',
+    command: 'node dev-5171-server.cjs',
     port: 8080,
     timeoutMs: 30000,
     healthPath: '/',
@@ -19,7 +19,7 @@ const servers = [
     cwd: path.join(rootDir, 'frontend-uniapp'),
     command: 'npm run dev',
     port: 5171,
-    timeoutMs: 60000,
+    timeoutMs: 300000,
     healthPath: '/',
     isHealthy: (body) => body.includes('<!DOCTYPE html>') || body.includes('/@vite/client')
   }
