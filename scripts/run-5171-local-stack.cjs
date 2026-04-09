@@ -1,4 +1,5 @@
 const net = require('node:net')
+const http = require('node:http')
 const path = require('node:path')
 const { spawn } = require('node:child_process')
 
@@ -9,14 +10,18 @@ const servers = [
     cwd: path.join(rootDir, 'mock-server'),
     command: 'npm run start',
     port: 8080,
-    timeoutMs: 30000
+    timeoutMs: 30000,
+    healthPath: '/',
+    isHealthy: (body) => body.includes('Mock Server is running')
   },
   {
     name: '5171 frontend-uniapp',
     cwd: path.join(rootDir, 'frontend-uniapp'),
     command: 'npm run dev',
     port: 5171,
-    timeoutMs: 60000
+    timeoutMs: 60000,
+    healthPath: '/',
+    isHealthy: (body) => body.includes('<!DOCTYPE html>') || body.includes('/@vite/client')
   }
 ]
 
@@ -58,6 +63,32 @@ const waitForPort = async (port, timeoutMs) => {
   throw new Error(`Port ${port} did not become ready within ${timeoutMs}ms`)
 }
 
+const requestHealth = (server) =>
+  new Promise((resolve) => {
+    const req = http.get(
+      {
+        hostname: '127.0.0.1',
+        port: server.port,
+        path: server.healthPath || '/',
+        timeout: 3000
+      },
+      (res) => {
+        let body = ''
+        res.on('data', (chunk) => {
+          body += chunk.toString()
+        })
+        res.on('end', () => {
+          resolve(res.statusCode && res.statusCode < 500 && (!server.isHealthy || server.isHealthy(body, res.statusCode)))
+        })
+      }
+    )
+    req.on('error', () => resolve(false))
+    req.on('timeout', () => {
+      req.destroy()
+      resolve(false)
+    })
+  })
+
 const isPortReady = (port) =>
   new Promise((resolve) => {
     const socket = net.createConnection({ host: '127.0.0.1', port })
@@ -68,8 +99,20 @@ const isPortReady = (port) =>
     socket.once('error', () => resolve(false))
   })
 
+const waitForHealthy = async (server, timeoutMs) => {
+  const start = Date.now()
+  while (Date.now() - start < timeoutMs) {
+    if (await requestHealth(server)) return
+    await sleep(1000)
+  }
+  throw new Error(`${server.name} 健康检查未在 ${timeoutMs}ms 内通过`)
+}
+
 const startServer = async (server) => {
   if (await isPortReady(server.port)) {
+    if (!(await requestHealth(server))) {
+      throw new Error(`${server.name} 端口 ${server.port} 已被占用，但当前服务健康检查未通过`)
+    }
     process.stdout.write(`Reusing ${server.name}\n`)
     return null
   }
@@ -84,7 +127,9 @@ const startServer = async (server) => {
   childProcesses.push(child)
   prefixOutput(child.stdout, server.name)
   prefixOutput(child.stderr, `${server.name}:err`)
-  const readyPromise = waitForPort(server.port, server.timeoutMs).then(() => 'ready')
+  const readyPromise = waitForPort(server.port, server.timeoutMs)
+    .then(() => waitForHealthy(server, server.timeoutMs))
+    .then(() => 'ready')
   const exitPromise = new Promise((resolve, reject) => {
     child.once('exit', (code) => resolve(code))
     child.once('error', reject)
@@ -105,8 +150,10 @@ const stopAll = () => {
 }
 
 const main = async () => {
+  let keepAliveTimer = null
   const handleSignal = (signal) => {
     stopAll()
+    if (keepAliveTimer) clearInterval(keepAliveTimer)
     process.exit(signal === 'SIGINT' ? 130 : 143)
   }
   process.on('SIGINT', handleSignal)
@@ -121,8 +168,10 @@ const main = async () => {
     process.stdout.write('5171 本地联调已就绪\n')
     process.stdout.write('5171: http://127.0.0.1:5171/\n')
     process.stdout.write('8080: http://127.0.0.1:8080/\n')
+    keepAliveTimer = setInterval(() => {}, 60_000)
     await new Promise(() => {})
   } finally {
+    if (keepAliveTimer) clearInterval(keepAliveTimer)
     stopAll()
   }
 }
